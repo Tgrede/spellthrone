@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Spellthrone v3.7 · Slice 3.7 — Courts & Longevity — a duel of archmages</title>
+<title>Spellthrone v3.7.1 · Slice 3.7.1 — Courts & Longevity — a duel of archmages</title>
 <style>
   :root{ --gold:#f5c542; --ink:#0d0f14; --txt:#f3ead2; --ember:#ff9a3d; --frost:#57c8ff; --card:#1a1d26; }
   *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ width:100%; height:100%; overflow:hidden; background:#14101f; font-family:Georgia,'Times New Roman',serif; color:var(--txt); }
-  #scene{ position:fixed; inset:0; }
+  #scene{ position:fixed; inset:0; background:radial-gradient(120% 62% at 50% 26%, rgba(124,51,80,.50), rgba(124,51,80,0) 70%), linear-gradient(180deg, #4a2358 0%, #7c3350 20%, #5a2748 42%, #38204a 64%, #2a1740 84%, #211334 100%); }
   #scene canvas{ display:block; touch-action:none; }
   .bar{ position:fixed; left:50%; transform:translateX(-50%); z-index:10; background:rgba(13,15,20,.82); border:1px solid rgba(245,197,66,.35); border-radius:14px; backdrop-filter:blur(6px); }
   #topbar{ top:8px; padding:7px 14px; display:flex; gap:14px; align-items:center; font-size:14px; white-space:nowrap; }
@@ -141,7 +141,7 @@
     <button class="gbtn big" id="btnPvP">👥 Pass-and-play — two humans, one device</button>
     <button class="gbtn big" id="btnHow">📖 How to play (one minute)</button>
     <div id="glbStatus" style="text-align:center;opacity:.85;font-size:13px;margin-top:10px;min-height:16px"></div>
-    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.7 · Slice 3.7 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 5. Learn it in a minute. Master it in a season.</p>
+    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.7.1 · Slice 3.7.1 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 5. Learn it in a minute. Master it in a season.</p>
   </div>
 </div>
 <div id="selectOverlay" class="overlay" style="display:none">
@@ -4800,7 +4800,12 @@ var TEAM = [0xff8a3d, 0x57b8ff];
 var FLASH_RED = null; /* set once THREE is live */
 var TEAM_DARK = [0xb35a1e, 0x2f7fc4];
 
-var renderer = new THREE.WebGLRenderer({ antialias: true });
+var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+/* Slice 3.7.1 — transparent clear: the dusk backdrop is the page's CSS
+   gradient behind the canvas (see #scene), never scene geometry, so no
+   background mesh can ever present a bounded silhouette again (the
+   ZOOM-OUT BLACK MASS root cause — see patch-v371). */
+if (renderer.setClearColor) renderer.setClearColor(0x000000, 0);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
@@ -4817,10 +4822,9 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.05;
 document.getElementById('scene').appendChild(renderer.domElement);
 var scene = new THREE.Scene();
-/* Slice 3.5: backdrop deepened toward the studio falloff (was
-   0x2a1836) — the sky dome's gradient still carries the dusk band;
-   this is the void behind and below the floating isle. */
-scene.background = new THREE.Color(0x211334);
+/* Slice 3.7.1: scene.background stays null — the backdrop is the
+   page's CSS gradient (see #scene); the canvas clears transparent. */
+scene.background = null;
 /* Slice 3.7 — NO scene fog (the zoom-out black mass fix): depth in the
    background is painted by the SKY_STOPS gradient and skyShade(), never
    fogged. Board, island and pieces stay crisp at every zoom. */
@@ -4936,28 +4940,23 @@ var glowTex = canvasTex(128, 128, function(g, w, h){
 });
 
 /* ---- the room: dusk sky dome, stars, ember motes, far shards ---- */
-/* Slice 3.7 — the dusk gradient as DATA, pinned by the background
-   regression suite: a broad soft rose-violet band, and a dusk-family
-   floor at EVERY angle — no stop darker than luminance ~0.077, no
-   steep cliff edges (the old 0.52->0.75 fall to #0a0614 was the black
-   mass). The dome's bottom stop IS scene.background (0x211334), so
-   dome and void agree at the nadir. */
+/* The dusk gradient as DATA, pinned by the background regression
+   suite: a broad soft rose-violet band with a dusk-family floor and
+   no cliff edges. Since Slice 3.7.1 this palette is DOCUMENTATION
+   for the page's CSS backdrop (see #scene): every hex in that CSS
+   gradient is one of these stops, and the last stop (#211334) is
+   the backdrop's floor. It is no longer painted on any mesh. */
 var SKY_STOPS = [[0, '#17102e'], [0.30, '#2a1847'], [0.44, '#4a2358'], [0.50, '#7c3350'], [0.56, '#5a2748'], [0.70, '#38204a'], [0.86, '#2a1740'], [1.00, '#211334']];
 /* hand-shaded depth for distant scenery, replacing fog: near color
    lerps to far color by t in [0,1] — every result stays dusk-lit. */
 function skyShade(hexNear, hexFar, t){ var c = new THREE.Color(hexNear); c.lerp(new THREE.Color(hexFar), Math.max(0, Math.min(1, t))); return c; }
-skyDome = (function(){
-  var cv = document.createElement('canvas'); cv.width = 32; cv.height = 512;
-  var g = cv.getContext('2d');
-  var gr = g.createLinearGradient(0, 0, 0, 512);
-  SKY_STOPS.forEach(function(st){ gr.addColorStop(st[0], st[1]); });
-  g.fillStyle = gr; g.fillRect(0, 0, 32, 512);
-  var dome = new THREE.Mesh(new THREE.SphereGeometry(150, 24, 16),
-    new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(cv), side: THREE.BackSide, fog: false, depthWrite: false }));
-  dome.renderOrder = -10;
-  scene.add(dome);
-  return dome;
-})();
+/* Slice 3.7.1 — THE DOME IS GONE (see patch-v371 header): a coarse
+   24x16 sphere wearing this gradient projected its iso-color
+   contours as straight-chord rings, and the ring bounding the dark
+   southern cap read on screen as a faceted hexagonal black hole
+   behind the island. The backdrop is now the page's CSS gradient
+   behind a transparent canvas — no geometry, no silhouette, at any
+   camera distance or angle. skyDome stays null by design. */
 starField = (function(){
   var n = 380, pos = new Float32Array(n * 3);
   for (var i = 0; i < n; i++){
