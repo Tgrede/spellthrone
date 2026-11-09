@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Spellthrone — Board Lab · four board samples</title>
+<title>Spellthrone — Board Lab · round 2: five board samples, deepened</title>
 <style>
   :root{ --gold:#f5c542; --ink:#0d0f14; --txt:#f3ead2; --ember:#ff9a3d; --frost:#57c8ff; --card:#1a1d26; }
   *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -7864,53 +7864,82 @@ animate();
   #labBar .labNote{ font-size:12.5px; opacity:.75; margin-top:8px; line-height:1.45; }
 </style>
 <div id="labBar">
-  <div class="labTitle">BOARD LAB — FOUR SAMPLES, SAME ISLAND</div>
+  <div class="labTitle">BOARD LAB · ROUND 2 — FIVE SAMPLES, DEEPENED</div>
   <div class="labName" id="labName"></div>
   <div id="labBtns"></div>
-  <div class="labNote">Tap a sample to re-skin the board live. Then tap one of your pieces — the selection
-  rings, move highlights and HP numbers are the game's own and never change: check they stay readable on every skin.</div>
+  <div class="labNote">Round 2 keeps the two directions you picked (slate + violet) and pushes the color deeper —
+  the deep samples run their colors through the same conversion the piece models get, so the board stops reading washed out.
+  Tap a sample, then tap one of your pieces: the selection rings, move highlights and HP numbers are the game's own
+  and never change — check they stay readable on every skin.</div>
 </div>
 <script>
 (function(){
-  /* The four treatments. 'terrain' re-bases every tile (the builder's
+  /* The five treatments. 'terrain' re-bases every tile (the builder's
      hashed per-tile variation is re-applied on top, exactly as
      buildIsland computes it); slab/plate/band/under/rock dress the
-     island body. A is the shipped board, the control. */
+     island body; 'backdrop' re-skins the page's CSS dusk gradient
+     behind the canvas (lab only). Recipes flagged srgb run every
+     color through convertSRGBToLinear — the conversion the GLB
+     loader applies to the piece models — because the diagnosis
+     showed the raw path is what washes the board out. A is the
+     shipped board, raw and unchanged, the control. */
+  var SHIPPED_BACKDROP = 'radial-gradient(120% 62% at 50% 26%, rgba(124,51,80,.50), rgba(124,51,80,0) 70%), linear-gradient(180deg, #4a2358 0%, #7c3350 20%, #5a2748 42%, #38204a 64%, #2a1740 84%, #211334 100%)';
   var TREATMENTS = {
     A: { name: 'A · Sandstone', desc: 'the current board — warm sand and stone, the control.',
       terrain: { plain: 0x9a8a63, forest: 0x5c7046, hill: 0x9c8b74, ley: 0x8f7cc0, throne: 0xa8893a, crystal: 0x6b5a8f },
-      grout: 0x2e2419, slab: 0x6f5b45, plate: 0xc9a227, band: 0xffffff, under: 0x54402c, rock: 0x4a3b30 },
-    B: { name: 'B · Dusk Slate', desc: 'dark blue-grey stone — moodier; the pieces and the gold rim pop.',
-      terrain: { plain: 0x5d6472, forest: 0x3f5247, hill: 0x848b99, ley: 0x8f7cc0, throne: 0xa8893a, crystal: 0x6b5a8f },
-      grout: 0x20242e, slab: 0x3d434f, plate: 0xc9a227, band: 0xdfe6f2, under: 0x39404c, rock: 0x323a46 },
-    C: { name: 'C · Arcane Violet', desc: 'deep violet stone with a stronger gold read — the board leans into the dusk.',
-      terrain: { plain: 0x6a5570, forest: 0x49543d, hill: 0x93789c, ley: 0xa58ae0, throne: 0xd9a83e, crystal: 0x7763ad },
-      grout: 0x241631, slab: 0x483352, plate: 0xe3b93e, band: 0xffe9a8, under: 0x453049, rock: 0x3e2c44 },
-    D: { name: 'D · Verdigris Court', desc: 'desaturated green-bronze — cooler dusk, aged-metal calm.',
-      terrain: { plain: 0x7d8474, forest: 0x3d5a43, hill: 0x918f78, ley: 0x8f7cc0, throne: 0xa8893a, crystal: 0x6b5a8f },
-      grout: 0x2a2e22, slab: 0x59634f, plate: 0xa89a4a, band: 0xf2ecd8, under: 0x4c5540, rock: 0x424c38 }
+      grout: 0x2e2419, slab: 0x6f5b45, plate: 0xc9a227, band: 0xffffff, under: 0x54402c, rock: 0x4a3b30,
+      backdrop: SHIPPED_BACKDROP },
+    B: { name: 'B · Dusk Slate', desc: 'round 1\'s slate, deepened — richer blue stone, darker bases, colors converted like the pieces.',
+      srgb: true,
+      terrain: { plain: 0x42506e, forest: 0x2c4a34, hill: 0x6d7fa3, ley: 0x9678d8, throne: 0xc9a227, crystal: 0x5d4a8a },
+      grout: 0x171c26, slab: 0x2c3444, plate: 0xc9a227, band: 0xdfe6f2, under: 0x272e3d, rock: 0x28303e,
+      backdrop: 'radial-gradient(120% 62% at 50% 26%, rgba(110,44,70,.34), rgba(110,44,70,0) 70%), linear-gradient(180deg, #33204a 0%, #5e2a44 20%, #452442 42%, #2c1a40 64%, #201336 84%, #180e28 100%)' },
+    B2: { name: 'B2 · Midnight Slate', desc: 'slate pushed to midnight — near-black grout, deep blue tiles, the gold rim at full brightness.',
+      srgb: true,
+      terrain: { plain: 0x26355c, forest: 0x256b3c, hill: 0x55688f, ley: 0xa582e8, throne: 0xd9ab3c, crystal: 0x52407e },
+      grout: 0x0c0f16, slab: 0x1d2536, plate: 0xe3b93e, band: 0xe8eefc, under: 0x1a2130, rock: 0x202938,
+      backdrop: 'radial-gradient(120% 62% at 50% 26%, rgba(96,38,62,.22), rgba(96,38,62,0) 70%), linear-gradient(180deg, #241638 0%, #47213a 20%, #331c36 42%, #20122e 64%, #170d24 84%, #120a1e 100%)' },
+    C: { name: 'C · Arcane Violet', desc: 'round 1\'s violet, deepened — richer violet stone, brighter ley and gold.',
+      srgb: true,
+      terrain: { plain: 0x4e2f66, forest: 0x2f4a2a, hill: 0x7a5c94, ley: 0xa58ae0, throne: 0xd9a83e, crystal: 0x6a4fa3 },
+      grout: 0x1c0f28, slab: 0x38244a, plate: 0xe3b93e, band: 0xffe9a8, under: 0x332040, rock: 0x31203e,
+      backdrop: 'radial-gradient(120% 62% at 50% 26%, rgba(124,51,80,.36), rgba(124,51,80,0) 70%), linear-gradient(180deg, #3a2152 0%, #682c48 20%, #4a2342 42%, #2f1a42 64%, #221238 84%, #1a0e2c 100%)' },
+    C2: { name: 'C2 · Royal Arcane', desc: 'violet pushed to royal — the deepest violet tiles, the brightest ley and gold accents.',
+      srgb: true,
+      terrain: { plain: 0x3d2060, forest: 0x2e6b34, hill: 0x6b4c8c, ley: 0xbfa2f2, throne: 0xeec44a, crystal: 0x5f4396 },
+      grout: 0x120818, slab: 0x2a1740, plate: 0xf2c14e, band: 0xfff3c4, under: 0x241231, rock: 0x261536,
+      backdrop: 'radial-gradient(120% 62% at 50% 26%, rgba(110,40,90,.26), rgba(110,40,90,0) 70%), linear-gradient(180deg, #2c1844 0%, #552441 20%, #3c1c38 42%, #261236 64%, #1c0c2a 84%, #150820 100%)' }
   };
   var groutMeshes = [], rockMats = [];
   scene.traverse(function(o){
     if (o.isMesh && o.geometry && o.geometry.type === 'RingGeometry' && o.material && o.material.color && o.material.color.getHex() === 0x2e2419) groutMeshes.push(o);
     if (o.isMesh && o.material && o.material.color && o.material.color.getHex() === 0x4a3b30 && rockMats.indexOf(o.material) < 0) rockMats.push(o.material);
   });
+  function dressed(hex, T){
+    var c = new THREE.Color(hex);
+    if (T.srgb) c.convertSRGBToLinear();
+    return c;
+  }
   function applyTreatment(key){
     var T = TREATMENTS[key]; if (!T) return;
     tileMeshes.forEach(function(m){
       var h = m.userData.hex, t = terrainAt(h.q, h.r);
       var base = (t in T.terrain) ? T.terrain[t] : T.terrain.plain;
       var tv = (hash2(h.q * 3 + 9, h.r * 5 + 2) - 0.5) * 0.08, thue = (hash2(h.q * 7 + 4, h.r * 3 + 8) - 0.5) * 0.012;
-      m.material.color.setHex(base).offsetHSL(thue, 0, tv);
+      var c = new THREE.Color(base).offsetHSL(thue, 0, tv);
+      if (T.srgb) c.convertSRGBToLinear();
+      m.material.color.copy(c);
     });
-    groutMeshes.forEach(function(g){ g.material.color.setHex(T.grout); });
+    groutMeshes.forEach(function(g){ g.material.color.copy(dressed(T.grout, T)); });
     if (islandSlab && islandSlab.children.length >= 2){
-      islandSlab.children[0].material.color.setHex(T.slab);
-      islandSlab.children[1].material.color.setHex(T.plate);
+      islandSlab.children[0].material.color.copy(dressed(T.slab, T));
+      islandSlab.children[1].material.color.copy(dressed(T.plate, T));
     }
-    if (runeBand) runeBand.material.color.setHex(T.band);
-    if (islandUnder) islandUnder.material.color.setHex(T.under);
-    rockMats.forEach(function(mt){ mt.color.setHex(T.rock); });
+    if (runeBand) runeBand.material.color.copy(dressed(T.band, T));
+    if (islandUnder) islandUnder.material.color.copy(dressed(T.under, T));
+    rockMats.forEach(function(mt){ mt.color.copy(dressed(T.rock, T)); });
+    var sceneEl = document.getElementById('scene');
+    if (sceneEl) sceneEl.style.background = T.backdrop;
     document.getElementById('labName').innerHTML = '<b>' + T.name + '</b> — ' + T.desc;
     var btns = document.getElementById('labBtns').children;
     for (var i = 0; i < btns.length; i++) btns[i].className = btns[i].getAttribute('data-k') === key ? 'on' : '';
@@ -7923,7 +7952,7 @@ animate();
     btnsEl.appendChild(b);
   });
   window.addEventListener('keydown', function(e){
-    var k = { '1': 'A', '2': 'B', '3': 'C', '4': 'D' }[e.key]; if (k) applyTreatment(k);
+    var k = { '1': 'A', '2': 'B', '3': 'B2', '4': 'C', '5': 'C2' }[e.key]; if (k) applyTreatment(k);
   });
   window.applyBoardTreatment = applyTreatment; /* test hook (verify/board-lab-v3c.js) */
   applyTreatment('A');
