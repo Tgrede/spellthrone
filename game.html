@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Spellthrone v3.7.1 · Slice 3.7.1 — Courts & Longevity — a duel of archmages</title>
+<title>Spellthrone v3.8 · Slice 3.8 — Courts & Longevity — a duel of archmages</title>
 <style>
   :root{ --gold:#f5c542; --ink:#0d0f14; --txt:#f3ead2; --ember:#ff9a3d; --frost:#57c8ff; --card:#1a1d26; }
   *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ width:100%; height:100%; overflow:hidden; background:#14101f; font-family:Georgia,'Times New Roman',serif; color:var(--txt); }
-  #scene{ position:fixed; inset:0; background:radial-gradient(120% 62% at 50% 26%, rgba(124,51,80,.50), rgba(124,51,80,0) 70%), linear-gradient(180deg, #4a2358 0%, #7c3350 20%, #5a2748 42%, #38204a 64%, #2a1740 84%, #211334 100%); }
+  #scene{ position:fixed; inset:0; background:radial-gradient(120% 62% at 50% 26%, rgba(110,44,70,.34), rgba(110,44,70,0) 70%), linear-gradient(180deg, #33204a 0%, #5e2a44 20%, #452442 42%, #2c1a40 64%, #201336 84%, #180e28 100%); }
   #scene canvas{ display:block; touch-action:none; }
   .bar{ position:fixed; left:50%; transform:translateX(-50%); z-index:10; background:rgba(13,15,20,.82); border:1px solid rgba(245,197,66,.35); border-radius:14px; backdrop-filter:blur(6px); }
   #topbar{ top:8px; padding:7px 14px; display:flex; gap:14px; align-items:center; font-size:14px; white-space:nowrap; }
@@ -141,7 +141,7 @@
     <button class="gbtn big" id="btnPvP">👥 Pass-and-play — two humans, one device</button>
     <button class="gbtn big" id="btnHow">📖 How to play (one minute)</button>
     <div id="glbStatus" style="text-align:center;opacity:.85;font-size:13px;margin-top:10px;min-height:16px"></div>
-    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.7.1 · Slice 3.7.1 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 5. Learn it in a minute. Master it in a season.</p>
+    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.8 · Slice 3.8 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 5. Learn it in a minute. Master it in a season.</p>
   </div>
 </div>
 <div id="selectOverlay" class="overlay" style="display:none">
@@ -4944,9 +4944,13 @@ var glowTex = canvasTex(128, 128, function(g, w, h){
    suite: a broad soft rose-violet band with a dusk-family floor and
    no cliff edges. Since Slice 3.7.1 this palette is DOCUMENTATION
    for the page's CSS backdrop (see #scene): every hex in that CSS
-   gradient is one of these stops, and the last stop (#211334) is
-   the backdrop's floor. It is no longer painted on any mesh. */
-var SKY_STOPS = [[0, '#17102e'], [0.30, '#2a1847'], [0.44, '#4a2358'], [0.50, '#7c3350'], [0.56, '#5a2748'], [0.70, '#38204a'], [0.86, '#2a1740'], [1.00, '#211334']];
+   gradient is one of these stops, and the last stop is the
+   backdrop's floor. It is no longer painted on any mesh.
+   Slice 3.8: the stops now document the DUSK SLATE backdrop —
+   Board Lab recipe B's moderated graduation of this column,
+   adopted with the board. The radial glow rides rgba(110,44,70),
+   the rose band's glow color, not a linear stop. */
+var SKY_STOPS = [[0, '#33204a'], [0.20, '#5e2a44'], [0.42, '#452442'], [0.64, '#2c1a40'], [0.84, '#201336'], [1.00, '#180e28']];
 /* hand-shaded depth for distant scenery, replacing fog: near color
    lerps to far color by t in [0,1] — every result stays dusk-lit. */
 function skyShade(hexNear, hexFar, t){ var c = new THREE.Color(hexNear); c.lerp(new THREE.Color(hexFar), Math.max(0, Math.min(1, t))); return c; }
@@ -5006,27 +5010,42 @@ var decorTrees = [];   /* {hex:'q,r', group} per tree — terrain self-test read
 var leyRings = [], leyShards = [], leyLights = [];
 var crystalRings = [], crystalShards = [];
 var throneRingInlay = null;
+/* Slice 3.8 — THE BOARD: Dusk Slate, Board Lab recipe B adopted
+   whole (see patch-v38 header). boardColor() is the recipe's
+   conversion: every dressed board color runs through
+   convertSRGBToLinear, the conversion the GLB loader applies to
+   the piece models. Tiles convert after their hashed variation,
+   exactly as the Lab's applyTreatment did it. */
+var BOARD_RECIPE = {
+  terrain: { plain: 0x42506e, forest: 0x2c4a34, hill: 0x6d7fa3, ley: 0x9678d8, throne: 0xc9a227, crystal: 0x5d4a8a },
+  grout: 0x171c26, slab: 0x2c3444, plate: 0xc9a227, band: 0xdfe6f2, under: 0x272e3d, rock: 0x28303e
+};
+function boardColor(hex){ var c = new THREE.Color(hex); c.convertSRGBToLinear(); return c; }
 (function buildIsland(){
-  var rockMat = new THREE.MeshStandardMaterial({ color: 0x4a3b30, map: stoneTex, roughness: 1, flatShading: true });
+  var rockMat = new THREE.MeshStandardMaterial({ color: boardColor(BOARD_RECIPE.rock), map: stoneTex, roughness: 1, flatShading: true });
   allHexes().forEach(function(h){
     var t = terrainAt(h.q, h.r), w = hexToWorld(h.q, h.r), th = tileH(h.q, h.r);
-    /* terrain base colors pushed well apart, none near the court colors
-       (Ember orange / Frost blue): sand plain, deep-green forest floor,
-       rocky tan-grey hill, bright violet ley, gold throne */
-    var col = t === 'forest' ? 0x5c7046 : t === 'hill' ? 0x9c8b74 : t === 'ley' ? 0x8f7cc0 : t === 'throne' ? 0xa8893a : t === 'crystal' ? 0x6b5a8f : 0x9a8a63;
+    /* terrain bases are the Dusk Slate recipe (Slice 3.8), pushed
+       well apart, none near the court colors (Ember orange / Frost
+       blue): blue-slate plain, deep-green forest floor, pale slate
+       hill, bright violet ley, gold throne */
+    var base = (t in BOARD_RECIPE.terrain) ? BOARD_RECIPE.terrain[t] : BOARD_RECIPE.terrain.plain;
     /* Slice 3.7 tile pass: hashed per-tile variation on all terrains —
        lightness ±0.04 and a whisper of hue, from hash2(q,r), so no two
        tiles are quite alike and nothing repeats in a pattern. Bases stay
-       far apart: terrain still reads at a glance. */
+       far apart: terrain still reads at a glance. Slice 3.8: the varied
+       color then runs through convertSRGBToLinear — the pieces'
+       conversion — exactly as the Board Lab applied the recipe. */
     var tv = (hash2(h.q * 3 + 9, h.r * 5 + 2) - 0.5) * 0.08, thue = (hash2(h.q * 7 + 4, h.r * 3 + 8) - 0.5) * 0.012;
-    col = new THREE.Color(col).offsetHSL(thue, 0, tv).getHex();
+    var col = new THREE.Color(base).offsetHSL(thue, 0, tv);
+    col.convertSRGBToLinear();
     var m = new THREE.Mesh(new THREE.CylinderGeometry(HEX_SIZE * 0.97, HEX_SIZE * 1.03, th, 6), new THREE.MeshStandardMaterial({ color: col, map: grainTex, roughness: 0.95, flatShading: true }));
     m.position.set(w.x, SURF(h.q, h.r) - th / 2, w.z); m.receiveShadow = true; m.castShadow = false;
     m.userData.hex = h; scene.add(m); tileMeshes.push(m);
     var sy = SURF(h.q, h.r);
     /* grout line: a dark hex outline on every tile top, so each hex
        reads as its own tile at a glance */
-    var grout = new THREE.Mesh(new THREE.RingGeometry(HEX_SIZE * 0.9, HEX_SIZE * 0.985, 6), new THREE.MeshBasicMaterial({ color: 0x2e2419, transparent: true, opacity: 0.38, side: THREE.DoubleSide, depthWrite: false }));
+    var grout = new THREE.Mesh(new THREE.RingGeometry(HEX_SIZE * 0.9, HEX_SIZE * 0.985, 6), new THREE.MeshBasicMaterial({ color: boardColor(BOARD_RECIPE.grout), transparent: true, opacity: 0.38, side: THREE.DoubleSide, depthWrite: false }));
     grout.rotation.x = -Math.PI / 2; grout.rotation.z = Math.PI / 6; grout.position.set(w.x, sy + 0.012, w.z);
     scene.add(grout);
     if (t === 'forest'){
@@ -5054,7 +5073,7 @@ var throneRingInlay = null;
       }
     }
     if (t === 'hill'){
-      var rock = new THREE.Mesh(new THREE.DodecahedronGeometry(0.4, 0), new THREE.MeshStandardMaterial({ color: 0x7d7264, roughness: 1, flatShading: true }));
+      var rock = new THREE.Mesh(new THREE.DodecahedronGeometry(0.4, 0), new THREE.MeshStandardMaterial({ color: boardColor(BOARD_RECIPE.rock), roughness: 1, flatShading: true }));
       rock.position.set(w.x + 0.2, sy + 0.18, w.z - 0.14); rock.rotation.set(0.6, 1.4, 0.2); rock.castShadow = true; scene.add(rock);
       var rock2 = new THREE.Mesh(new THREE.DodecahedronGeometry(0.24, 0), rock.material);
       rock2.position.set(w.x - 0.3, sy + 0.1, w.z + 0.24); rock2.rotation.set(1.2, 0.4, 0.7); rock2.castShadow = true;
@@ -5129,7 +5148,7 @@ var throneRingInlay = null;
     }
   }
   underGeo.computeVertexNormals();
-  islandUnder = new THREE.Mesh(underGeo, new THREE.MeshStandardMaterial({ color: 0x54402c, map: stoneTex, roughness: 1, flatShading: true }));
+  islandUnder = new THREE.Mesh(underGeo, new THREE.MeshStandardMaterial({ color: boardColor(BOARD_RECIPE.under), map: stoneTex, roughness: 1, flatShading: true }));
   islandUnder.scale.set(BOARD_SCALE, 1, BOARD_SCALE);
   scene.add(islandUnder);
   /* Slice 3.7: hanging stalactite teeth under the rim — hashed length,
@@ -5158,15 +5177,15 @@ var throneRingInlay = null;
      thick beveled stone slab, a rune-etched band around its rim ---- */
   islandSlab = new THREE.Group();
   var slab = new THREE.Mesh(new THREE.CylinderGeometry(9.7, 10.45, 0.85, 6),
-    new THREE.MeshStandardMaterial({ color: 0x6f5b45, map: stoneTex, roughness: 0.95, flatShading: true }));
+    new THREE.MeshStandardMaterial({ color: boardColor(BOARD_RECIPE.slab), map: stoneTex, roughness: 0.95, flatShading: true }));
   slab.rotation.y = Math.PI / 6; slab.position.y = -0.725; slab.receiveShadow = true;
   islandSlab.add(slab);
   var plate = new THREE.Mesh(new THREE.CylinderGeometry(9.5, 9.5, 0.06, 6),
-    new THREE.MeshStandardMaterial({ color: 0xc9a227, roughness: 0.38, metalness: 0.65, flatShading: true }));
+    new THREE.MeshStandardMaterial({ color: boardColor(BOARD_RECIPE.plate), roughness: 0.38, metalness: 0.65, flatShading: true }));
   plate.rotation.y = Math.PI / 6; plate.position.y = -0.32; plate.receiveShadow = true;
   islandSlab.add(plate);
   runeBand = new THREE.Mesh(new THREE.CylinderGeometry(9.92, 10.29, 0.42, 48, 1, true),
-    new THREE.MeshStandardMaterial({ map: runeTex, roughness: 0.45, metalness: 0.4 }));
+    new THREE.MeshStandardMaterial({ color: boardColor(BOARD_RECIPE.band), map: runeTex, roughness: 0.45, metalness: 0.4 }));
   runeBand.position.y = -0.69;
   runeBand.userData.glyphs = runeGlyphCount;
   islandSlab.add(runeBand);
