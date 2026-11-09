@@ -1,0 +1,80 @@
+name: Extract Spellthrone GLB models
+
+# The roster and hounds pages already carry the fourteen final GLBs as
+# base64. This workflow decodes the byte-identical payloads into real
+# models/*.glb files so the Pages variant of the game can fetch them
+# as sibling files. Mapping is pinned by MD5: any drift fails the run.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - roster.html
+      - hounds.html
+      - .github/workflows/extract-spellthrone-models.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decode models from roster and hounds pages
+        run: |
+          python3 - <<'PY'
+          import base64, hashlib, os, re, sys
+          EXPECTED = {
+            "849e26d6c9e3e3d4e5a653596e7b10db": "spellthrone-archmage-ember-v3.glb",
+            "c7d22f5a4ab136065f2923e32bef1975": "spellthrone-highmage-ember-v1.glb",
+            "161012e621fd517d6bd227c9d9fbe88e": "spellthrone-guardian-ember-v3.glb",
+            "90d0a25c318fbfd7f727a715f1b60d44": "spellthrone-skirmisher-ember-v3.glb",
+            "5ed058d13af2662edcefcd3a07a8eba0": "spellthrone-enabler-ember-v1.glb",
+            "c53ece501eb4843140e34c3eb644b229": "spellthrone-scout-ember-v2.glb",
+            "10f4c2c6ebcbee1a719d3e5a3b705174": "spellthrone-exclusive-ember-v1.glb",
+            "a74c8d78cb73ec4037aa6f7c1f4dd3f5": "spellthrone-archmage-frost-v2.glb",
+            "9e5616476f54b55648a6f727b3c09350": "spellthrone-highmage-frost-v1.glb",
+            "de396490f39ca3e51977360d1d55febb": "spellthrone-guardian-frost-v3.glb",
+            "c653fbf8fa3454ff7de286d2680bf8ce": "spellthrone-skirmisher-frost-v3.glb",
+            "8a1a88eec1893c710db826a2739b82cf": "spellthrone-enabler-frost-v1.glb",
+            "fb67c458de7bfa5dba2795e1a6be2d78": "spellthrone-scout-frost-v1.glb",
+            "eaca975193c2dd7a1bc743cd06c18aee": "spellthrone-exclusive-frost-v1.glb",
+          }
+          found = {}
+          for page in ("roster.html", "hounds.html"):
+              text = open(page, encoding="utf-8", errors="ignore").read()
+              for run in re.findall(r"[A-Za-z0-9+/=]{1000,}", text):
+                  try:
+                      blob = base64.b64decode(run, validate=True)
+                  except Exception:
+                      continue
+                  if blob[:4] != b"glTF":
+                      continue
+                  digest = hashlib.md5(blob).hexdigest()
+                  if digest in EXPECTED:
+                      found[digest] = blob
+          missing = [EXPECTED[d] for d in EXPECTED if d not in found]
+          if missing:
+              print("MISSING MODELS:", ", ".join(sorted(missing)))
+              sys.exit(1)
+          os.makedirs("models", exist_ok=True)
+          for digest, blob in found.items():
+              path = os.path.join("models", EXPECTED[digest])
+              with open(path, "wb") as fh:
+                  fh.write(blob)
+              print("wrote", path, len(blob), digest)
+          print("extracted", len(found), "models")
+          PY
+      - name: Commit models if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add models
+          if git diff --cached --quiet; then
+            echo "models already up to date"
+          else
+            git commit -m "Extract Spellthrone GLB models for Pages variant"
+            git push
+          fi
