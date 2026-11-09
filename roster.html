@@ -55,22 +55,50 @@
     align-items:center;}
   #clipbar .cb-label{color:#f5c542;font-size:14px;margin-right:2px;}
   #clipbar button{padding:7px 11px;font-size:13.5px;}
+
+  /* ---- piece reference panels (focus view) ---- */
+  #focusInfo{margin-top:12px;border-top:1px solid #2c3050;padding-top:10px;}
+  .fi-role{color:#f0ead8;font-size:15.5px;line-height:1.45;}
+  .fi-stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px;}
+  .fi-chip{background:#1d2138;border:1px solid #454b6e;border-radius:999px;
+    padding:4px 10px;font-size:13px;color:#e8e4da;}
+  .fi-note{color:#9a94a8;font-size:13px;margin-top:7px;line-height:1.45;}
+  .fi-feat{color:#f5c542;font-size:13.5px;margin-top:9px;line-height:1.45;}
+  .fi-ab{color:#c9c4d6;font-size:14px;line-height:1.55;margin-top:8px;}
+  .fi-ab b{color:#f0ead8;}
+  .fi-bookh{color:#f5c542;font-size:15px;margin-top:14px;letter-spacing:.03em;}
+  .fi-spell{margin-top:8px;font-size:14px;}
+  .fi-sn{color:#f0ead8;}
+  .fi-sc{color:#b49ae0;}
+  .fi-st{color:#8b86a0;font-size:12.5px;}
+  .fi-sd{color:#b9b4c6;font-size:13.5px;line-height:1.5;margin-top:1px;}
+  a.playlink{display:inline-block;background:#3a2f10;color:#f5c542;
+    border:1px solid #f5c542;border-radius:8px;padding:9px 14px;
+    font-size:14.5px;text-decoration:none;}
+  /* ---- court reference block under the grid ---- */
+  #courtref{margin:16px auto 0;border:1px solid #3a4066;border-radius:10px;
+    padding:12px 14px;background:#101226;}
+  #courtref h2{font-size:17px;color:#f5c542;font-weight:normal;margin:2px 0 4px;}
+  #courtref .cr{color:#c9c4d6;font-size:13.5px;line-height:1.55;margin-top:7px;}
+  #courtref .cr b{color:#f0ead8;}
+  #courtref a{color:#f5c542;}
 </style>
 </head>
 <body>
 <div id="wrap">
   <h1>Spellthrone — the court roster</h1>
-  <div class="sub">Both courts at full strength, same scale, same
-  hexes — back row EMBER, front row FROST, mirrored. Twelve pieces
-  now: the Enablers and Scouts have joined (the court Exclusives —
-  the two hounds — are still being refined). Every piece
-  opens on Idle + its court's FX: Ember flickers, Frost breathes
-  slow. <b>Tap any card below — or tap a piece on the stage — to
-  bring it up solo</b>, on its own turntable, at full size or at
-  true phone size. All GLBs share the rig contract: named parts
-  (base, body, head, the role piece — staff / shield / bow — and
-  an orb carrying the magic) the game can pose independently.</div>
+  <div class="sub">The full court, both sides, at full strength —
+  back row EMBER, front row FROST, mirrored: fourteen pieces, now
+  that the court Exclusives, the Cindermaw Hound and the Pale
+  Stalker, have taken the field. This page is the game's
+  reference. <b>Tap any card below — or tap a piece on the stage —
+  to bring it up solo</b>: its model on its own turntable, and
+  underneath, everything it does — its move, its attack, every
+  ability, and for the two great mages their full spellbooks.
+  Read the court here, then press Play. Every piece opens on
+  Idle + its court's FX: Ember flickers, Frost breathes slow.</div>
   <div id="bar">
+    <a class="playlink" href="game.html">▶ Play Spellthrone</a>
     <button id="btnPhone">📱 True phone size (~80px pieces)</button>
     <button id="btnSpin" class="on">⏸ Pause turntable</button>
     <span id="err"></span>
@@ -79,6 +107,7 @@
   <div id="focusPanel" style="display:none">
     <div id="focusTitle"></div>
     <div id="focusDesc"></div>
+    <div id="focusInfo"></div>
     <div id="focusBar">
       <button id="btnBack">← Roster</button>
       <button id="btnFocusSize">📱 True size (~80px)</button>
@@ -102,7 +131,7 @@
       <div class="rt">GLB v3 · ANIMATED</div>
       <div class="rr">flame crown · scale mantle · 7 clips &amp;
       ember FX · flickering crystal · rising sparks</div>
-      <div class="rv">View in 3D ▸</div>
+      <div class="rv">3D + full info ▸</div>
     </div>
     <div class="rcard ember" id="card1">
       <div class="rc">EMBER</div>
@@ -110,7 +139,7 @@
       <div class="rt">GLB v1</div>
       <div class="rr">slimmer robe + train · gold circlet · open
       spellbook, steady hand · molten wisp</div>
-      <div class="rv">View in 3D ▸</div>
+      <div class="rv">3D + full info ▸</div>
     </div>
     <div class="rcard ember" id="card2">
       <div class="rc">EMBER</div>
@@ -119,7 +148,7 @@
       <div class="rr">FURNACE HEART behind a barred grille ·
       relief shield emblem · vent slits shedding sparks ·
       rivets, buckle, piped hem</div>
-      <div class="rv">View in 3D ▸</div>
+      <div class="rv">3D + full info ▸</div>
     </div>
     <div class="rcard ember" id="card3">
       <div class="rc">EMBER</div>
@@ -128,7 +157,7 @@
       <div class="rr">RUNE-LIT bow limbs · fletched quiver
       arrows · coal-studded bracer · baldric · singed
       jagged cloak hem</div>
-      <div class="rv">View in 3D ▸</div>
+      <div class="rv">3D + full info ▸</div>
     </div>
     <div class="rcard ember" id="card4">
       <div class="rc">EMBER</div>
@@ -137,7 +166,7 @@
       <div class="rr">an ember HALO turning over the raised
       blessing palm · glowing branding iron in the other hand ·
       plate row, belt studs, fringed hem</div>
-      <div class="rv">View in 3D ▸</div>
+      <div class="rv">3D + full info ▸</div>
     </div>
     <div class="rcard ember" id="card5">
       <div class="rc">EMBER</div>
@@ -146,7 +175,16 @@
       <div class="rr">a BELLY CORE glowing through a barred
       coal grille · flame wings and a flame tail · ember
       cracks across the flanks, sparks rising as it hovers</div>
-      <div class="rv">View in 3D ▸</div>
+      <div class="rv">3D + full info ▸</div>
+    </div>
+    <div class="rcard ember" id="card12">
+      <div class="rc">EMBER</div>
+      <div class="rn">Court Exclusive · Cindermaw Hound</div>
+      <div class="rt">GLB v1 · THE FURNACE MASTIFF</div>
+      <div class="rr">the merged hound — a furnace heart in a
+      flame-maned courser frame · runs farther toward fire and
+      bites Burning prey harder</div>
+      <div class="rv">3D + full info ▸</div>
     </div>
     <div class="rcard frost" id="card6">
       <div class="rc">FROST</div>
@@ -154,7 +192,7 @@
       <div class="rt">GLB v2 · ANIMATED</div>
       <div class="rr">ice-shard crown · silver fin mantle · living
       crystal, orbiting shards, falling snow</div>
-      <div class="rv">View in 3D ▸</div>
+      <div class="rv">3D + full info ▸</div>
     </div>
     <div class="rcard frost" id="card7">
       <div class="rc">FROST</div>
@@ -162,7 +200,7 @@
       <div class="rt">GLB v1</div>
       <div class="rr">mirrored pose · silver circlet, ice gem ·
       open spellbook · frost wisp, motes falling</div>
-      <div class="rv">View in 3D ▸</div>
+      <div class="rv">3D + full info ▸</div>
     </div>
     <div class="rcard frost" id="card8">
       <div class="rc">FROST</div>
@@ -171,7 +209,7 @@
       <div class="rr">GLACIER SHIELD — crystals bursting from
       the shield face · translucent ice blade, cyan core
       inside · rivets, buckle, piped hem</div>
-      <div class="rv">View in 3D ▸</div>
+      <div class="rv">3D + full info ▸</div>
     </div>
     <div class="rcard frost" id="card9">
       <div class="rc">FROST</div>
@@ -180,7 +218,7 @@
       <div class="rr">THE MIST HEM — layered mist trailing
       from the cloak · icicle fringe · crystal shoulder
       cluster · motes drifting down</div>
-      <div class="rv">View in 3D ▸</div>
+      <div class="rv">3D + full info ▸</div>
     </div>
     <div class="rcard frost" id="card10">
       <div class="rc">FROST</div>
@@ -189,7 +227,7 @@
       <div class="rr">a translucent WARD BUBBLE hovering at her
       shoulder — glowing core and two motes orbiting inside it ·
       a frost lantern in her other hand</div>
-      <div class="rv">View in 3D ▸</div>
+      <div class="rv">3D + full info ▸</div>
     </div>
     <div class="rcard frost" id="card11">
       <div class="rc">FROST</div>
@@ -198,8 +236,45 @@
       <div class="rr">one great GLOWING CORE worn openly at the
       chest in a silver setting, under a shadowed hood · long
       veil fins trailing behind</div>
-      <div class="rv">View in 3D ▸</div>
+      <div class="rv">3D + full info ▸</div>
     </div>
+    <div class="rcard frost" id="card13">
+      <div class="rc">FROST</div>
+      <div class="rn">Court Exclusive · Pale Stalker</div>
+      <div class="rt">GLB v1 · THE CRYSTAL WOLF</div>
+      <div class="rr">a spine of ice crystals graded tall at the
+      shoulders · its bite deepens with its prey's Chill —
+      coldest on the Rooted</div>
+      <div class="rv">3D + full info ▸</div>
+    </div>
+  </div>
+  <div id="courtref">
+    <h2>How the courts fight — the short version</h2>
+    <div class="cr"><b>Winning</b> — fell the enemy Archmage, or end a round as the Throne's
+    (the center hex) sole holder 3 times; crowns count from Round 3. If 24 rounds pass,
+    the crowns decide.</div>
+    <div class="cr"><b>Mana</b> — both courts start on ◆3 and gain ◆1 each round (cap ◆8);
+    +1 more if your Archmage ends the round standing on a Mana Font, and +1 more for
+    everyone after the Deepening. Six fonts: a home pair per court and a contested pair
+    on the rims.</div>
+    <div class="cr"><b>The Deepening</b> — at the start of Round 5 the island deepens:
+    each Archmage's signature spell unseals (once per game) and mana income rises by 1.
+    Symmetric — no catch-up, no rubber band.</div>
+    <div class="cr"><b>Burning &amp; Chill</b> — Ember hits set Burning (1 damage at the start
+    of the burning piece's own activation; out at round's end). Frost hits Chill
+    (−1 move next activation; 2 Chill at activation start = Rooted, no move at all).
+    Ending a move beside the Frost Archmage Chills you too.</div>
+    <div class="cr"><b>The triangle</b> — Scout +1 dmg vs Skirmisher · Guardian +1 dmg vs
+    Scout · Skirmisher Pins Guardians (no Intercept that round; the aura never sleeps).
+    Bonus-only — nothing resists anything.</div>
+    <div class="cr"><b>The ground</b> — Hill: attacks made FROM a hill deal +1 damage.
+    Forest: a piece standing in one takes −1 damage (a hit always deals at least 1),
+    and entering costs 2 movement — Scouts pay 1. Mana Font: spells cast standing on
+    one cost ◆1 less (min ◆1).</div>
+    <div class="cr"><b>Heart Crystals</b> — deep in each home stands a crystal of the enemy
+    element: a dormant objective. A future Pilgrimage will send each court's Scout
+    across the isle for it; for now it marks the far ground.</div>
+    <div class="cr">Read enough? <a href="game.html">▶ Play Spellthrone</a></div>
   </div>
   <div id="note"></div>
 </div>
@@ -3883,8 +3958,10 @@ function showErr(e){
 /* ---------------- piece metadata ----------------
    Slot order everywhere (stage, cards, arrays): 0-5 Ember row,
    6-11 Frost row; within a row Archmage, Queen, Guardian,
-   Skirmisher, Enabler, Scout. Heights are the models' verified
-   standing heights, used to frame a focused piece. */
+   Skirmisher, Enabler, Scout. Slots 12/13 are the court
+   Exclusives (Ember/Frost), closing the ends of their rows.
+   Heights are the models' verified standing heights, used to
+   frame a focused piece (the hounds are framed by length). */
 var PIECES = [
   {court:'EMBER', name:'Archmage',
    desc:'Flame crown, scale mantle, front-open robe. Seven ' +
@@ -3935,10 +4012,21 @@ var PIECES = [
    desc:'The Veil Wisp: one great glowing core worn openly at ' +
      'the chest in a silver setting, shining under a shadowed ' +
      'hood; long veil fins trail behind. Mistveil hides it ' +
-     'until an enemy comes within two hexes.'}
+     'until an enemy comes within two hexes.'},
+  {court:'EMBER', name:'Court Exclusive · Cindermaw Hound',
+   desc:'The Furnace Mastiff: the merged hound — the Mastiff\'s ' +
+     'furnace heart and barred chest grille in the Courser\'s ' +
+     'flame-maned frame. It runs farther toward fire, and bites ' +
+     'Burning prey harder.'},
+  {court:'FROST', name:'Court Exclusive · Pale Stalker',
+   desc:'The Crystal Wolf: the merged stalker — a wolf\'s frame ' +
+     'carrying a spine of ice crystals graded tall at the ' +
+     'shoulders, frost scoring seaming the flanks, a great ' +
+     'crystal at its chest. Its bite deepens with its prey\'s Chill.'}
 ];
 var HEIGHTS = [2.26, 2.20, 2.36, 2.05, 1.92, 1.37,
-               2.50, 2.36, 2.43, 2.14, 1.82, 1.15];
+               2.50, 2.36, 2.43, 2.14, 1.82, 1.15,
+               1.85, 1.85];
 
 /* ---------------- scene ---------------- */
 var stage = document.getElementById('stage');
@@ -3982,13 +4070,13 @@ ground.receiveShadow = true;
 scene.add(ground);
 
 var spinners = [];   // groups that turntable in roster view
-var figs = [null, null, null, null, null, null,
-            null, null, null, null, null, null];
+var figs = [null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null];
 var hexes = [];
 var SLOT_TINTS = [0x5a4636, 0x5a4636, 0x5a4636, 0x5a4636, 0x5a4636,
                   0x5a4636, 0x424a55, 0x424a55, 0x424a55, 0x424a55,
-                  0x424a55, 0x424a55];
-for (var hi = 0; hi < 12; hi++){
+                  0x424a55, 0x424a55, 0x5a4636, 0x424a55];
+for (var hi = 0; hi < 14; hi++){
   var hex = new THREE.Mesh(
     new THREE.CylinderGeometry(1.04, 1.12, 0.18, 6),
     new THREE.MeshStandardMaterial({ color: SLOT_TINTS[hi],
@@ -3998,19 +4086,24 @@ for (var hi = 0; hi < 12; hi++){
   hex.userData.slot = hi;
   scene.add(hex); hexes.push(hex);
 }
-var NORMAL_POS = [[-6.5,0,-2.6],[-3.9,0,-2.6],[-1.3,0,-2.6],
-                  [1.3,0,-2.6],[3.9,0,-2.6],[6.5,0,-2.6],
-                  [-6.5,0,2.6],[-3.9,0,2.6],[-1.3,0,2.6],
-                  [1.3,0,2.6],[3.9,0,2.6],[6.5,0,2.6]];
+var NORMAL_POS = [[-7.8,0,-2.6],[-5.2,0,-2.6],[-2.6,0,-2.6],
+                  [0,0,-2.6],[2.6,0,-2.6],[5.2,0,-2.6],
+                  [-5.2,0,2.6],[-2.6,0,2.6],[0,0,2.6],
+                  [2.6,0,2.6],[5.2,0,2.6],[7.8,0,2.6],
+                  [7.8,0,-2.6],[-7.8,0,2.6]];
+/* slots 12/13 (the Exclusives) close their courts' rows:
+   Cindermaw at Ember's right end, the Stalker at Frost's
+   left — the rotational mirror of the same formation. */
 /* phone mode: each court becomes a 2-wide x 3-deep block,
    Ember behind Frost */
-var PHONE_POS = [[-1.3,0,-8.2],[1.3,0,-8.2],[-1.3,0,-6.5],[1.3,0,-6.5],
-                 [-1.3,0,-4.8],[1.3,0,-4.8],[-1.3,0,-3.1],[1.3,0,-3.1],
-                 [-1.3,0,-1.4],[1.3,0,-1.4],[-1.3,0,0.3],[1.3,0,0.3]];
+var PHONE_POS = [[-1.3,0,-9.9],[1.3,0,-9.9],[-1.3,0,-8.2],[1.3,0,-8.2],
+                 [-1.3,0,-6.5],[1.3,0,-6.5],[-1.3,0,-3.1],[1.3,0,-3.1],
+                 [-1.3,0,-1.4],[1.3,0,-1.4],[-1.3,0,0.3],[1.3,0,0.3],
+                 [-1.3,0,-4.8],[1.3,0,2.0]];
 var phoneMode = false;
 
 /* ---------------- focus state ----------------
-   focusSlot < 0: roster view (all twelve on their hexes).
+   focusSlot < 0: roster view (all fourteen on their hexes).
    focusSlot >= 0: that piece alone, centered on its hex at the
    origin, framed by frameFocus(); the rest are hidden. */
 var focusSlot = -1;
@@ -4018,7 +4111,7 @@ var focusSize = false;   // true: focused piece at ~80px
 var focusSpin = true;
 
 function applyVisibility(){
-  for (var i = 0; i < 12; i++){
+  for (var i = 0; i < 14; i++){
     var vis = (focusSlot < 0 || i === focusSlot);
     hexes[i].visible = vis;
     if (figs[i]) figs[i].visible = vis;
@@ -4026,7 +4119,7 @@ function applyVisibility(){
 }
 function applyLayout(){
   var P = phoneMode ? PHONE_POS : NORMAL_POS;
-  for (var i = 0; i < 12; i++){
+  for (var i = 0; i < 14; i++){
     if (i === focusSlot){
       hexes[i].position.set(0, -0.09, 0);
       if (figs[i]) figs[i].position.set(0, 0, 0);
@@ -4046,13 +4139,14 @@ var SLOT_NAMES = ['Ember Archmage', 'Ember High Mage',
   'Ember Guardian', 'Ember Skirmisher', 'Ember Enabler',
   'Ember Scout', 'Frost Archmage', 'Frost High Mage',
   'Frost Guardian', 'Frost Skirmisher', 'Frost Enabler',
-  'Frost Scout'];
-function placeGLB(b64, slot, mode){
+  'Frost Scout', 'Ember Exclusive', 'Frost Exclusive'];
+function placeGLB(b64, slot, mode){ placeFromBuffer(b64ToBuffer(b64), slot, mode); }
+function placeFromBuffer(buf, slot, mode){
   /* Every figure is its own failure domain: a bad parse or a
-     setup throw names the piece in the bar and the other eleven
+     setup throw names the piece in the bar and the other thirteen
      still take the field. */
   try {
-    loader.parse(b64ToBuffer(b64), '', function(gltf){
+    loader.parse(buf, '', function(gltf){
       try {
         var fig = gltf.scene;
         fig.traverse(function(o){
@@ -4091,7 +4185,7 @@ function placeGLB(b64, slot, mode){
       (e && e.message ? e.message : e));
   }
 }
-/* Staggered queue: twelve GLBs parsing on a single tick can
+/* Staggered queue: fourteen GLBs parsing on a single tick can
    stall a phone webview for seconds. One at a time, a breath
    apart, the page stays alive while the court assembles. */
 var LOAD_QUEUE = [
@@ -4104,10 +4198,53 @@ var LOAD_QUEUE = [
 ];
 function loadNext(){
   var job = LOAD_QUEUE.shift();
-  if (!job) return;
+  if (!job){ loadExclusives(); return; }
   placeGLB(job[0], job[1], job[2]);
   setTimeout(loadNext, 90);
 }
+
+/* ---------------- the Exclusives join late ----------------
+   The two hounds are not embedded in this page (they would push
+   it past the publish size cap). Their bytes already live in
+   this site's hounds.html, embedded there byte-identical to the
+   game's own models — so the roster borrows them from that page
+   at runtime. Second road: the Pages models/ folder, same files
+   raw. If both roads fail, the error bar says so and the
+   Exclusives' full reference still renders from their cards. */
+function loadExclusives(){
+  if (typeof fetch !== 'function'){
+    showErr('This browser cannot fetch the court Exclusives for ' +
+      'the stage — their full reference is on their cards below.');
+    return;
+  }
+  function fallback(){
+    function one(url, slot){
+      fetch(url).then(function(r){
+        if (!r.ok) throw new Error('http ' + r.status);
+        return r.arrayBuffer();
+      }).then(function(buf){ placeFromBuffer(buf, slot, 'ambient'); })
+      .catch(function(){
+        showErr(SLOT_NAMES[slot] + ': its model could not be ' +
+          'fetched for the stage — its full reference is on its ' +
+          'card below.');
+      });
+    }
+    one('models/spellthrone-exclusive-ember-v1.glb', 12);
+    one('models/spellthrone-exclusive-frost-v1.glb', 13);
+  }
+  fetch('hounds.html').then(function(r){
+    if (!r.ok) throw new Error('http ' + r.status);
+    return r.text();
+  }).then(function(txt){
+    var m = txt.match(/id="payloads">(\{[\s\S]*?\})<\/script>/);
+    if (!m) throw new Error('payloads not found');
+    var p = JSON.parse(m[1]);
+    if (!p['hounds-a'] || !p['hounds-b']) throw new Error('payloads incomplete');
+    placeGLB(p['hounds-a'], 12, 'ambient');
+    placeGLB(p['hounds-b'], 13, 'ambient');
+  }).catch(function(){ fallback(); });
+}
+
 
 /* ---------------- v3 animation: Idle + EmberFX layered ----------------
    Idle drives the body; EmberFX drives ONLY the orb, the staff
@@ -4196,10 +4333,10 @@ function frame(viewW, viewH, piecePx){
   var dist = TARGET_H * viewH /
     (2 * piecePx * Math.tan(THREE.MathUtils.degToRad(FOV / 2)));
   if (!phoneMode){
-    // two court rows of six: fit the row's width (outer hex
-    // edges at +-7.6), then step back so both rows (5.2 deep)
+    // two court rows of seven: fit the row's width (outer hex
+    // edges at +-8.9), then step back so both rows (5.2 deep)
     // sit in frame
-    var span = 7.7 / (Math.tan(THREE.MathUtils.degToRad(FOV / 2)) *
+    var span = 8.95 / (Math.tan(THREE.MathUtils.degToRad(FOV / 2)) *
       camera.aspect);
     dist = Math.max(dist, span) + 2.8;
     camera.position.set(0, 2.6, dist);
@@ -4219,8 +4356,8 @@ function applyMode(){
     frame(378, 820, 80);
     document.getElementById('note').textContent =
       'PHONE SIZE — the pieces stand about 80px tall in a 390×844 ' +
-      'phone frame (twelve across no longer fits, so each ' +
-      'court stacks 2 wide × 3 deep: Ember behind, Frost in ' +
+      'phone frame (fourteen across no longer fits, so each ' +
+      'court stacks 2 wide × 4 deep: Ember behind, Frost in ' +
       'front): the size a ' +
       'player actually sees in game. Judge the silhouettes here, ' +
       'not in the big view — crown against circlet, the Guardians\' ' +
@@ -4249,7 +4386,9 @@ function applyMode(){
       'Bulwark\'s rim shards shimmer, the Shardbow\'s ice ' +
       'arrowhead turns slowly, the Lantern Sentinel\'s ward ' +
       'bubble breathes at her shoulder, the Veil Wisp\'s core ' +
-      'glows under its hood. Tap a card — or a piece — to view ' +
+      'glows under its hood. At the ends of the rows, the ' +
+      'Exclusives: the Cindermaw Hound closing Ember\'s right, ' +
+      'the Pale Stalker Frost\'s left. Tap a card — or a piece — to view ' +
       'it solo.';
     document.getElementById('btnPhone').classList.remove('on');
     document.getElementById('btnPhone').textContent =
@@ -4284,6 +4423,60 @@ function frameFocus(){
   camera.updateProjectionMatrix();
 }
 
+/* ---------------- piece reference (the full panels) ----------------
+   Stats and spell tables are generated from the shipped game
+   engine’s own data (TYPES / COURT_MODS / SPELLS / COURT_BOOKS)
+   and cross-checked against it by verify_roster.js; the ability
+   prose is written from the engine’s mechanics. */
+var SPELL_INFO = {"fireball": {"n": "Fireball", "i": "🔥", "c": 3, "t": "Hex · range 4", "d": "Blast a hex within 4: 3 damage at the center, 1 to every adjacent hex — friends included — and survivors catch Burning."}, "wildfire": {"n": "Wildfire", "i": "🌋", "c": 3, "t": "No target — the whole board", "d": "Fire leaps: every enemy standing beside a Burning piece takes 1 and catches Burning. Needs a Burning piece with an enemy beside it."}, "overheat": {"n": "Overheat", "i": "♨️", "c": 2, "t": "Ally · range 3", "d": "An ally within 3 takes 1 damage; its next attack deals +2. Health is fuel."}, "mend": {"n": "Mend", "i": "💚", "c": 2, "t": "Ally · range 3", "d": "An ally within 3 heals 3 HP. The only true healing in the game."}, "frostlance": {"n": "Frost Lance", "i": "🧊", "c": 2, "t": "Enemy · range 4", "d": "2 damage to an enemy within 4, and Chill it (−1 movement; two Chill roots)."}, "brittle": {"n": "Brittle", "i": "🔨", "c": 2, "t": "Enemy · range 4", "d": "Strike an enemy within 4: 3 damage if it is Chilled (and the Chill is spent), otherwise 1."}, "glacier": {"n": "Glacier", "i": "🏔️", "c": 4, "t": "Hex · range 4", "d": "Raise an ice wall (4 HP) on an empty hex within 4. Nothing moves through it; it melts after 2 rounds."}, "cinderlance": {"n": "Cinderlance", "i": "🔥", "c": 2, "t": "Enemy · range 4", "d": "2 damage to an enemy within 4, and set it Burning."}, "pyrebrand": {"n": "Pyrebrand", "i": "🏷️", "c": 1, "t": "Enemy · range 3", "d": "Mark an enemy within 3 Burning — it takes 1 at the start of its next activation. No direct damage."}, "shardspray": {"n": "Shardspray", "i": "❄️", "c": 2, "t": "Hex · range 3", "d": "A hex within 3 and everything around it: every enemy there takes 1 damage and is Chilled."}, "coldsnap": {"n": "Coldsnap", "i": "🥶", "c": 1, "t": "Enemy · range 4", "d": "1 damage to an enemy within 4, and Chill it (−1 movement; two Chill roots)."}, "conflagration": {"n": "Conflagration", "i": "☄️", "c": 5, "t": "Hex · range 4", "d": "A greater Fireball: 3 damage at the center of a hex within 4, 2 to every adjacent hex, and survivors catch Burning."}, "massignite": {"n": "Mass Ignite", "i": "🎇", "c": 4, "t": "No target — the whole board", "d": "Every Burning enemy takes 2 damage; every other enemy catches Burning. Needs at least one enemy already Burning."}, "deepfreeze": {"n": "Deep Freeze", "i": "🥶", "c": 5, "t": "No target — the whole board", "d": "Every enemy is Chilled; those already Chilled crack for 3 damage."}, "glacierfield": {"n": "Glacier Field", "i": "🧱", "c": 4, "t": "Hex · range 4", "d": "Raise a greater ice wall (6 HP) on an empty hex within 4, standing 3 rounds; enemies beside it are Chilled, and chilled again each round it stands."}, "meteor": {"n": "Meteor", "i": "🌠", "c": 5, "t": "Hex · range 5", "d": "A falling star on a hex within 5: 4 damage at the center, 2 to every adjacent hex, and survivors catch Burning."}, "absolutezero": {"n": "Absolute Zero", "i": "🌡️", "c": 6, "t": "No target — the whole board", "d": "Every enemy is Chilled; those already Chilled take 2 damage and are Rooted."}};
+var BOOKS = {"emberMage": ["fireball", "wildfire", "overheat", "mend"], "emberQueen": ["cinderlance", "pyrebrand"], "frostMage": ["frostlance", "brittle", "glacier", "mend"], "frostQueen": ["shardspray", "coldsnap"], "res_ember": ["conflagration", "massignite"], "res_frost": ["deepfreeze", "glacierfield"]};
+var INFO = [{"role": "The duel itself. If he falls, Ember loses on the spot.", "stats": {"hp": 10, "move": 2, "weapon": "Staff bolt", "dmg": 2, "min": 2, "max": 3}, "note": "No point-blank bolts.", "feat": "the five-flame crown and the caged-ember staff — a living ember flickers in the cage while sparks rise.", "ab": [["The lose condition", "Lose him and the duel ends — unless the Throne has already spoken for you: end a round as the Throne’s sole holder 3 times (counting from Round 3) to win the other way."], ["Great mage", "One of the court’s two casters — only great mages cast spells. Spells cast while standing on a Mana Font cost ◆1 less (minimum ◆1)."], ["Kindling — the Ember court power", "Every Ember weapon hit sets its target Burning. A Burning piece takes 1 damage at the start of its own activation — fire is not a hit, so no ward or aura stops it — and the fire goes out at the end of the round."]], "book": {"own": "emberMage", "res": "ember", "sig": "meteor"}}, {"role": "The second great mage — a full caster in her own right, but not a lose condition.", "stats": {"hp": 8, "move": 2, "weapon": "Staff bolt", "dmg": 2, "min": 2, "max": 4}, "note": "No point-blank bolts.", "feat": "the open spellbook — held perfectly steady while its page-glow breathes, a molten wisp hovering by her hand.", "ab": [["Not a lose condition", "If she falls, the duel goes on — but the court’s Resonance spells are lost with her. They need BOTH great mages standing."], ["Great mage", "One of the court’s two casters — only great mages cast spells. Spells cast while standing on a Mana Font cost ◆1 less (minimum ◆1)."], ["Kindling — the Ember court power", "Every Ember weapon hit sets its target Burning. A Burning piece takes 1 damage at the start of its own activation — fire is not a hit, so no ward or aura stops it — and the fire goes out at the end of the round."]], "book": {"own": "emberQueen", "res": "ember"}}, {"role": "A walking wall: soaks the hits meant for the line, and answers for them.", "stats": {"hp": 10, "move": 2, "weapon": "Melee", "dmg": 3, "min": 1, "max": 1}, "note": "Adjacent only.", "feat": "THE FURNACE HEART — a burning core behind a barred grille in its chest.", "ab": [["Intercept", "Once per round, when a weapon attack targets an ally standing beside this Guardian (never another Guardian), the defender may have the Guardian step in and take the hit instead — the choice is made seeing the damage it would do to each of them."], ["Guardian aura", "Allies standing beside a Guardian take −1 damage from weapon attacks. A hit always deals at least 1."], ["The triangle", "Guardians deal +1 damage to Scouts. Skirmishers answer by Pinning: a pinned Guardian can’t Intercept until the round ends — its aura still works."], ["Retaliation", "When the Pyre Guard steps in with an Intercept, the attacker takes 1 damage back."], ["Kindling — the Ember court power", "Every Ember weapon hit sets its target Burning. A Burning piece takes 1 damage at the start of its own activation — fire is not a hit, so no ward or aura stops it — and the fire goes out at the end of the round."]]}, {"role": "Ember’s archer — spreads fire across two targets a turn.", "stats": {"hp": 5, "move": 2, "weapon": "Bow", "dmg": 2, "min": 2, "max": 3}, "note": "Never point-blank.", "feat": "RUNE-LIT LIMBS — ember inlays glowing along its arms and bow.", "ab": [["Volley", "If the Cinderbow did not move this activation, it may loose a second arrow — 1 damage — at a DIFFERENT enemy in range. Spread, never burst."], ["Pinning", "Its hits Pin Guardians: a pinned Guardian can’t Intercept until the round ends (its aura still works). That — not bonus damage — is the Skirmisher’s edge in the triangle."], ["Kindling — the Ember court power", "Every Ember weapon hit sets its target Burning. A Burning piece takes 1 damage at the start of its own activation — fire is not a hit, so no ward or aura stops it — and the fire goes out at the end of the round."]]}, {"role": "The War-Priest: points his court’s weapons outward. He never heals.", "stats": {"hp": 6, "move": 2, "weapon": "Melee poke", "dmg": 1, "min": 1, "max": 1}, "note": "The poke is a last resort — the blessing is the point.", "feat": "the ember HALO turning slowly over his raised blessing palm.", "ab": [["Kindle (his action)", "Instead of attacking, he may touch an adjacent ally: that ally’s next attack deals +1 damage (and primes Burning like every Ember hit). Anyone can be kindled — the great mages included."], ["No healing", "Enablers point outward. The only true healing in the game is the Mend spell."], ["Kindling — the Ember court power", "Every Ember weapon hit sets its target Burning. A Burning piece takes 1 damage at the start of its own activation — fire is not a hit, so no ward or aura stops it — and the fire goes out at the end of the round."]]}, {"role": "The fastest piece on the isle — and a small bomb when it falls.", "stats": {"hp": 5, "move": 4, "weapon": "Needle", "dmg": 1, "min": 1, "max": 2}, "note": "", "feat": "the belly CORE glowing through its barred coal grille, sparks rising as it hovers.", "ab": [["Cinderburst", "When the Spark Sprite dies, it bursts: every adjacent enemy takes 1 damage and catches Burning. Bursts can chain."], ["Fleet", "Pays only 1 movement to enter a forest — every other piece pays 2. Bodies and ice walls still block the way."], ["The triangle", "Scouts deal +1 damage to Skirmishers."], ["Kindling — the Ember court power", "Every Ember weapon hit sets its target Burning. A Burning piece takes 1 damage at the start of its own activation — fire is not a hit, so no ward or aura stops it — and the fire goes out at the end of the round."]]}, {"role": "The duel itself. If she falls, Frost loses on the spot.", "stats": {"hp": 10, "move": 2, "weapon": "Staff bolt", "dmg": 2, "min": 2, "max": 3}, "note": "No point-blank bolts.", "feat": "the ice-shard crown, and the ring of shards that slowly revolves around her crystal while snow falls.", "ab": [["The lose condition", "Lose her and the duel ends — unless the Throne has already spoken for you: end a round as the Throne’s sole holder 3 times (counting from Round 3) to win the other way."], ["Great mage", "One of the court’s two casters — only great mages cast spells. Spells cast while standing on a Mana Font cost ◆1 less (minimum ◆1)."], ["Rime’s doorstep", "An enemy that ends its move beside the Frost Archmage arrives Chilled — her doorstep is cold."], ["Rime — the Frost court power", "Every Frost weapon hit Chills its target. A Chilled piece moves 1 less on its next activation; a piece carrying 2 Chill when its activation begins is Rooted and cannot move at all. Chill is spent by living through that activation."]], "book": {"own": "frostMage", "res": "frost", "sig": "absolutezero"}}, {"role": "The second great mage — a full caster in her own right, but not a lose condition.", "stats": {"hp": 8, "move": 2, "weapon": "Staff bolt", "dmg": 2, "min": 2, "max": 4}, "note": "No point-blank bolts.", "feat": "the open spellbook under a silver circlet, motes of snow falling past the frost wisp.", "ab": [["Not a lose condition", "If she falls, the duel goes on — but the court’s Resonance spells are lost with her. They need BOTH great mages standing."], ["Great mage", "One of the court’s two casters — only great mages cast spells. Spells cast while standing on a Mana Font cost ◆1 less (minimum ◆1)."], ["Rime — the Frost court power", "Every Frost weapon hit Chills its target. A Chilled piece moves 1 less on its next activation; a piece carrying 2 Chill when its activation begins is Rooted and cannot move at all. Chill is spent by living through that activation."]], "book": {"own": "frostQueen", "res": "frost"}}, {"role": "A walking wall of ice — striking it costs you your footing.", "stats": {"hp": 11, "move": 2, "weapon": "Melee", "dmg": 3, "min": 1, "max": 1}, "note": "Adjacent only. The 11 HP is the Frost tune — Ember’s Guardian stands at 10.", "feat": "THE GLACIER SHIELD — a translucent shield of living ice, crystals bursting from its face.", "ab": [["Intercept", "Once per round, when a weapon attack targets an ally standing beside this Guardian (never another Guardian), the defender may have the Guardian step in and take the hit instead — the choice is made seeing the damage it would do to each of them."], ["Guardian aura", "Allies standing beside a Guardian take −1 damage from weapon attacks. A hit always deals at least 1."], ["The triangle", "Guardians deal +1 damage to Scouts. Skirmishers answer by Pinning: a pinned Guardian can’t Intercept until the round ends — its aura still works."], ["The cold swamp", "A melee attacker who strikes the Bulwark — or an ally standing in a Bulwark’s aura — is Chilled by the cold rolling off the ice. Ranged shots and the Scout’s needle never touch the swamp."], ["Rime — the Frost court power", "Every Frost weapon hit Chills its target. A Chilled piece moves 1 less on its next activation; a piece carrying 2 Chill when its activation begins is Rooted and cannot move at all. Chill is spent by living through that activation."]]}, {"role": "Frost’s archer — slows what it doesn’t root outright.", "stats": {"hp": 5, "move": 2, "weapon": "Bow", "dmg": 2, "min": 2, "max": 3}, "note": "Never point-blank.", "feat": "THE MIST HEM — layered translucent mist shells trailing from its cloak.", "ab": [["Still Aim", "If the Shardbow did not move this activation, its shot drives the cold deeper: a target already carrying Chill takes a second Chill (2 Chill = Rooted on its next activation). A fresh target takes the usual single Chill."], ["Pinning", "Its hits Pin Guardians: a pinned Guardian can’t Intercept until the round ends (its aura still works). That — not bonus damage — is the Skirmisher’s edge in the triangle."], ["Rime — the Frost court power", "Every Frost weapon hit Chills its target. A Chilled piece moves 1 less on its next activation; a piece carrying 2 Chill when its activation begins is Rooted and cannot move at all. Chill is spent by living through that activation."]]}, {"role": "The Lantern Sentinel: wraps the line in one-hit wards. She never heals.", "stats": {"hp": 6, "move": 2, "weapon": "Melee poke", "dmg": 1, "min": 1, "max": 1}, "note": "The poke is a last resort — the ward is the point.", "feat": "the translucent WARD BUBBLE hovering at her shoulder — a glowing core with two motes orbiting inside it.", "ab": [["Ward (her action)", "Instead of attacking, she may wrap an adjacent ally in a one-hit ward: the next hit that would damage them is negated entirely, and the ward is spent. It lasts until it eats a hit. Burning’s start-of-turn tick is not a hit — fire ignores the ward."], ["The ward law", "Great mages burn too bright to hold a ward: neither the Archmage nor the High Mage can ever be warded."], ["Rime — the Frost court power", "Every Frost weapon hit Chills its target. A Chilled piece moves 1 less on its next activation; a piece carrying 2 Chill when its activation begins is Rooted and cannot move at all. Chill is spent by living through that activation."]]}, {"role": "A ghost in the trees — ranged fire can barely touch it.", "stats": {"hp": 5, "move": 4, "weapon": "Needle", "dmg": 1, "min": 1, "max": 2}, "note": "", "feat": "the one great glowing CORE worn openly at its chest in a silver setting, under a shadowed hood.", "ab": [["Mistveil", "Standing in a forest, it cannot be targeted by ranged attacks — bolts and arrows — from 3 or more hexes away. A shot from exactly 2 hexes can still reach it, and the veil drops entirely while any enemy stands beside it. Melee, needles and spells answer as normal."], ["Fleet", "Pays only 1 movement to enter a forest — every other piece pays 2. Bodies and ice walls still block the way."], ["The triangle", "Scouts deal +1 damage to Skirmishers."], ["Rime — the Frost court power", "Every Frost weapon hit Chills its target. A Chilled piece moves 1 less on its next activation; a piece carrying 2 Chill when its activation begins is Rooted and cannot move at all. Chill is spent by living through that activation."]]}, {"role": "The court’s hound: runs down whatever the bows have lit.", "stats": {"hp": 7, "move": 3, "weapon": "Melee", "dmg": 3, "min": 1, "max": 1}, "note": "Adjacent only.", "feat": "the furnace heart behind its barred chest grille, in a mane of living flame tongues.", "ab": [["Bloodscent", "+1 damage against Burning targets."], ["Drawn to the fire", "It gains +1 movement on a move that ends beside a Burning enemy."], ["Kindling — the Ember court power", "Every Ember weapon hit sets its target Burning. A Burning piece takes 1 damage at the start of its own activation — fire is not a hit, so no ward or aura stops it — and the fire goes out at the end of the round."]]}, {"role": "The court’s hound: finishes what the cold has slowed.", "stats": {"hp": 6, "move": 3, "weapon": "Melee", "dmg": 3, "min": 1, "max": 1}, "note": "Adjacent only.", "feat": "the spine of ice crystals graded tall at its shoulders, and the great crystal at its chest.", "ab": [["The cold chain", "+1 damage against a Chilled target, and +1 more against a Rooted one (2 Chill) — a 3-damage bite becomes 5 on a frozen foe."], ["Rime — the Frost court power", "Every Frost weapon hit Chills its target. A Chilled piece moves 1 less on its next activation; a piece carrying 2 Chill when its activation begins is Rooted and cannot move at all. Chill is spent by living through that activation."]]}];
+function spellRows(ids){
+  var h = '';
+  for (var i = 0; i < ids.length; i++){
+    var sp = SPELL_INFO[ids[i]]; if (!sp) continue;
+    h += '<div class="fi-spell"><span class="fi-sn">' + sp.i + ' ' +
+      sp.n + '</span> <span class="fi-sc">◆' + sp.c +
+      '</span> <span class="fi-st">' + sp.t + '</span>' +
+      '<div class="fi-sd">' + sp.d + '</div></div>';
+  }
+  return h;
+}
+function renderInfo(slot){
+  var inf = INFO[slot], el = document.getElementById('focusInfo');
+  if (!inf || !el) return;
+  var st = inf.stats;
+  var rng = st.min === st.max ? ("" + st.max) : (st.min + "–" + st.max);
+  var h = '<div class="fi-role">' + inf.role + '</div>';
+  h += '<div class="fi-stats"><span class="fi-chip">HP ' + st.hp +
+    '</span><span class="fi-chip">Move ' + st.move +
+    '</span><span class="fi-chip">' + st.weapon + ' · ' + st.dmg +
+    ' dmg · range ' + rng + '</span></div>';
+  if (inf.note) h += '<div class="fi-note">' + inf.note + '</div>';
+  h += '<div class="fi-feat">★ Standout: ' + inf.feat + '</div>';
+  for (var i = 0; i < inf.ab.length; i++)
+    h += '<div class="fi-ab"><b>' + inf.ab[i][0] + '</b> — ' +
+      inf.ab[i][1] + '</div>';
+  if (inf.book){
+    h += '<div class="fi-bookh">Spellbook</div>';
+    h += spellRows(BOOKS[inf.book.own]);
+    h += '<div class="fi-ab"><b>Resonance</b> — castable by either ' +
+      'great mage, only while <b>both</b> the Archmage and the High ' +
+      'Mage stand. If either falls, these lock away.</div>';
+    h += spellRows(BOOKS['res_' + inf.book.res]);
+    if (inf.book.sig){
+      h += '<div class="fi-ab"><b>Signature</b> — sealed until the ' +
+        'Deepening, the start of Round 5; then castable once.</div>';
+      h += spellRows([inf.book.sig]);
+    }
+    h += '<div class="fi-note">Mana: the court starts on ◆3, gains ' +
+      '◆1 a round (cap ◆8), +1 more if its Archmage ends the ' +
+      'round on a Mana Font, +1 more after the Deepening. Casting from ' +
+      'a Mana Font costs ◆1 less (min ◆1).</div>';
+  }
+  el.innerHTML = h;
+}
+
 /* ---------------- focus flow ---------------- */
 var rosterEl = document.getElementById('roster');
 var focusPanel = document.getElementById('focusPanel');
@@ -4298,6 +4491,7 @@ function enterFocus(slot){
     PIECES[slot].court + ' — ' + PIECES[slot].name;
   document.getElementById('focusDesc').textContent =
     PIECES[slot].desc;
+  renderInfo(slot);
   /* the clip buttons belong to the Ember Archmage alone */
   clipbarEl.style.display = (slot === 0) ? 'flex' : 'none';
   var fsb = document.getElementById('btnFocusSize');
@@ -4332,7 +4526,7 @@ function exitFocus(){
 focusPanel.style.display = 'none';
 rosterEl.style.display = '';
 
-for (var ci = 0; ci < 12; ci++){
+for (var ci = 0; ci < 14; ci++){
   (function(slot){
     var card = document.getElementById('card' + slot);
     if (card) card.addEventListener('click', function(){
@@ -4373,7 +4567,7 @@ renderer.domElement.addEventListener('click', function(e){
   scene.updateMatrixWorld();
   raycaster.setFromCamera(pickV, camera);
   var targets = [];
-  for (var i = 0; i < 12; i++){
+  for (var i = 0; i < 14; i++){
     if (figs[i] && figs[i].visible) targets.push(figs[i]);
     if (hexes[i].visible) targets.push(hexes[i]);
   }
