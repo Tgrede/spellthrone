@@ -7936,7 +7936,7 @@ animate();
     if (typeof GLB_READY !== 'undefined' && GLB_READY){
       clearInterval(iv);
       startGame('ai', { courts: ['ember', 'frost'], presets: ['ember-classic', 'frost-classic'], humanSide: 0 });
-      camPhiT = 0.92; camRadT = 30;
+      camPhiT = 0.92; if (typeof fitRadius === 'function') fitRadius();
     } else if (tries > 150) clearInterval(iv);
   }, 200);
 })();
