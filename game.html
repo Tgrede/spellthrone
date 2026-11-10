@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Spellthrone v3.9 · Slice 3.9 — Courts & Longevity — a duel of archmages</title>
+<title>Spellthrone v3.10 · Slice 3.10 — Courts & Longevity — a duel of archmages</title>
 <style>
   :root{ --gold:#f5c542; --ink:#0d0f14; --txt:#f3ead2; --ember:#ff9a3d; --frost:#57c8ff; --card:#1a1d26; }
   *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -112,6 +112,7 @@
   <div class="legRow"><span class="chip" style="background:#a8893a"></span><b>Throne</b> — end a round as its <b>sole holder, 3 times</b>, to win · <b>crowns count from Round 3</b></div>
   <div class="legRow"><span class="chip" style="background:#d96a4a"></span><b>Heart Crystal</b> — a dormant objective deep in each home: the enemy element, waiting. The Scout's pilgrimage — <b>a later lesson</b></div>
   <div class="legRow"><span class="chip" style="background:#ffd968"></span><b>The Deepening</b> — at <b>Round 5</b>: signatures unseal, mana income <b>+1</b> for both courts</div>
+  <div class="legRow"><span class="chip" style="background:transparent;border:2px solid #ffb84d;border-radius:50%"></span><b>Ring of light</b> — a piece wearing one <b>can still act</b> this round. No ring, and a dimmer figure: it has <b>already acted</b></div>
   <button class="gbtn" id="btnLegendClose" style="margin-top:4px">Close</button>
 </div>
 <div id="coachCard">
@@ -141,7 +142,7 @@
     <button class="gbtn big" id="btnPvP">👥 Pass-and-play — two humans, one device</button>
     <button class="gbtn big" id="btnHow">📖 How to play (one minute)</button>
     <div id="glbStatus" style="text-align:center;opacity:.85;font-size:13px;margin-top:10px;min-height:16px"></div>
-    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.9 · Slice 3.9 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 5. Learn it in a minute. Master it in a season.</p>
+    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.10 · Slice 3.10 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 5. A piece still to act wears a ring of light; once it has acted, the ring is gone and the piece rests dimmer. Learn it in a minute. Master it in a season.</p>
   </div>
 </div>
 <div id="selectOverlay" class="overlay" style="display:none">
@@ -5820,6 +5821,17 @@ function buildRig(u){
   hpG.add(hpNum); g.add(hpG);
   parts.hpBar = hpG; parts.hpFill = hpf;
   parts.hpNum = hpNum; parts.hpNumCv = hpCv; parts.hpNumCtx = hpCv.getContext('2d'); parts.hpNumTex = hpTex; parts.hpNumText = '';
+  /* Slice 3.10 READY RING: a soft luminous ROUND ring at the piece's
+     base — round, deliberately, where every highlight the game aims
+     (selection, ley lines, the coach) is hexagonal; status is not a
+     highlight. Court-tinted by kit: Ember warm gold, Frost pale cyan.
+     Hung on the hex group g, NOT the lifting figure fig: it never
+     lifts with selection, and it sits outside the fig material
+     registry, so dim / flash / fade never touch it. Visibility and
+     pulse are driven per-frame in animate from v._spentShown. */
+  var readyRing = new THREE.Mesh(new THREE.RingGeometry(0.62, 0.76, 40), new THREE.MeshBasicMaterial({ color: u.kit === 'frost' ? 0x9fe8ff : 0xffb84d, transparent: true, opacity: 0.8, side: THREE.DoubleSide, depthWrite: false }));
+  readyRing.rotation.x = -Math.PI / 2; readyRing.position.y = 0.05; readyRing.renderOrder = 4; readyRing.name = 'ready-ring';
+  g.add(readyRing); parts.readyRing = readyRing;
   return { group: g, parts: parts, mats: matSet.map(function(m){ return { m: m, c: m.color.getHex(), e: m.emissive ? m.emissive.getHex() : 0 }; }) };
 }
 
@@ -6330,6 +6342,7 @@ function buildViews(){
     views[u.id] = { group: rig.group, parts: rig.parts, mats: rig.mats, q: u.q, r: u.r, hp: u.hp, phase: Math.random() * 6.28, flash: 0, dead: false, proxy: proxy };
     setHPBar(u.id);
   });
+  refreshActedVisuals();
 }
 function setHPBar(id){
   var u = unitById(S, id), v = views[id]; if (!v) return;
@@ -6392,10 +6405,52 @@ function refreshHpPreviews(){
     else if (w !== undefined && (cur !== w || cf !== wf)){ v.previewDmg = w; v.previewFav = wf; setHPBar(+id); }
   });
 }
+/* Slice 3.10 SPENT, restyled. The old dim multiplied color by 0.5 and
+   stopped there: emissive untouched (a spent mage's gems glowed on at
+   full strength) and nothing marked the pieces that could still act.
+   The spent read now: desaturate toward the material's own luminance
+   by SPENT_DESAT, multiply color by SPENT_BRIGHT, scale emissive by
+   SPENT_EMISSIVE — about a 0.7-brightness 'resting' feel that keeps
+   the court's hue, never reads as dead, never as the other court.
+   Restore is exact (registry base color/emissive). The HP bar and
+   numerals are not in this registry — they never dim. */
+var SPENT_DESAT = 0.30, SPENT_BRIGHT = 0.74, SPENT_EMISSIVE = 0.5;
 function setActedDim(id, dim){
   var v = views[id]; if (!v) return;
-  v.mats.forEach(function(rec){ rec.m.color.setHex(rec.c); if (dim) rec.m.color.multiplyScalar(0.5); });
+  v.mats.forEach(function(rec){
+    var c = new THREE.Color(rec.c);
+    if (dim){
+      var lum = 0.299 * c.r + 0.587 * c.g + 0.114 * c.b;
+      c.lerp(new THREE.Color(lum, lum, lum), SPENT_DESAT);
+      c.multiplyScalar(SPENT_BRIGHT);
+    }
+    rec.m.color.copy(c);
+    if (rec.m.emissive){
+      var e = new THREE.Color(rec.e);
+      if (dim) e.multiplyScalar(SPENT_EMISSIVE);
+      rec.m.emissive.copy(e);
+    }
+  });
 }
+/* Slice 3.10: the ONE sync between the engine's acted flags and what
+   the board shows. v._spentShown is the shown truth; this reads
+   u.acted — which is exactly the engine's definition of spent, so a
+   Guardian who Intercepted (interceptUsed) but has not activated is
+   NOT spent here either. Called from the 'acted' and 'round' shots,
+   the performEvents settle, and the end of buildViews; idempotent —
+   the dim rewrites only when a piece's shown state actually flips. */
+function refreshActedVisuals(){
+  if (!S) return;
+  S.units.forEach(function(u){
+    var v = views[u.id]; if (!v || v.dead || !u.alive) return;
+    var spent = !!u.acted;
+    if (v._spentShown === undefined){ v._spentShown = spent; if (spent) setActedDim(u.id, true); }
+    else if (v._spentShown !== spent){ v._spentShown = spent; setActedDim(u.id, spent); }
+  });
+}
+/* Slice 3.10: the turn prompt carries the count for the side to move */
+function readyCount(side){ var n = 0; S.units.forEach(function(u){ if (u.alive && u.side === side && !u.acted) n++; }); return n; }
+function readyNote(side){ var n = readyCount(side); return ' · ' + n + (n === 1 ? ' piece' : ' pieces') + ' ready'; }
 function refreshTop(){
   document.getElementById('roundLbl').textContent = 'Round ' + S.round;
   [0, 1].forEach(function(side){
@@ -6587,16 +6642,17 @@ function performEvents(evs, cb){
         notes.push('👑 ' + SIDE_NAMES[ev.side] + ' claims the Throne — ' + ev.crowns + ' of 3');
       })(ev);
     } else if (ev.t === 'round'){
-      shot(60, function(){}, function(){ Object.keys(views).forEach(function(id){ if (!views[id].dead) setActedDim(id, false); }); });
+      shot(60, function(){}, function(){ refreshActedVisuals(); });
       notes.push('— Round ' + ev.round + ' —' + (ev.round === 3 ? ' · 👑 the Throne counts crowns from this round' : ''));
     } else if (ev.t === 'acted'){
-      (function(ev){ shot(30, function(){}, function(){ setActedDim(ev.unit, true); }); })(ev);
+      (function(ev){ shot(30, function(){}, function(){ refreshActedVisuals(); }); })(ev);
     }
   });
   var iv = setInterval(function(){
     if (!shots.length){
       clearInterval(iv); BUSY = false;
       refreshTop();
+      refreshActedVisuals();
       if (notes.length) toast(notes.join(' · '), 2600);
       cb && cb();
     }
@@ -7058,7 +7114,7 @@ function drawSelection(){
     if (u.type === 'mage' || u.type === 'queen') addSpellButtons(u, { q: u.q, r: u.r });
     if (u.type === 'enabler') addEnableButton(u);
     btn('✋ End — do nothing', '', function(){ commit({ unit: u.id, dest: { q: u.q, r: u.r }, action: null }); });
-    btn('Deselect', '', function(){ SEL = null; PHASE = 'pick'; STAGED = null; clearHL(); document.getElementById('bottombar').style.display = 'none'; banner(sideTag(S.turn) + ' to move — tap one of your pieces'); });
+    btn('Deselect', '', function(){ SEL = null; PHASE = 'pick'; STAGED = null; clearHL(); document.getElementById('bottombar').style.display = 'none'; banner(sideTag(S.turn) + ' to move' + readyNote(S.turn) + ' — tap one of your pieces'); });
   } else if (PHASE === 'act'){
     var base = DEST;
     /* v2.2.3 THE ARMED MOVE STAYS LIT. The old draw wiped the board
@@ -7333,7 +7389,7 @@ function afterAction(){
       });
     }, 480);
   } else {
-    banner(sideTag(S.turn) + (MODE === 'pvp' ? ' to move — pass the device, then tap a piece' : ' to move — tap one of your pieces'));
+    banner(sideTag(S.turn) + ' to move' + readyNote(S.turn) + (MODE === 'pvp' ? ' — pass the device, then tap a piece' : ' — tap one of your pieces'));
   }
 }
 function showWin(){
@@ -7821,7 +7877,7 @@ function startGame(mode, cfg){
   document.getElementById('winOverlay').style.display = 'none';
   document.getElementById('selectOverlay').style.display = 'none';
   camThetaT = camHomeTheta();
-  banner(sideTag(S.turn) + ' to move — tap one of your pieces');
+  banner(sideTag(S.turn) + ' to move' + readyNote(S.turn) + ' — tap one of your pieces');
   /* if the AI holds the first turn (the player fielded Frost), the
      duel opens on its move, not on a dead board */
   if (mode === 'ai' && !humanTurn()) afterAction();
@@ -7908,11 +7964,34 @@ function animate(){
     if (v.parts.glb && v.parts.glb.mixer) v.parts.glb.mixer.update(dt);
     if (v.parts.orb) v.parts.orb.scale.setScalar(1 + Math.sin(t * 3 + v.phase) * 0.16);
     if (v.flash > 0 || v._flashed){
-      v.mats.forEach(function(rec){ if (!rec.m.emissive) return; var base = new THREE.Color(rec.e); base.lerp(FLASH_RED, v.flash * 0.85); rec.m.emissive.copy(base); });
+      v.mats.forEach(function(rec){ if (!rec.m.emissive) return; var base = new THREE.Color(rec.e); if (v._spentShown) base.multiplyScalar(SPENT_EMISSIVE); base.lerp(FLASH_RED, v.flash * 0.85); rec.m.emissive.copy(base); });
       v._flashed = v.flash > 0;
     }
     v.parts.hpBar.quaternion.copy(camera.quaternion);
   });
+  /* Slice 3.10: the ready rings breathe — visible exactly when the
+     piece can still act and is not itself selected (the selection
+     highlight family wins while a piece is picked; the state
+     reasserts the frame it is deselected). A spent piece keeps its
+     dim under any selection — selection never makes a spent piece
+     look ready, because the dim lives in _spentShown. This loop
+     iterates S.units (numeric ids) on purpose: the per-view loop
+     above looks pieces up by Object.keys string and has silently
+     never matched (pre-existing; left as found — see the v3.10
+     slice notes), so the rings drive themselves here. */
+  if (S) for (var rri = 0; rri < S.units.length; rri++){
+    var ru = S.units[rri], rv = views[ru.id];
+    if (!rv || rv.dead || !rv.parts.readyRing) continue;
+    var rring = rv.parts.readyRing;
+    var rShow = !rv._spentShown && ru.alive && !(SEL && SEL.id === ru.id);
+    rring.visible = rShow;
+    if (rShow){
+      var rPulse = Math.sin(t * 2.4 + rv.phase);
+      rring.material.opacity = 0.72 + 0.16 * rPulse;
+      var rScale = 1 + 0.03 * rPulse;
+      rring.scale.set(rScale, rScale, 1);
+    }
+  }
   for (var pmi = 0; pmi < PROP_MIXERS.length; pmi++) PROP_MIXERS[pmi].update(dt);
   throneCrystal.rotation.y += dt * 0.7;
   throneCrystal.position.y = SURF(0, 0) + 1.35 + Math.sin(t * 1.3) * 0.1;
