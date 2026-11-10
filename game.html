@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Spellthrone v3.19 · Slice 3.19 — Courts & Longevity — a duel of archmages</title>
+<title>Spellthrone v3.20 · Slice 3.20 — The Pilgrimage — a duel of archmages</title>
 <style>
   :root{ --gold:#f5c542; --ink:#0d0f14; --txt:#f3ead2; --ember:#ff9a3d; --frost:#57c8ff; --card:#1a1d26; }
   *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -118,7 +118,7 @@
   <div class="legRow"><span class="chip" style="background:#5c7046"></span><b>Forest</b> — <b>−1 damage taken</b> standing in it · costs <b>2 movement</b> to enter (Scouts ignore)</div>
   <div class="legRow"><span class="chip" style="background:#8f7cc0"></span><b>Mana Font</b> — a great mage standing here gains <b>+1 extra mana</b> each round · spells cast <b>from a Font cost ◆1 less</b> (min ◆1)</div>
   <div class="legRow"><span class="chip" style="background:#a8893a"></span><b>Throne</b> — end a round as its <b>sole holder, 3 times</b>, to win · <b>crowns count from Round 3</b></div>
-  <div class="legRow"><span class="chip" style="background:#d96a4a"></span><b>Heart Crystal</b> — a dormant objective deep in each home: the enemy element, waiting. The Scout's pilgrimage — <b>a later lesson</b></div>
+  <div class="legRow"><span class="chip" style="background:#d96a4a"></span><b>Heart Crystal</b> — deep in each home, the enemy element's crystal. Your Scout's <b>Pilgrimage</b>: end an activation standing on <b>your court's crystal</b> (it waits in the enemy home) and <b>survive to its next activation</b> — it wakes as a <b>True Spirit</b> and you choose its form. Kill the kneeling Sprite first, or face what wakes</div>
   <div class="legRow"><span class="chip" style="background:#ffd968"></span><b>The Deepening</b> — at <b>Round 5</b>: signatures unseal, mana income <b>+1</b> for both courts</div>
   <div class="legRow"><span class="chip" style="background:transparent;border:2px solid #ffb84d;border-radius:50%"></span><b>Ring of light</b> — a piece wearing one <b>can still act</b> this round. No ring, and a dimmer figure: it has <b>already acted</b></div>
   <button class="gbtn" id="btnLegendClose" style="margin-top:4px">Close</button>
@@ -150,7 +150,7 @@
     <button class="gbtn big" id="btnPvP">👥 Pass-and-play — two humans, one device</button>
     <button class="gbtn big" id="btnHow">📖 How to play (one minute)</button>
     <div id="glbStatus" style="text-align:center;opacity:.85;font-size:13px;margin-top:10px;min-height:16px"></div>
-    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.19 · Slice 3.19 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 5. A piece still to act wears a ring of light; once it has acted, the ring is gone and the piece rests dimmer. Orbit low and the island’s under-rock is lit from below now, mana seams glowing in the dark. The court breathes: pieces idle on their own time, rise when chosen, and flash when struck. And the Exclusives are serpents now — Ember's Cinderwyrm and Frost's Rimewyrm coil where the hounds once ran, forked tongues and all — while the archers stand in a true shooter's stance, arrows level. And the air itself has taken sides: embers rise over Ember's half of the isle while snow sifts down over Frost's, the braziers' firelight dances with their own flames, and gold, ice and plate catch real reflections of the dusk. The camera has learned manners too: four preset views fly you smoothly around the court, and left alone it breathes, very slowly, like something alive. On the board, pieces travel like they mean it now: moves glide hex to hex on an eased arc, strikes lunge and recoil, and the fallen shrink into their burst of court-colored sparks. And the wyrms themselves have been taken down a size — a small trim, so the serpents coil beside the band instead of towering over it. And the board itself has been polished to the pieces’ shine — the Dusk Slate now catches the same dusk as the gold and ice it carries. And the island no longer floats in front of a poster: a ruined colonnade rings the sky, mist pools below the rock, and the horizon glows warm toward Ember and cool toward Frost. Learn it in a minute. Master it in a season.</p>
+    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.20 · Slice 3.20 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 5. A piece still to act wears a ring of light; once it has acted, the ring is gone and the piece rests dimmer. Orbit low and the island’s under-rock is lit from below now, mana seams glowing in the dark. The court breathes: pieces idle on their own time, rise when chosen, and flash when struck. And the Exclusives are serpents now — Ember's Cinderwyrm and Frost's Rimewyrm coil where the hounds once ran, forked tongues and all — while the archers stand in a true shooter's stance, arrows level. And the air itself has taken sides: embers rise over Ember's half of the isle while snow sifts down over Frost's, the braziers' firelight dances with their own flames, and gold, ice and plate catch real reflections of the dusk. The camera has learned manners too: four preset views fly you smoothly around the court, and left alone it breathes, very slowly, like something alive. On the board, pieces travel like they mean it now: moves glide hex to hex on an eased arc, strikes lunge and recoil, and the fallen shrink into their burst of court-colored sparks. And the wyrms themselves have been taken down a size — a small trim, so the serpents coil beside the band instead of towering over it. And the board itself has been polished to the pieces’ shine — the Dusk Slate now catches the same dusk as the gold and ice it carries. And the island no longer floats in front of a poster: a ruined colonnade rings the sky, mist pools below the rock, and the horizon glows warm toward Ember and cool toward Frost. And the Heart Crystals have woken: a Sprite that ends its activation kneeling on its own crystal and lives to stir again rises as a True Spirit — Inferno or Hearth for Ember, Blizzard or Glacier Wisp for Frost — and the kneeling wears a ring of light the whole board can read, so the race to stop it is fair. Learn it in a minute. Master it in a season.</p>
   </div>
 </div>
 <div id="selectOverlay" class="overlay" style="display:none">
@@ -175,7 +175,7 @@
     <div class="pcard"><span class="pname">👑 High Mage</span> <span class="php">8 HP</span><br>The queen: her own two spells and a bolt at range 2–4. While <b>both</b> great mages stand, either can cast the court's <b>Resonance</b> pair. Her fall ends Resonance — not the duel.</div>
     <div class="pcard"><span class="pname">🗿 Guardian</span> <span class="php">10–11 HP</span><br>A walking wall. Hits for 3 in melee; allies beside one take <b>−1 damage</b>; and once a round a Guardian can <b>Intercept</b> — take a hit meant for a neighbor (the defender chooses, seeing the damage). Ember's Pyre Guard bites back for 1; Frost's Bulwark (11 HP) chills whatever strikes it or its aura.</div>
     <div class="pcard"><span class="pname">🏹 Skirmisher</span> <span class="php">5 HP</span><br>Shoots for 2 at range <b>2–3</b>, never point-blank. Ember's Cinderbow primes Burning and, standing still, looses a <b>Volley</b> at a second foe; Frost's Shardbow chills — and standing still, its shot drives the cold deeper: a foe <b>already Chilled</b> is <b>Rooted</b> where they stand (Still Aim). A fresh foe is only Chilled.</div>
-    <div class="pcard"><span class="pname">🧚 Scout</span> <span class="php">5 HP</span><br>Flits <b>4 hexes</b> through forests as if they were air; stings for 1 and needles at range 2. Ember's Spark Sprite <b>bursts</b> on death; Frost's Mist Sprite, in a forest, cannot be targeted by ranged fire beyond 2 hexes while no enemy stands adjacent.</div>
+    <div class="pcard"><span class="pname">🧚 Scout</span> <span class="php">5 HP</span><br>Flits <b>4 hexes</b> through forests as if they were air; stings for 1 and needles at range 2. Ember's Spark Sprite <b>bursts</b> on death; Frost's Mist Sprite, in a forest, cannot be targeted by ranged fire beyond 2 hexes while no enemy stands adjacent. And the Scout alone can make <b>the Pilgrimage</b> — end an activation on her own court's Heart Crystal, survive to her next, and she wakes as a <b>True Spirit</b>.</div>
     <div class="pcard"><span class="pname">🕯️ Enabler</span> <span class="php">6 HP</span><br>Points outward, never heals. Ember's Kindlebrand lights an ally's next attack (+1, primes Burning); Frost's Rimewarden wraps an ally in ice — the <b>Ward</b>: the next hit they take is negated. But <b>great mages burn too bright to hold a ward</b>, so no Archmage or High Mage may be warded.</div>
     <div class="pcard"><span class="pname">🐍 Court Exclusive</span> <span class="php">6–7 HP</span><br>Ember's Cinderwyrm: a coiled serpent of stone plate and magma — fast, +1 vs Burning prey, runs farther toward fire. Frost's Rimewyrm: a serpent of ice plate over glacier light — its hits chill, +1 vs Chilled, +1 more vs Rooted.</div>
     <div class="pcard"><span class="pname">▲ The triangle</span><br>Classes circle: <b>Scout +1 dmg vs Skirmisher · Guardian +1 dmg vs Scout · Skirmisher pins Guardians</b> (a pinned Guardian cannot Intercept that round; his aura never sleeps). Bonus-only — the favored hit wears a ▲ on the target's number.</div>
@@ -185,7 +185,7 @@
       <div class="legRow"><span class="chip" style="background:#5c7046"></span><b>Forest</b> (trees) — <b>−1 damage taken</b> standing in it · costs <b>2 movement</b> to enter (Scouts ignore the cost)</div>
       <div class="legRow"><span class="chip" style="background:#8f7cc0"></span><b>Mana Font</b> (violet crystals) — a great mage standing here gains <b>+1 extra mana</b> each round, on top of the usual +1 — and spells cast <b>while standing on one cost ◆1 less</b> (never below ◆1). Fonts are casting platforms: the spell buttons show the font price while a caster stands there. Six fonts: a home pair per court, and a contested pair on the rims.</div>
       <div class="legRow"><span class="chip" style="background:#a8893a"></span><b>Throne</b> (gold, center) — end a round as its <b>sole holder, 3 times</b>, to win · crowns count <b>from Round 3</b></div>
-      <div class="legRow"><span class="chip" style="background:#d96a4a"></span><b>Heart Crystal</b> — deep in each home burns the enemy element's crystal: a dormant objective, the Scout's pilgrimage in a later lesson. Guard the ground around yours.</div>
+      <div class="legRow"><span class="chip" style="background:#d96a4a"></span><b>Heart Crystal</b> — deep in each home burns the enemy element's crystal. <b>The Pilgrimage:</b> your Scout seeks ITS OWN court's crystal, the one waiting in the enemy home. End its activation standing on it and the Communion begins — a turning ring of light around the kneeling Sprite is the whole board's warning. If it still stands there at the start of its next activation, it wakes as a <b>True Spirit</b> (8 HP · Move 3 · strikes for 3, no spells) and you pick its form on the spot: Ember chooses <b>🔥 Inferno</b> (its touch sets foes Burning; its death-burst doubles) or <b>🏮 Hearth</b> (Burning foes beside it tick for 2); Frost chooses <b>❄️ Blizzard</b> (foes starting beside it are Chilled) or <b>🌨️ Glacier Wisp</b> (Mistveil everywhere — no forest needed; foes at range 2, or beside it, still reach it). Death is the only interruption — damage alone never breaks the Communion. Guard the ground around yours.</div>
     </div>
     <h2 style="margin-top:14px">SPELLS — THE GREAT MAGES CAST</h2>
     <div class="rules">
@@ -3870,9 +3870,10 @@ var PROP_FILE_NAMES = {"tree-a":"spellthrone-prop-tree-a.glb","tree-b":"spellthr
    damage triangle, staff bolts, the needle, Volley / Still Aim,
    enablers instead of medics, signatures sealed until the Deepening
    (start of round 5: signatures unseal, mana income +1). Heart
-   Crystals stand deep in each home — DORMANT objectives (named,
-   defended by the AI's valuation; the Pilgrimage itself is the next
-   slice). The wider isle: 6 Mana Fonts (a home pair and a contested
+   Crystals stand deep in each home; v3.20 wakes the PILGRIMAGE
+   (addendum §10, Trenten's design): a Sprite ending its activation
+   on its own crystal and surviving to its next one wakes as a True
+   Spirit — the fork chosen at the crystal, board visible. The wider isle: 6 Mana Fonts (a home pair and a contested
    flank pair per side), start lines on the back two rows so first
    contact lands around round 2–3. */
 var HEX_R = 5;
@@ -3888,6 +3889,7 @@ var TYPES = {
   guardian:  { name:'Guardian',   icon:'🛡️', hp:10, move:2, range:1, dmg:3, minRange:1, value:30,  attackKind:'melee' },
   skirmisher:{ name:'Skirmisher', icon:'🏹', hp:5,  move:2, range:3, dmg:2, minRange:2, value:25,  attackKind:'ranged' },
   scout:     { name:'Scout',      icon:'🧚', hp:5,  move:4, range:2, dmg:1, minRange:1, value:15,  attackKind:'needle' },
+  spirit:    { name:'True Spirit', icon:'🌟', hp:8,  move:3, range:2, dmg:3, minRange:1, value:30,  attackKind:'needle' },
   enabler:   { name:'Enabler',    icon:'🕯️', hp:6,  move:2, range:1, dmg:1, minRange:1, value:22,  attackKind:'melee' },
   exclusive: { name:'Exclusive',  icon:'🐍', hp:7,  move:3, range:1, dmg:3, minRange:1, value:32,  attackKind:'melee' }
 };
@@ -3907,7 +3909,8 @@ var COURT_PIECES = {
     skirmisher:{ name:'Cinderbow',          icon:'🏹' },
     scout:     { name:'Spark Sprite',       icon:'✨' },
     enabler:   { name:'Kindlebrand Acolyte',icon:'🕯️' },
-    exclusive: { name:'Cinderwyrm',    icon:'🐍' }
+    exclusive: { name:'Cinderwyrm',    icon:'🐍' },
+    spirit:    { name:'True Spirit', icon:'🌟' }
   },
   frost: {
     mage:      { name:'Archmage',    icon:'🔮' },
@@ -3916,13 +3919,28 @@ var COURT_PIECES = {
     skirmisher:{ name:'Shardbow',    icon:'🏹' },
     scout:     { name:'Mist Sprite', icon:'🌫️' },
     enabler:   { name:'Rimewarden',  icon:'🛡️' },
-    exclusive: { name:'Rimewyrm',icon:'🐍' }
+    exclusive: { name:'Rimewyrm',icon:'🐍' },
+    spirit:    { name:'True Spirit', icon:'🌟' }
   }
 };
 function kitOf(court){ return COURT_PIECES[court] ? court : 'ember'; }
 function maxHp(u){ var m = (COURT_MODS[u.kit] || {})[u.type]; return (m && m.hp) || TYPES[u.type].hp; }
-function unitName(u){ var p = (COURT_PIECES[u.kit] || {})[u.type]; return p ? p.name : TYPES[u.type].name; }
-function unitIcon(u){ var p = (COURT_PIECES[u.kit] || {})[u.type]; return p ? p.icon : TYPES[u.type].icon; }
+/* v3.20 — the True Spirit forms (addendum §10). A Sprite that
+   completes the Communion FORKS at the crystal; the form is the
+   piece from then on. One chassis for all four (TYPES.spirit:
+   8 HP, move 3, a 3-damage needle at range 1–2) — exclusive-
+   grade, worth about two pieces, never a second Archmage: no
+   spellbook, and it stands OUTSIDE the damage triangle on both
+   edges, the Exclusives' privilege (§8). */
+var SPIRIT_FORMS = {
+  inferno:  { court: 'ember', name: 'Inferno Spirit', icon: '🔥', desc: 'Everything it touches Burns: enemies beside it catch fire at the start of its activation — and its Cinderburst, when it falls, doubles to 2.' },
+  hearth:   { court: 'ember', name: 'Hearth Spirit',  icon: '🏮', desc: 'The hearth feeds on fire: a Burning enemy who begins an activation beside it ticks for 2 instead of 1.' },
+  blizzard: { court: 'frost', name: 'Blizzard Spirit', icon: '❄️', desc: 'Its weather arrives with it: enemies who begin an activation beside it start Chilled — and two Chills Root, as ever.' },
+  glacier:  { court: 'frost', name: 'Glacier Wisp',   icon: '🌨️', desc: 'Mistveil everywhere: ranged fire cannot target it at range 3 or more — no forest needed. The proximity gate (range 2 reaches it) and the flush (an adjacent enemy drops the veil) still apply.' }
+};
+function spiritForm(u){ return (u && u.type === 'spirit' && SPIRIT_FORMS[u.form]) ? SPIRIT_FORMS[u.form] : null; }
+function unitName(u){ var f = spiritForm(u); if (f) return f.name; var p = (COURT_PIECES[u.kit] || {})[u.type]; return p ? p.name : TYPES[u.type].name; }
+function unitIcon(u){ var f = spiritForm(u); if (f) return f.icon; var p = (COURT_PIECES[u.kit] || {})[u.type]; return p ? p.icon : TYPES[u.type].icon; }
 /* ---- spells. kind: 'hex' (target a hex), 'unit' (target an enemy
    unit), 'ally' (target a friendly unit), 'self' (no target).
    resonance: castable by either great mage, only while BOTH live.
@@ -4063,7 +4081,7 @@ var CRYSTALS = {}; /* hexKey -> the court whose crystal it is (the element it ho
   pair(2, -2, 'ley'); pair(1, -2, 'ley'); pair(5, 0, 'ley');
   pair(1, 0, 'hill'); pair(0, 1, 'hill'); pair(2, 1, 'hill'); pair(3, -2, 'hill');
   pair(1, 1, 'forest'); pair(-1, 1, 'forest'); pair(3, -1, 'forest'); pair(3, 0, 'forest'); pair(2, 3, 'forest'); pair(4, -3, 'forest');
-  /* Heart Crystals — DORMANT: each home keeps the crystal its own
+  /* Heart Crystals (§10): each home keeps the crystal its own
      court's Sprite must one day reach, deep behind the enemy
      formation, beside the enemy Archmage's neighborhood */
   set(3, -5, 'crystal'); CRYSTALS['3,-5'] = 'ember';
@@ -4077,6 +4095,12 @@ function crystalAt(q, r){ return CRYSTALS[hexKey(q, r)] || null; }
 /* the crystal a side must DEFEND: the one in its own home (it holds
    the enemy element — the enemy Scout's pilgrimage target) */
 function homeCrystalOf(s, side){ return s.courts[side] === 'ember' ? { q: -3, r: 5 } : { q: 3, r: -5 }; }
+/* the crystal a side's Sprite must REACH: its own court's crystal,
+   which stands in the ENEMY home (the inverse of homeCrystalOf).
+   Element-keyed, as registered: in a mirror match a side's pilgrim
+   target is the crystal in its own home — the placement rule as
+   written, left as written. */
+function pilgrimCrystalOf(s, side){ return s.courts[side] === 'ember' ? { q: 3, r: -5 } : { q: -3, r: 5 }; }
 function allHexes(){ var out = []; for (var q = -HEX_R; q <= HEX_R; q++) for (var r = -HEX_R; r <= HEX_R; r++) if (inBoard(q, r)) out.push({ q: q, r: r }); return out; }
 /* §4 (Slice 2): fonts are casting platforms. A spell cast while the
    caster stands on a Mana Font costs ◆1 less, minimum ◆1 — the only
@@ -4105,7 +4129,7 @@ function newMatch(courtA, courtB){
       var u = { id: id++, side: side, court: courts[side], kit: kitOf(courts[side]), type: sp[0], q: q, r: r,
                 hp: 0, acted: false, alive: true,
                 burning: false, chill: 0, ward: false, buffKind: false, buffOver: false,
-                pinned: false, interceptUsed: false, sigUsed: false };
+                pinned: false, interceptUsed: false, sigUsed: false, channeling: false, form: null };
       u.hp = maxHp(u);
       s.units.push(u);
     });
@@ -4123,15 +4147,29 @@ function glacierAt(s, q, r){ for (var i = 0; i < s.glaciers.length; i++){ var g 
    Absolute Zero still roots next round's first steps. */
 function isRooted(u){ return u.chill >= 2; }
 function effMove(u){ if (isRooted(u)) return 0; return Math.max(0, TYPES[u.type].move - (u.chill > 0 ? 1 : 0)); }
-function moveCost(u, q, r){ if (u.type === 'scout') return 1; return terrainAt(q, r) === 'forest' ? 2 : 1; }
+function moveCost(u, q, r){ if (u.type === 'scout' || u.type === 'spirit') return 1; return terrainAt(q, r) === 'forest' ? 2 : 1; }
 /* reachable hexes for u, with the cheapest cost and a walked path to
    each. Glaciers block like bodies. The Cinderwyrm's "drawn to
    the fire": +1 budget when the destination ends beside a Burning
    enemy (checked per-destination by re-running the walk at budget+1
    only for qualifying hexes — approximated honestly: the extra hex
    of budget exists only on paths whose END is beside the fire). */
+/* the Blizzard question, asked by the walk below and by the
+   renderer: is this piece beside a living enemy Blizzard Spirit? */
+function blizzardPending(s, u){
+  return s.units.some(function(o){ return o.alive && o.side !== u.side && o.type === 'spirit' && o.form === 'blizzard' && hexDist(o.q, o.r, u.q, u.r) === 1; });
+}
 function reachable(s, u){
-  var budget = effMove(u);
+  /* v3.20: the Blizzard Spirit's cold is priced into the walk
+     itself. A piece beside an enemy Blizzard Spirit walks as if
+     it carried one more Chill than it does (two total = Rooted:
+     no walk at all) — priced HERE, in the one walk every consumer
+     shares, so the board's preview, the AI's enumerations and
+     the resolution agree before anyone commits. The chill is a
+     phantom: it taxes this activation's movement only (see the
+     head of applyActivation for how it is announced and spent). */
+  var vchill = Math.min(2, u.chill + (blizzardPending(s, u) ? 1 : 0));
+  var budget = vchill >= 2 ? 0 : Math.max(0, TYPES[u.type].move - (vchill > 0 ? 1 : 0));
   var walk = function(bud){
     var best = {}, start = hexKey(u.q, u.r);
     best[start] = { cost: 0, path: [start] };
@@ -4196,6 +4234,21 @@ function attackDamage(s, atk, def, fromQ, fromR){
    the needle are not ranged; spells target hexes/units by their own
    rules and always answer. */
 function veiledFrom(s, atk, def, fromQ, fromR){
+  /* v3.20: the Glacier Wisp carries its veil with it — Mistveil
+     everywhere, no forest required. The two registered pressure
+     valves still apply unchanged: the proximity gate (ranged MAY
+     target it from exactly 2 hexes) and the flush (any enemy of
+     the attacker standing adjacent drops the veil). */
+  if (def.type === 'spirit' && def.form === 'glacier'){
+    var gk = TYPES[atk.type].attackKind;
+    if (gk !== 'ranged' && gk !== 'bolt') return false;
+    if (hexDist(fromQ, fromR, def.q, def.r) === 2) return false;
+    for (var gi = 0; gi < s.units.length; gi++){
+      var ge = s.units[gi];
+      if (ge.alive && ge.side === atk.side && hexDist(ge.q, ge.r, def.q, def.r) === 1) return false;
+    }
+    return true;
+  }
   if (def.type !== 'scout' || def.kit !== 'frost') return false;
   if (terrainAt(def.q, def.r) !== 'forest') return false;
   var kind = TYPES[atk.type].attackKind;
@@ -4262,20 +4315,48 @@ function hurt(s, u, dmg, evs, how){
   if (!u.alive) return;
   u.hp -= dmg;
   evs.push({ t: 'hit', unit: u.id, dmg: dmg, how: how });
-  if (u.hp <= 0){ u.alive = false; evs.push({ t: 'death', unit: u.id }); cinderburst(s, u, evs); settleWinner(s, evs); }
+  if (u.hp <= 0){ u.alive = false; u.channeling = false; evs.push({ t: 'death', unit: u.id }); cinderburst(s, u, evs); settleWinner(s, evs); }
 }
 /* the Spark Sprite's Cinderburst: on death, 1 to every adjacent
    enemy, and they catch fire. Chains are allowed (a burst can kill
    another Spark Sprite) — deaths are final, so chains terminate. */
 function cinderburst(s, u, evs){
-  if (u.type !== 'scout' || u.kit !== 'ember') return;
+  if (u.kit !== 'ember') return;
+  if (u.type !== 'scout' && u.type !== 'spirit') return;
+  /* the Inferno Spirit's burst doubles (§10: 'Cinderburst doubles') */
+  var dmg = (u.type === 'spirit' && u.form === 'inferno') ? 2 : 1;
   evs.push({ t: 'burst', unit: u.id });
   s.units.forEach(function(e){
     if (e.alive && e.side !== u.side && hexDist(u.q, u.r, e.q, e.r) === 1){
       e.burning = true;
-      dealDamage(s, e, 1, evs, 'cinderburst');
+      dealDamage(s, e, dmg, evs, 'cinderburst');
     }
   });
+}
+/* the fork heuristic — the AI's pick, and the human chooser's
+   pre-selection. Ember: a board already burning (or a foe within
+   reach of the touch) wants the Inferno; a cold board wants the
+   Hearth, so every future fire ticks harder. Frost: a ranged
+   enemy court wants the Wisp's everywhere-veil; a brawling court
+   wants the Blizzard's personal weather. */
+function defaultFormFor(s, u){
+  if (u.kit === 'ember'){
+    var hot = s.units.some(function(e){ return e.alive && e.side !== u.side && (e.burning || hexDist(e.q, e.r, u.q, u.r) === 1); });
+    return hot ? 'inferno' : 'hearth';
+  }
+  var ranged = s.units.filter(function(e){ return e.alive && e.side !== u.side && (e.type === 'skirmisher' || e.type === 'mage' || e.type === 'queen'); }).length;
+  return ranged >= 3 ? 'glacier' : 'blizzard';
+}
+/* the waking: full heal to the Spirit's 8, every mark and boon
+   burned away, position kept — and the piece then takes this
+   activation as what it has become. */
+function evolveSpirit(s, u, fork, evs){
+  var legal = u.kit === 'ember' ? ['inferno', 'hearth'] : ['blizzard', 'glacier'];
+  if (legal.indexOf(fork) < 0) fork = defaultFormFor(s, u);
+  u.type = 'spirit'; u.form = fork; u.channeling = false;
+  u.hp = maxHp(u);
+  u.burning = false; u.chill = 0; u.ward = false; u.buffKind = false; u.buffOver = false; u.pinned = false;
+  evs.push({ t: 'evolve', unit: u.id, form: fork });
 }
 /* every HP loss that is a HIT passes here: the Rimewarden's one-hit
    ward negates it whole. (The Burning tick is not a hit — it calls
@@ -4405,12 +4486,43 @@ function resolveWeaponAttack(s, atk, def, fromQ, fromR, evs, plan, stationary){
 function applyActivation(s, plan){
   var evs = [], u = unitById(s, plan.unit);
   if (!u || !u.alive || u.acted || s.winner !== null) return evs;
+  /* v3.20 — THE PILGRIMAGE (addendum §10): the Communion completes
+     HERE, at the start of the Sprite's next activation, if it
+     ended its last activation on its own crystal and still stands
+     there. Death in the window cancels it (see hurt); nothing
+     else interrupts — there is no push or shove in this game,
+     and damage alone never broke a trance. The check runs before
+     the Burning tick: the defense's window was the round between,
+     and a Sprite that survived it wakes whole. */
+  if (u.type === 'scout' && u.channeling && crystalAt(u.q, u.r) === u.court) evolveSpirit(s, u, plan.evolve, evs);
+  /* a True Spirit's weather arrives with it. The Inferno's touch:
+     enemies beside it catch Burning at the start of ITS activation
+     (they tick at theirs, not now). The Blizzard's cold: a piece
+     beginning its activation beside an enemy Blizzard Spirit
+     starts Chilled — a phantom chill priced into its walk by
+     reachable(), so a piece already carrying one Chill is Rooted
+     for the activation. The Inferno's Burning, by contrast, is
+     real: it is laid now and ticks at the victim's own start. */
+  if (u.type === 'spirit' && u.form === 'inferno'){
+    s.units.forEach(function(e){ if (e.alive && e.side !== u.side && hexDist(u.q, u.r, e.q, e.r) === 1) applyBurn(s, e, evs); });
+  }
+  /* the Blizzard's cold, announced as a status — but a PHANTOM in
+     the state: reachable() has already priced it into this
+     activation's walk, and it is spent with the activation without
+     ever entering u.chill, so cold that lands DURING the
+     activation (a Bulwark's answer, Rime's arrival) still stays,
+     exactly as the Chill economy has always ruled. */
+  if (blizzardPending(s, u)) evs.push({ t: 'status', unit: u.id, what: 'chill', n: Math.min(2, u.chill + 1) });
   var chillAtStart = u.chill;
   /* Kindling's tax: a Burning piece takes 1 at the start of its own
      activation — before it stirs. Fire is not a hit: no ward saves
      you, no aura softens it. If it kills, the activation is spent. */
   if (u.burning){
-    hurt(s, u, 1, evs, 'burn');
+    /* the Hearth Spirit's aura (§10): a Burning foe beginning its
+       activation beside an enemy Hearth Spirit feeds on the fire —
+       its tick is 2, not 1 */
+    var hearthNear = s.units.some(function(o){ return o.alive && o.side !== u.side && o.type === 'spirit' && o.form === 'hearth' && hexDist(o.q, o.r, u.q, u.r) === 1; });
+    hurt(s, u, hearthNear ? 2 : 1, evs, 'burn');
     if (!u.alive){
       u.acted = true;
       evs.push({ t: 'acted', unit: u.id, from: { q: u.q, r: u.r } });
@@ -4482,6 +4594,14 @@ function applyActivation(s, plan){
      this piece BEFORE it stirred is gone; what landed DURING its
      activation (a Bulwark's answer, Rime's arrival) stays. */
   u.chill = Math.max(0, u.chill - chillAtStart);
+  /* the Communion begins: a Sprite that ENDS its activation
+     standing on its own court's Heart Crystal starts channeling.
+     Survive to its next activation and it wakes (see the head of
+     this function). */
+  if (u.type === 'scout' && u.alive && crystalAt(u.q, u.r) === u.court){
+    u.channeling = true;
+    evs.push({ t: 'channel', unit: u.id });
+  }
   evs.push({ t: 'acted', unit: u.id, from: from });
   if (!settleWinner(s, evs)) advanceTurn(s, evs);
   return evs;
@@ -4710,7 +4830,20 @@ function enumeratePlans(s, side){
       u.q = savedQ; u.r = savedR;
     });
   });
-  return plans;
+  /* v3.20: fork at the crystal — the plans of a Sprite whose
+     Communion completes this activation exist once per fork, so
+     the brain prices both destinies and picks with the board in
+     front of it, exactly as the human chooser does. */
+  var forkExtra = [];
+  plans.forEach(function(pl){
+    var pu = unitById(s, pl.unit);
+    if (pu && pu.type === 'scout' && pu.channeling && crystalAt(pu.q, pu.r) === pu.court){
+      var fk = pu.kit === 'ember' ? ['inferno', 'hearth'] : ['blizzard', 'glacier'];
+      pl.evolve = fk[0];
+      var fc = Object.assign({}, pl); fc.evolve = fk[1]; forkExtra.push(fc);
+    }
+  });
+  return plans.concat(forkExtra);
 }
 /* ================= THE AI =================
    One honest heuristic brain: it prices damage in material, fears
@@ -4745,17 +4878,21 @@ function scorePlan(s, side, plan){
   var clone = cloneState(s);
   var before = {}; s.units.forEach(function(x){ before[x.id] = x.hp; });
   var gBefore = s.glaciers.reduce(function(a, g){ return a + g.hp; }, 0);
-  var evs = applyActivation(clone, { unit: plan.unit, dest: { q: plan.dest.q, r: plan.dest.r }, action: plan.action ? Object.assign({}, plan.action) : null });
+  var evs = applyActivation(clone, { unit: plan.unit, dest: { q: plan.dest.q, r: plan.dest.r }, action: plan.action ? Object.assign({}, plan.action) : null, evolve: plan.evolve });
   var cu = unitById(clone, u.id);
   s.units.forEach(function(x){
     var cx = unitById(clone, x.id);
     var dhp = (before[x.id] || 0) - Math.max(0, cx.hp);
-    if (dhp > 0) sc += (x.side === side ? -1 : 1) * dhp * (TYPES[x.type].value / maxHp(x));
-    if (x.alive && !cx.alive) sc += (x.side === side ? -1 : 1) * TYPES[x.type].value * 1.6;
+    /* a channeling Sprite is a marked target (§10): the defense
+       races the Communion, so wounds dealt to it price at 1.8x */
+    var xw = (x.side !== side && x.type === 'scout' && x.channeling) ? 1.8 : 1;
+    if (dhp > 0) sc += (x.side === side ? -1 : 1) * dhp * (TYPES[x.type].value / maxHp(x)) * xw;
+    if (x.alive && !cx.alive) sc += (x.side === side ? -1 : 1) * TYPES[x.type].value * 1.6 * xw;
   });
   var gAfter = clone.glaciers.reduce(function(a, g){ return a + g.hp; }, 0);
   if (gAfter < gBefore) sc += (gBefore - gAfter) * 1.2;         /* cracking a wall is worth something */
   if (gAfter > gBefore) sc += 2;                                 /* raising one, a little */
+  if (evs.some(function(e){ return e.t === 'evolve' && e.unit === plan.unit; })) sc += 38;  /* waking a True Spirit: ~a piece and a half of tempo */
   if (clone.winner === side) sc += 10000;
   if (clone.winner === 1 - side) sc -= 10000;
   if (plan.action && plan.action.kind === 'enable'){
@@ -4777,6 +4914,15 @@ function scorePlan(s, side, plan){
     var hc = homeCrystalOf(s, side);
     var foeScout = s.units.some(function(x){ return x.alive && x.side !== side && x.type === 'scout'; });
     if (foeScout && hexDist(cu.q, cu.r, hc.q, hc.r) <= 2) sc += 2.5;
+    /* the run itself (§10): a Scout prices progress toward its own
+       crystal at 1.1 a hex, and ending the activation ON it — the
+       Communion begun — at 30. Throne duty (16, above) still
+       outbids a step; exposure still taxes the deep run. */
+    if (cu.type === 'scout'){
+      var pc = pilgrimCrystalOf(s, side);
+      sc += (hexDist(u.q, u.r, pc.q, pc.r) - hexDist(cu.q, cu.r, pc.q, pc.r)) * 1.1;
+      if (cu.channeling) sc += 30;
+    }
     var foe = mageOf(clone, 1 - side);
     if (foe) sc -= hexDist(cu.q, cu.r, foe.q, foe.r) * 0.18;
   } else if (cu && !cu.alive) sc -= 400;
@@ -4792,7 +4938,6 @@ function planAI(s, side, rng){
   }
   return best;
 }
-
 </script>
 <script>
 /* ================= RENDER + HUMAN UX =================
@@ -6886,6 +7031,71 @@ function refreshActedVisuals(){
     if (v._spentShown === undefined){ v._spentShown = spent; if (spent) setActedDim(u.id, true); }
     else if (v._spentShown !== spent){ v._spentShown = spent; setActedDim(u.id, spent); }
   });
+  refreshSpiritVisuals();
+}
+
+/* v3.20 — THE PILGRIMAGE READ. State-driven like refreshActedVisuals
+   (which calls this at its end, so every existing sync point covers
+   it): attaches/detaches exactly on state flips. A CHANNELING
+   Sprite wears a turning ring of its court's light at hex level
+   with three sparks in orbit — it shows while the piece sits spent
+   and dimmed, which is precisely the defense's window to race it.
+   A TRUE SPIRIT gains an authored treatment on the existing model:
+   five crown shards turning above it, a tilted halo, a soft pool
+   of court light below, the figure standing 1.2x — distinguishable
+   at 80px and inside the ready/spent system (the aura is NOT dimmed
+   with the piece: it reads through the spent state). Bespoke True
+   Spirit GLBs are a named follow-up; this is the presentable
+   transformation, not a bare recolor. */
+function refreshSpiritVisuals(){
+  if (!S) return;
+  S.units.forEach(function(u){
+    var v = views[u.id]; if (!v || !v.group) return;
+    var col = u.court === 'frost' ? 0x9fd8ff : 0xffa245;
+    if (v.dead){
+      if (v.chanFx){ v.group.remove(v.chanFx); v.chanFx = null; }
+      if (v.spiritFx){ v.group.remove(v.spiritFx); v.spiritFx = null; }
+      return;
+    }
+    var wantChan = u.alive && !!u.channeling;
+    if (wantChan && !v.chanFx){
+      var cg = new THREE.Group();
+      var ring = new THREE.Mesh(new THREE.TorusGeometry(0.52, 0.035, 8, 40), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.9 }));
+      ring.rotation.x = Math.PI / 2; ring.position.y = 0.16; cg.add(ring);
+      for (var i = 0; i < 3; i++){
+        var orb = new THREE.Mesh(new THREE.OctahedronGeometry(0.07), new THREE.MeshBasicMaterial({ color: 0xfff2cf }));
+        var a = i * Math.PI * 2 / 3;
+        orb.position.set(Math.cos(a) * 0.52, 0.16, Math.sin(a) * 0.52);
+        cg.add(orb);
+      }
+      v.group.add(cg); v.chanFx = cg;
+    } else if (!wantChan && v.chanFx){
+      v.group.remove(v.chanFx); v.chanFx = null;
+    }
+    var wantSpirit = u.alive && u.type === 'spirit';
+    if (wantSpirit && !v.spiritFx){
+      var sg = new THREE.Group();
+      var disc = new THREE.Mesh(new THREE.CircleGeometry(0.62, 28), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.18, depthWrite: false }));
+      disc.rotation.x = -Math.PI / 2; disc.position.y = 0.03; sg.add(disc);
+      var crown = new THREE.Group();
+      for (var j = 0; j < 5; j++){
+        var sh = new THREE.Mesh(new THREE.OctahedronGeometry(0.085), new THREE.MeshBasicMaterial({ color: j % 2 ? 0xfff2cf : col }));
+        var aj = j * Math.PI * 2 / 5;
+        sh.position.set(Math.cos(aj) * 0.34, 0, Math.sin(aj) * 0.34);
+        crown.add(sh);
+      }
+      crown.position.y = 1.5; crown.userData.baseY = 1.5; sg.add(crown); sg.userData.crown = crown;
+      var halo = new THREE.Mesh(new THREE.TorusGeometry(0.44, 0.022, 8, 40), new THREE.MeshBasicMaterial({ color: 0xfff2cf, transparent: true, opacity: 0.75 }));
+      halo.rotation.x = Math.PI / 2.6; halo.position.y = 1.12; sg.add(halo);
+      v.group.add(sg); v.spiritFx = sg;
+      var fig = v.parts && v.parts.fig;
+      if (fig){ if (v._spiritBaseScale === undefined) v._spiritBaseScale = fig.scale.x; fig.scale.setScalar(v._spiritBaseScale * 1.2); }
+    } else if (!wantSpirit && v.spiritFx){
+      v.group.remove(v.spiritFx); v.spiritFx = null;
+      var fig2 = v.parts && v.parts.fig;
+      if (fig2 && v._spiritBaseScale !== undefined) fig2.scale.setScalar(v._spiritBaseScale);
+    }
+  });
 }
 /* Slice 3.10: the turn prompt carries the count for the side to move */
 function readyCount(side){ var n = 0; S.units.forEach(function(u){ if (u.alive && u.side === side && !u.acted) n++; }); return n; }
@@ -7075,6 +7285,23 @@ function performEvents(evs, cb){
         shot(200, function(){}, function(){ burst(v.group.position.clone().setY(v.group.position.y + 0.7), 0xff8a3d, 16, 4, 3); });
         notes.push('💥 Cinderburst!');
       })(ev);
+    } else if (ev.t === 'channel'){
+      (function(ev){
+        var v = views[ev.unit]; if (!v) return;
+        shot(220, function(){}, function(){ floater(v.group.position.clone().setY(v.group.position.y + 1.1), '✨ THE COMMUNION BEGINS', '#ffd9ec'); refreshSpiritVisuals(); });
+        notes.push('✨ A Sprite kneels at its Heart Crystal — if it lives to act again, it wakes as a True Spirit');
+      })(ev);
+    } else if (ev.t === 'evolve'){
+      (function(ev){
+        var v = views[ev.unit]; if (!v) return;
+        var uu = unitById(S, ev.unit);
+        shot(460, function(){}, function(){
+          floater(v.group.position.clone().setY(v.group.position.y + 1.3), '🌟 ' + (uu ? unitName(uu).toUpperCase() : 'TRUE SPIRIT'), '#ffe9a8');
+          burst(v.group.position.clone().setY(v.group.position.y + 0.8), uu && uu.court === 'frost' ? 0x9fd8ff : 0xffa245, 22, 5, 4);
+          v.flash = 1; setHPBar(ev.unit); refreshSpiritVisuals();
+        });
+        notes.push('🌟 The Communion completes — a True Spirit wakes');
+      })(ev);
     } else if (ev.t === 'deepening'){
       shot(60, function(){}, function(){
         if (runeBand && runeBand.material && runeBand.material.emissive) runeBand.material.emissive.setHex(0x8a3800);
@@ -7203,7 +7430,7 @@ var TUTSTEPS = [
       var spr = tutUnit('scout');
       return 'Send your <b>Spark Sprite</b> <b>through the forest</b> (the trees on the western rim — four hexes is exactly her stride).' +
       '<br><br>The Sprite moves <b>4 hexes</b> and ignores the forest movement cost entirely — woods that cost everyone else 2 cost it 1. She is your scout, your throne-runner, your escape artist — and a bomb with a smile: when she falls, her <b>Cinderburst</b> deals 1 to every adjacent enemy and sets them Burning.' +
-      '<br><br>🩵 And see the great crystal burning deep in Frost\'s back line? That is a <b>Heart Crystal</b> — one day it will be your Sprite\'s pilgrimage. Today it only watches.' +
+      '<br><br>🩵 And see the great crystal burning deep in Frost\'s back line? That is a <b>Heart Crystal</b> — that is where your Sprite\'s pilgrimage will one day lead — a later lesson walks it. Today it only watches.' +
       /* v2.2.3: if the player spent the Sprite earlier this round —
          step 2's own advice suggests exactly that — the step is not
          stuck, it is waiting for the round to turn over; say so on
@@ -7525,9 +7752,14 @@ function drawSelection(){
   if (u.buffOver) statusBits.push('♨️ Overheated +2');
   if (u.pinned) statusBits.push('📌 Pinned — no Intercept this round');
   if (u.type === 'guardian' && u.interceptUsed) statusBits.push('🛡️ Intercept spent');
+  /* v3.20: the Pilgrimage reads on the card as plainly as on the board */
+  if (u.type === 'scout' && !u.channeling && crystalAt(u.q, u.r) === u.court) statusBits.push('✨ On its Heart Crystal — end this activation here to begin the Communion');
+  if (u.channeling) statusBits.push('🌀 Communing — a True Spirit wakes at its next activation');
+  var _sf = spiritForm(u); if (_sf) statusBits.push(_sf.icon + ' ' + _sf.name + ' — ' + _sf.desc);
+  if (u.alive && !u.acted && blizzardPending(S, u)) statusBits.push('❄️ Blizzard drift — beside a Blizzard Spirit: this activation walks Chilled (its glowing reach already shows it)');
   card.innerHTML = '<span class="uname">' + unitIcon(u) + ' ' + unitName(u) + '</span> · ' + sideTag(u.side) + ' · ❤️ ' + u.hp + '/' + maxHp(u) +
     '<br><span style="opacity:.8;font-size:13px">Move ' + effMove(u) + (u.chill > 0 ? ' (base ' + T.move + ')' : '') + ' · ' + (T.range > 1 ? 'Range ' + (T.minRange > 1 ? T.minRange + '–' : '') + T.range : 'Melee') + ' · Damage ' + T.dmg +
-    (terr !== 'plain' ? ' · standing on ' + (terr === 'ley' ? 'Mana Font' : terr === 'crystal' ? 'a Heart Crystal (dormant)' : terr) : '') + '</span>' +
+    (terr !== 'plain' ? ' · standing on ' + (terr === 'ley' ? 'Mana Font' : terr === 'crystal' ? 'a Heart Crystal' : terr) : '') + '</span>' +
     (statusBits.length ? '<br><span style="font-size:13px;color:#ffd968">' + statusBits.join(' · ') + '</span>' : '');
   /* Slice 3.1: the standing-fast tricks are stated on the card BEFORE
      any shot, whenever the piece is in a position to use them — the
@@ -7548,6 +7780,20 @@ function drawSelection(){
   function btn(label, cls, fn, dis){
     var b = document.createElement('button'); b.className = 'gbtn ' + (cls || ''); b.innerHTML = label; b.disabled = !!dis;
     b.onclick = function(ev2){ ev2.stopPropagation(); fn(); }; row.appendChild(b); CARD_BTNS.push(label); return b;
+  }
+  /* v3.20: the fork at the crystal. When this Sprite's Communion
+     completes with THIS activation, the choice stands in the card
+     before the move is even picked: two destinies as toggles, the
+     engine's heuristic pre-picked, the board visible behind. */
+  if (u.type === 'scout' && u.channeling && crystalAt(u.q, u.r) === u.court && HUMANS[u.side] && S.turn === u.side){
+    var _forks = u.kit === 'ember' ? ['inferno', 'hearth'] : ['blizzard', 'glacier'];
+    if (!EVOLVE_PICK[u.id]) EVOLVE_PICK[u.id] = defaultFormFor(S, u);
+    card.innerHTML += '<br><span style="font-size:13px;color:#ffd9ec">🌟 <b>The Communion completes as this activation begins.</b> Choose what wakes:</span>';
+    _forks.forEach(function(f){
+      var F = SPIRIT_FORMS[f];
+      btn((EVOLVE_PICK[u.id] === f ? '● ' : '○ ') + F.icon + ' ' + F.name, '', function(){ EVOLVE_PICK[u.id] = f; drawSelection(); });
+    });
+    card.innerHTML += '<br><span style="font-size:12.5px;opacity:.85">' + SPIRIT_FORMS[EVOLVE_PICK[u.id]].desc + '</span>';
   }
   if (PHASE === 'move'){
     var reach = reachable(S, u);
@@ -7739,6 +7985,7 @@ function addEnableButton(u){
   };
   row.appendChild(b); CARD_BTNS.push(b.innerHTML);
 }
+var EVOLVE_PICK = {}; /* v3.20: unit id -> the fork its human picked at the crystal */
 function commit(plan){
   /* reset the WHOLE input machine, not just SEL: leaving PHASE at
      'move'/'act' with SEL null strands every future tap — handleTap
@@ -7746,6 +7993,13 @@ function commit(plan){
      no longer exists, so the board goes permanently deaf */
   SEL = null; PHASE = 'pick'; DEST = null; ARMED = null; STAGED = null; VOLLEY_ARM = false; clearHL(); document.getElementById('bottombar').style.display = 'none';
   refreshHpPreviews(); /* the armed outcome comes off the target's number the moment the blow is committed */
+  /* v3.20: a waking Sprite's fork rides the plan — the chooser's
+     pick, or the engine's heuristic when the card was never opened */
+  if (plan){
+    var _eu = unitById(S, plan.unit);
+    if (plan.evolve === undefined && _eu && _eu.type === 'scout' && _eu.channeling) plan.evolve = EVOLVE_PICK[plan.unit] || defaultFormFor(S, _eu);
+    delete EVOLVE_PICK[plan.unit];
+  }
   tutBeforeCommit(plan);
   maybeIntercept(plan, function(){ doCommit(plan); });
 }
@@ -8428,6 +8682,10 @@ function animate(){
     }
     if (v.parts.glb && v.parts.glb.mixer) v.parts.glb.mixer.update(dt);
     if (v.parts.orb) v.parts.orb.scale.setScalar(1 + Math.sin(t * 3 + v.phase) * 0.16);
+    /* v3.20: the Communion ring turns and breathes; the True
+       Spirit's crown wheels slowly above it */
+    if (v.chanFx){ v.chanFx.rotation.y = t * 1.6 + v.phase; v.chanFx.children[0].material.opacity = 0.72 + Math.sin(t * 3.4 + v.phase) * 0.28; }
+    if (v.spiritFx && v.spiritFx.userData.crown){ var _crw = v.spiritFx.userData.crown; _crw.rotation.y = -t * 0.9 + v.phase; _crw.position.y = _crw.userData.baseY + Math.sin(t * 1.7 + v.phase) * 0.05; }
     if (v.flash > 0 || v._flashed){
       v.mats.forEach(function(rec){ if (!rec.m.emissive) return; var base = new THREE.Color(rec.e); if (v._spentShown) base.multiplyScalar(SPENT_EMISSIVE); base.lerp(FLASH_RED, v.flash * 0.85); rec.m.emissive.copy(base); });
       v._flashed = v.flash > 0;
