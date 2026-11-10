@@ -4092,15 +4092,19 @@ function inBoard(q, r){ return Math.max(Math.abs(q), Math.abs(r), Math.abs(q + r
 function hexDist(aq, ar, bq, br){ var dq = aq - bq, dr = ar - br; return (Math.abs(dq) + Math.abs(dr) + Math.abs(dq + dr)) / 2; }
 function terrainAt(q, r){ return TERRAIN[hexKey(q, r)] || 'plain'; }
 function crystalAt(q, r){ return CRYSTALS[hexKey(q, r)] || null; }
-/* the crystal a side must DEFEND: the one in its own home (it holds
-   the enemy element — the enemy Scout's pilgrimage target) */
-function homeCrystalOf(s, side){ return s.courts[side] === 'ember' ? { q: -3, r: 5 } : { q: 3, r: -5 }; }
-/* the crystal a side's Sprite must REACH: its own court's crystal,
-   which stands in the ENEMY home (the inverse of homeCrystalOf).
-   Element-keyed, as registered: in a mirror match a side's pilgrim
-   target is the crystal in its own home — the placement rule as
-   written, left as written. */
-function pilgrimCrystalOf(s, side){ return s.courts[side] === 'ember' ? { q: 3, r: -5 } : { q: -3, r: 5 }; }
+/* the crystal a side must DEFEND: the one standing in its own home
+   (the back-rank crystal hex on the side's own half — formations are
+   side-keyed, so home follows the SIDE, not the element) */
+function homeCrystalOf(s, side){ return side === 0 ? { q: -3, r: 5 } : { q: 3, r: -5 }; }
+/* the crystal a side's Sprite must REACH: the one standing in the
+   ENEMY home, behind the enemy formation (the inverse of
+   homeCrystalOf). Side-keyed since the v3.20c orientation fix: keying
+   by crystal element collapsed the run to one hex whenever courts
+   were swapped or mirrored (probes, Nov 10). In the canonical
+   Ember-south orientation this is the same hex as the element rule. */
+function pilgrimCrystalOf(s, side){ return side === 0 ? { q: 3, r: -5 } : { q: -3, r: 5 }; }
+/* is this unit standing on ITS pilgrimage crystal (the enemy-home one)? */
+function onPilgrimCrystal(s, u){ var pc = pilgrimCrystalOf(s, u.side); return u.q === pc.q && u.r === pc.r; }
 function allHexes(){ var out = []; for (var q = -HEX_R; q <= HEX_R; q++) for (var r = -HEX_R; r <= HEX_R; r++) if (inBoard(q, r)) out.push({ q: q, r: r }); return out; }
 /* §4 (Slice 2): fonts are casting platforms. A spell cast while the
    caster stands on a Mana Font costs ◆1 less, minimum ◆1 — the only
@@ -4494,7 +4498,7 @@ function applyActivation(s, plan){
      and damage alone never broke a trance. The check runs before
      the Burning tick: the defense's window was the round between,
      and a Sprite that survived it wakes whole. */
-  if (u.type === 'scout' && u.channeling && crystalAt(u.q, u.r) === u.court) evolveSpirit(s, u, plan.evolve, evs);
+  if (u.type === 'scout' && u.channeling && onPilgrimCrystal(s, u)) evolveSpirit(s, u, plan.evolve, evs);
   /* a True Spirit's weather arrives with it. The Inferno's touch:
      enemies beside it catch Burning at the start of ITS activation
      (they tick at theirs, not now). The Blizzard's cold: a piece
@@ -4598,7 +4602,7 @@ function applyActivation(s, plan){
      standing on its own court's Heart Crystal starts channeling.
      Survive to its next activation and it wakes (see the head of
      this function). */
-  if (u.type === 'scout' && u.alive && crystalAt(u.q, u.r) === u.court){
+  if (u.type === 'scout' && u.alive && onPilgrimCrystal(s, u)){
     u.channeling = true;
     evs.push({ t: 'channel', unit: u.id });
   }
@@ -4837,7 +4841,7 @@ function enumeratePlans(s, side){
   var forkExtra = [];
   plans.forEach(function(pl){
     var pu = unitById(s, pl.unit);
-    if (pu && pu.type === 'scout' && pu.channeling && crystalAt(pu.q, pu.r) === pu.court){
+    if (pu && pu.type === 'scout' && pu.channeling && onPilgrimCrystal(s, pu)){
       var fk = pu.kit === 'ember' ? ['inferno', 'hearth'] : ['blizzard', 'glacier'];
       pl.evolve = fk[0];
       var fc = Object.assign({}, pl); fc.evolve = fk[1]; forkExtra.push(fc);
@@ -5555,10 +5559,10 @@ function boardColor(hex){ var c = new THREE.Color(hex); c.convertSRGBToLinear();
       scene.add(throneRingInlay);
     }
     if (t === 'crystal'){
-      /* a Heart Crystal — DORMANT in this slice: a great shard of the
-         element it holds, burning in the enemy's home. It does
-         nothing yet but wait (and be defended). Named in the legend
-         and in one line of the tutorial. */
+      /* a Heart Crystal — a great shard of the element it holds,
+         standing in a home territory. Since Slice 3.20 it is the
+         Pilgrimage's goal: a Sprite that ends its activation on the
+         crystal in the ENEMY home begins the Communion. */
       var el = crystalAt(h.q, h.r);
       var cc = el === 'ember' ? 0xff8a3d : 0xa8ecff, cg = el === 'ember' ? 0xff5a00 : 0x35c8ff;
       var cring = new THREE.Mesh(new THREE.RingGeometry(0.6, 0.88, 6), new THREE.MeshBasicMaterial({ color: cc, transparent: true, opacity: 0.9, side: THREE.DoubleSide, depthWrite: false }));
@@ -7753,7 +7757,7 @@ function drawSelection(){
   if (u.pinned) statusBits.push('📌 Pinned — no Intercept this round');
   if (u.type === 'guardian' && u.interceptUsed) statusBits.push('🛡️ Intercept spent');
   /* v3.20: the Pilgrimage reads on the card as plainly as on the board */
-  if (u.type === 'scout' && !u.channeling && crystalAt(u.q, u.r) === u.court) statusBits.push('✨ On its Heart Crystal — end this activation here to begin the Communion');
+  if (u.type === 'scout' && !u.channeling && onPilgrimCrystal(S, u)) statusBits.push('✨ On its Heart Crystal — end this activation here to begin the Communion');
   if (u.channeling) statusBits.push('🌀 Communing — a True Spirit wakes at its next activation');
   var _sf = spiritForm(u); if (_sf) statusBits.push(_sf.icon + ' ' + _sf.name + ' — ' + _sf.desc);
   if (u.alive && !u.acted && blizzardPending(S, u)) statusBits.push('❄️ Blizzard drift — beside a Blizzard Spirit: this activation walks Chilled (its glowing reach already shows it)');
@@ -7785,7 +7789,7 @@ function drawSelection(){
      completes with THIS activation, the choice stands in the card
      before the move is even picked: two destinies as toggles, the
      engine's heuristic pre-picked, the board visible behind. */
-  if (u.type === 'scout' && u.channeling && crystalAt(u.q, u.r) === u.court && HUMANS[u.side] && S.turn === u.side){
+  if (u.type === 'scout' && u.channeling && onPilgrimCrystal(S, u) && HUMANS[u.side] && S.turn === u.side){
     var _forks = u.kit === 'ember' ? ['inferno', 'hearth'] : ['blizzard', 'glacier'];
     if (!EVOLVE_PICK[u.id]) EVOLVE_PICK[u.id] = defaultFormFor(S, u);
     card.innerHTML += '<br><span style="font-size:13px;color:#ffd9ec">🌟 <b>The Communion completes as this activation begins.</b> Choose what wakes:</span>';
