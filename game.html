@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Spellthrone v3.15 · Slice 3.15 — Courts & Longevity — a duel of archmages</title>
+<title>Spellthrone v3.16 · Slice 3.16 — Courts & Longevity — a duel of archmages</title>
 <style>
   :root{ --gold:#f5c542; --ink:#0d0f14; --txt:#f3ead2; --ember:#ff9a3d; --frost:#57c8ff; --card:#1a1d26; }
   *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -150,7 +150,7 @@
     <button class="gbtn big" id="btnPvP">👥 Pass-and-play — two humans, one device</button>
     <button class="gbtn big" id="btnHow">📖 How to play (one minute)</button>
     <div id="glbStatus" style="text-align:center;opacity:.85;font-size:13px;margin-top:10px;min-height:16px"></div>
-    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.15 · Slice 3.15 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 5. A piece still to act wears a ring of light; once it has acted, the ring is gone and the piece rests dimmer. Orbit low and the island’s under-rock is lit from below now, mana seams glowing in the dark. The court breathes: pieces idle on their own time, rise when chosen, and flash when struck. And the Exclusives are serpents now — Ember's Cinderwyrm and Frost's Rimewyrm coil where the hounds once ran, forked tongues and all — while the archers stand in a true shooter's stance, arrows level. And the air itself has taken sides: embers rise over Ember's half of the isle while snow sifts down over Frost's, the braziers' firelight dances with their own flames, and gold, ice and plate catch real reflections of the dusk. The camera has learned manners too: four preset views fly you smoothly around the court, and left alone it breathes, very slowly, like something alive. Learn it in a minute. Master it in a season.</p>
+    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.16 · Slice 3.16 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 5. A piece still to act wears a ring of light; once it has acted, the ring is gone and the piece rests dimmer. Orbit low and the island’s under-rock is lit from below now, mana seams glowing in the dark. The court breathes: pieces idle on their own time, rise when chosen, and flash when struck. And the Exclusives are serpents now — Ember's Cinderwyrm and Frost's Rimewyrm coil where the hounds once ran, forked tongues and all — while the archers stand in a true shooter's stance, arrows level. And the air itself has taken sides: embers rise over Ember's half of the isle while snow sifts down over Frost's, the braziers' firelight dances with their own flames, and gold, ice and plate catch real reflections of the dusk. The camera has learned manners too: four preset views fly you smoothly around the court, and left alone it breathes, very slowly, like something alive. On the board, pieces travel like they mean it now: moves glide hex to hex on an eased arc, strikes lunge and recoil, and the fallen shrink into their burst of court-colored sparks. Learn it in a minute. Master it in a season.</p>
   </div>
 </div>
 <div id="selectOverlay" class="overlay" style="display:none">
@@ -6714,12 +6714,17 @@ function performEvents(evs, cb){
         var fromPos = v.group.position.clone();
         shot(pts.length * 150, function(k){
           v._moving = true;
-          var f = k * (pts.length - 1), i = Math.min(pts.length - 2, Math.floor(f)), fr = f - i;
+          var f = k * (pts.length - 1), i = Math.min(pts.length - 2, Math.floor(f)), fr0 = f - i;
+          /* Slice 3.16: the glide eases — smoothstep within each
+             hex segment, so the piece leans out of one hex and
+             settles into the next; endpoints and duration are
+             exactly the old ones. */
+          var fr = fr0 * fr0 * (3 - 2 * fr0);
           var a = pts[Math.max(0, i)], b = pts[Math.min(pts.length - 1, i + 1)];
           var wa = hexToWorld(a.q, a.r), wb = hexToWorld(b.q, b.r);
           var x = wa.x + (wb.x - wa.x) * fr, z = wa.z + (wb.z - wa.z) * fr;
           var ya = SURF(a.q, a.r), yb = SURF(b.q, b.r);
-          v.group.position.set(x, ya + (yb - ya) * fr + Math.abs(Math.sin(k * Math.PI * (pts.length - 1))) * 0.07, z);
+          v.group.position.set(x, ya + (yb - ya) * fr + Math.abs(Math.sin(k * Math.PI * (pts.length - 1))) * 0.085, z);
           if (b.q !== a.q || b.r !== a.r) v.group.rotation.y = Math.atan2(wb.x - wa.x, wb.z - wa.z);
         }, function(){ v._moving = false; v.q = pts[pts.length - 1].q; v.r = pts[pts.length - 1].r; faceHome(ev.unit); });
       })(ev);
@@ -6773,6 +6778,7 @@ function performEvents(evs, cb){
            stale-capture class as the attack fix above (v2.1.2). */
         shot(520, function(k){
           v.group.position.y -= 0.016; v.group.rotation.z = k * 0.5;
+          v.group.scale.setScalar(1 - 0.15 * k);   /* Slice 3.16: the fallen shrink as they fade */
           v.mats.forEach(function(rec){ rec.m.opacity = 1 - k; });
         }, function(){ var p = v.group.position.clone(); scene.remove(v.group); v.dead = true; burst(p.clone().setY(p.y + 0.7), TEAM[unitById(S, ev.unit).side], 14, 3.4, 3); });
         notes.push('💀 ' + unitName(unitById(S, ev.unit)) + ' falls');
