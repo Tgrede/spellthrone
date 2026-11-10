@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Spellthrone v3.10 · Slice 3.10 — Courts & Longevity — a duel of archmages</title>
+<title>Spellthrone v3.11 · Slice 3.11 — Courts & Longevity — a duel of archmages</title>
 <style>
   :root{ --gold:#f5c542; --ink:#0d0f14; --txt:#f3ead2; --ember:#ff9a3d; --frost:#57c8ff; --card:#1a1d26; }
   *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -142,7 +142,7 @@
     <button class="gbtn big" id="btnPvP">👥 Pass-and-play — two humans, one device</button>
     <button class="gbtn big" id="btnHow">📖 How to play (one minute)</button>
     <div id="glbStatus" style="text-align:center;opacity:.85;font-size:13px;margin-top:10px;min-height:16px"></div>
-    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.10 · Slice 3.10 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 5. A piece still to act wears a ring of light; once it has acted, the ring is gone and the piece rests dimmer. Learn it in a minute. Master it in a season.</p>
+    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.11 · Slice 3.11 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 5. A piece still to act wears a ring of light; once it has acted, the ring is gone and the piece rests dimmer. Orbit low and the island’s under-rock is lit from below now, mana seams glowing in the dark. Learn it in a minute. Master it in a season.</p>
   </div>
 </div>
 <div id="selectOverlay" class="overlay" style="display:none">
@@ -4855,6 +4855,19 @@ sun.shadow.camera.updateProjectionMatrix();
 scene.add(sun);
 var duskFill = new THREE.DirectionalLight(0x9fc4ff, 0.95);
 duskFill.position.set(-16.56, 12.66, -15.57); scene.add(duskFill);
+/* Slice 3.11 — THE UNDER-FILL: a dim violet-blue light from below,
+   the under-rock's own light life (Trenten's low-orbit report: the
+   underside rendered a black void). It is NOT part of the canonical
+   studio rig — key / rim / hemisphere above stay untouched — and it
+   cannot leak onto the board: it shines UP from beneath the island,
+   so every up-facing surface (tiles, plate, piece tops) has
+   normal.L <= 0 and receives exactly zero from it, by construction.
+   Only downward / outward facets — strata, teeth, stalactites, the
+   slab's own rim wall — catch it, each by its facet angle, which is
+   what makes flat-shaded rock read as rock. No shadows. */
+var underFill = new THREE.DirectionalLight(0x7484e8, 0.55);
+underFill.position.set(4.5, -18, -6.5); underFill.castShadow = false;
+scene.add(underFill);
 var throneLight = new THREE.PointLight(0xffc95e, 1.0, 20); throneLight.position.set(0, 4.2, 0); scene.add(throneLight);
 
 /* ================= v2.2 PRESENTATION =================
@@ -4868,6 +4881,7 @@ var skyDome = null, starField = null, motes = null;
 var skyShards = [];
 /* (skyClouds is declared with the dressing slot registries below) */
 var islandSlab = null, islandUnder = null, runeBand = null;
+var islandCore = null, UNDER_ROCK_MAT = null;
 var braziers = [];
 /* Slice 3.7 — dressing slots: every dressed spot on the island gets a
    slot group wrapping its procedural dressing. The GLB prop, when its
@@ -4882,6 +4896,11 @@ var RING_SLOT = null, MANA_CRACK_MAT = null;
    slab at (10.4, -1.15). One array feeds the lathe, the teeth /
    crack / cluster placement below, and the diorama suite. */
 var UNDER_PROFILE = [[0.02, -8.9], [1.2, -8.55], [2.0, -8.5], [2.15, -7.95], [3.1, -7.9], [3.3, -7.3], [4.6, -7.25], [4.8, -6.55], [6.0, -6.5], [6.25, -5.75], [7.3, -5.7], [7.55, -4.9], [8.6, -4.85], [8.85, -4.0], [9.6, -3.95], [9.85, -3.0], [10.25, -2.2], [10.4, -1.15]];
+/* Slice 3.11: the INNER CORE profile — a slimmer shadow lathe inside
+   the shell. Its neck (the last four points) rises from below the rim
+   into the slab, sealing the seam the shell's single displaced rim
+   circle used to leave open, and its body backstops the hollow. */
+var CORE_PROFILE = [[0.02, -8.15], [1.0, -7.85], [1.65, -7.8], [2.2, -7.0], [3.55, -6.9], [4.05, -6.2], [5.15, -6.15], [5.5, -5.4], [6.55, -5.35], [6.95, -4.6], [7.85, -4.55], [8.15, -3.7], [8.85, -3.65], [9.1, -2.9], [9.45, -2.15], [9.7, -1.25], [8.75, -1.0], [8.35, -0.78], [8.1, -0.52]];
 var skyClouds = [];
 
 function canvasTex(w, h, draw, rx, ry){
@@ -5031,6 +5050,13 @@ var BOARD_RECIPE = {
 function boardColor(hex){ var c = new THREE.Color(hex); c.convertSRGBToLinear(); return c; }
 (function buildIsland(){
   var rockMat = new THREE.MeshStandardMaterial({ color: boardColor(BOARD_RECIPE.rock), map: stoneTex, roughness: 1, flatShading: true });
+  /* Slice 3.11: the underside's teeth and stalactites wear their own
+     cut of the rock — the same converted recipe color (the Dusk Slate
+     pins hold), plus the dim indigo emissive floor the lathe wears,
+     graded by the stone texture, so hanging rock never falls to pure
+     black under the under-fill. The board-top hill rocks keep the
+     plain rockMat — no emissive leaks onto the board. */
+  UNDER_ROCK_MAT = new THREE.MeshStandardMaterial({ color: boardColor(BOARD_RECIPE.rock), map: stoneTex, roughness: 1, flatShading: true, emissive: new THREE.Color(0x232c50).convertSRGBToLinear(), emissiveMap: stoneTex, emissiveIntensity: 0.3 });
   allHexes().forEach(function(h){
     var t = terrainAt(h.q, h.r), w = hexToWorld(h.q, h.r), th = tileH(h.q, h.r);
     /* terrain bases are the Dusk Slate recipe (Slice 3.8), pushed
@@ -5156,7 +5182,7 @@ function boardColor(hex){ var c = new THREE.Color(hex); c.convertSRGBToLinear();
     }
   }
   underGeo.computeVertexNormals();
-  islandUnder = new THREE.Mesh(underGeo, new THREE.MeshStandardMaterial({ color: boardColor(BOARD_RECIPE.under), map: stoneTex, roughness: 1, flatShading: true }));
+  islandUnder = new THREE.Mesh(underGeo, new THREE.MeshStandardMaterial({ color: boardColor(BOARD_RECIPE.under), map: stoneTex, roughness: 1, flatShading: true, emissive: new THREE.Color(0x2a3560).convertSRGBToLinear(), emissiveMap: stoneTex, emissiveIntensity: 0.32 }));
   islandUnder.scale.set(BOARD_SCALE, 1, BOARD_SCALE);
   scene.add(islandUnder);
   /* Slice 3.9 — the underside, dressed: strata teeth, a sparse
@@ -5186,16 +5212,18 @@ function boardColor(hex){ var c = new THREE.Color(hex); c.convertSRGBToLinear();
   for (var thi = 0; thi < 9; thi++){
     var thr = 2.6 + hash2(thi, 811) * 6.8, tha = hash2(thi, 813) * Math.PI * 2;
     var thh = 0.5 + hash2(thi, 815) * 0.6;
-    var tht = new THREE.Mesh(new THREE.ConeGeometry(0.16 + hash2(thi, 817) * 0.18, thh, 6), rockMat);
+    var tht = new THREE.Mesh(new THREE.ConeGeometry(0.16 + hash2(thi, 817) * 0.18, thh, 6), UNDER_ROCK_MAT);
     tht.rotation.x = Math.PI;
     tht.position.set(Math.cos(tha) * thr * BOARD_SCALE, underYAtR(thr) - thh * 0.28, Math.sin(tha) * thr * BOARD_SCALE);
     tht.castShadow = false; scene.add(tht); ISLAND_TEETH.push(tht);
   }
-  MANA_CRACK_MAT = new THREE.MeshStandardMaterial({ color: 0x1a1030, emissive: new THREE.Color(0x8b5cf6).convertSRGBToLinear(), emissiveIntensity: 0.55, roughness: 0.6, side: THREE.DoubleSide });
+  /* Slice 3.11: the cracks' glow raised to register from a low orbit
+     (built 0.55 -> 1.9; the render loop's pulse re-based to match) */
+  MANA_CRACK_MAT = new THREE.MeshStandardMaterial({ color: 0x1a1030, emissive: new THREE.Color(0x8b5cf6).convertSRGBToLinear(), emissiveIntensity: 1.9, roughness: 0.6, side: THREE.DoubleSide });
   [-7.9, -6.5, -4.85, -3.95].forEach(function(cy, ci){
     for (var ai = 0; ai < 3; ai++){
       var crad = underRAtY(cy) + 0.05;
-      var cg = new THREE.CylinderGeometry(crad, crad, 0.055, 20, 1, true, hash2(ci * 3 + ai, 821) * Math.PI * 2, 0.7 + hash2(ci * 3 + ai, 823) * 0.9);
+      var cg = new THREE.CylinderGeometry(crad, crad, 0.1, 20, 1, true, hash2(ci * 3 + ai, 821) * Math.PI * 2, 0.7 + hash2(ci * 3 + ai, 823) * 0.9);
       var cp = cg.attributes.position;
       for (var vi = 0; vi < cp.count; vi++){
         var ux = cp.getX(vi), uy = cp.getY(vi) + cy, uz = cp.getZ(vi);
@@ -5217,10 +5245,32 @@ function boardColor(hex){ var c = new THREE.Color(hex); c.convertSRGBToLinear();
     var ua = hash2(ui, 831) * Math.PI * 2;
     UNDER_CLUSTER_SLOTS.push({ x: Math.cos(ua) * ur2 * BOARD_SCALE, y: underYAtR(ur2), z: Math.sin(ua) * ur2 * BOARD_SCALE, rot: hash2(ui, 833) * Math.PI * 2, scl: 0.9 + hash2(ui, 835) * 0.25 });
   });
+  /* Slice 3.11 — THE INNER CORE: a second, slimmer lathe living
+     inside the shell, its neck rising into the slab. Two jobs.
+     (1) SEAM BACKSTOP: the outer shell meets the slab at one circle
+     and its rim vertices are hash-displaced (radial +/-0.425, Y
+     +/-0.15) — at a grazing angle a notch could open at the rim,
+     and because the shell is single-sided, a sightline through the
+     notch would cross the hollow interior and exit the far wall's
+     culled backfaces: sky inside the rock (the glint in Trenten's
+     recording). The core's neck overlaps the slab by 0.63
+     vertically (from the slab's floor at y -1.15 up to -0.52,
+     inside the slab's apothem at every height from y -1.0 up) and sits
+     0.26+ inside the shell's worst-case displaced surface at the
+     rim heights, so every seam sightline lands on dark rock.
+     (2) HOLLOW BACKSTOP: DoubleSide and very dark — any residual
+     glimpse into the interior, from any angle, shows shadowed rock,
+     never sky, never see-through. It catches the under-fill like
+     the shell does, a shade darker. */
+  var coreGeo = new THREE.LatheGeometry(CORE_PROFILE.map(function(p){ return new THREE.Vector2(p[0], p[1]); }), 36);
+  coreGeo.computeVertexNormals();
+  islandCore = new THREE.Mesh(coreGeo, new THREE.MeshStandardMaterial({ color: new THREE.Color(0x12161f).convertSRGBToLinear(), map: stoneTex, roughness: 1, flatShading: true, side: THREE.DoubleSide }));
+  islandCore.scale.set(BOARD_SCALE, 1, BOARD_SCALE);
+  scene.add(islandCore);
   /* Slice 3.7: hanging stalactite teeth under the rim — hashed length,
      radius and angle, so the diorama silhouette reads carved, not cast */
   for (var sti = 0; sti < 7; sti++){
-    var stc = new THREE.Mesh(new THREE.ConeGeometry(0.3 + hash2(sti, 71) * 0.35, 1.2 + hash2(sti, 73) * 1.7, 6), rockMat);
+    var stc = new THREE.Mesh(new THREE.ConeGeometry(0.3 + hash2(sti, 71) * 0.35, 1.2 + hash2(sti, 73) * 1.7, 6), UNDER_ROCK_MAT);
     var sta = hash2(sti, 75) * Math.PI * 2, str = (3 + hash2(sti, 77) * 5.5) * BOARD_SCALE;
     stc.rotation.x = Math.PI; stc.position.set(Math.cos(sta) * str, -3.6 - hash2(sti, 79) * 2.6, Math.sin(sta) * str);
     stc.castShadow = false; scene.add(stc); ISLAND_STALACTITES.push(stc);
@@ -5495,6 +5545,12 @@ function propPrepare(name, gltf){
     if (m.color) m.color.convertSRGBToLinear();
     if (m.emissive) m.emissive.convertSRGBToLinear();
   });
+  /* Slice 3.11: the underside clusters' hearts burned too dim to
+     register against the black — their authored emissive lands at
+     intensity 1.0 after conversion, the dimmest glow on the island.
+     The heart material is shared by every cluster clone, so this
+     one boost lights all eight hearts. */
+  if (name === 'cluster') seenMats.forEach(function(m){ if (m.name === 'cluster_heart' && m.emissive) m.emissiveIntensity = 2.3; });
   scene.updateMatrixWorld(true);
   var box = new THREE.Box3().setFromObject(scene);
   var size = box.getSize(new THREE.Vector3());
@@ -8013,7 +8069,7 @@ function animate(){
     } else coachRing.visible = false;
   } else if (coachRing.visible) coachRing.visible = false;
   hlGroup.children.forEach(function(ring, i){ var s = 1 + Math.sin(t * 4 + i) * 0.05; ring.scale.set(s, s, 1); });
-  if (MANA_CRACK_MAT) MANA_CRACK_MAT.emissiveIntensity = 0.48 + Math.sin(t * 0.7) * 0.14 + Math.sin(t * 1.7) * 0.05;
+  if (MANA_CRACK_MAT) MANA_CRACK_MAT.emissiveIntensity = 1.78 + Math.sin(t * 0.7) * 0.34 + Math.sin(t * 1.7) * 0.12;
   /* v2.2 ambient life: far shards drift, braziers flicker, motes float */
   skyShards.forEach(function(sh){
     var ud = sh.userData.skyShard;
