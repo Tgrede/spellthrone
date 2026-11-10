@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Spellthrone v3.11 · Slice 3.11 — Courts & Longevity — a duel of archmages</title>
+<title>Spellthrone v3.12 · Slice 3.12 — Courts & Longevity — a duel of archmages</title>
 <style>
   :root{ --gold:#f5c542; --ink:#0d0f14; --txt:#f3ead2; --ember:#ff9a3d; --frost:#57c8ff; --card:#1a1d26; }
   *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -142,7 +142,7 @@
     <button class="gbtn big" id="btnPvP">👥 Pass-and-play — two humans, one device</button>
     <button class="gbtn big" id="btnHow">📖 How to play (one minute)</button>
     <div id="glbStatus" style="text-align:center;opacity:.85;font-size:13px;margin-top:10px;min-height:16px"></div>
-    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.11 · Slice 3.11 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 5. A piece still to act wears a ring of light; once it has acted, the ring is gone and the piece rests dimmer. Orbit low and the island’s under-rock is lit from below now, mana seams glowing in the dark. Learn it in a minute. Master it in a season.</p>
+    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.12 · Slice 3.12 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 5. A piece still to act wears a ring of light; once it has acted, the ring is gone and the piece rests dimmer. Orbit low and the island’s under-rock is lit from below now, mana seams glowing in the dark. The court breathes: pieces idle on their own time, rise when chosen, and flash when struck. Learn it in a minute. Master it in a season.</p>
   </div>
 </div>
 <div id="selectOverlay" class="overlay" style="display:none">
@@ -7982,6 +7982,7 @@ document.getElementById('btnMenuClose').onclick = function(){ closeMenu(); };
 
 /* ---- frame loop: idle life, shots, particles, camera ---- */
 var clock = new THREE.Clock();
+var _bbQ = new THREE.Quaternion(); /* Slice 3.12: billboard scratch */
 function animate(){
   requestAnimationFrame(animate);
   var dt = Math.min(0.05, clock.getDelta()), t = clock.elapsedTime;
@@ -8004,16 +8005,29 @@ function animate(){
     fl.sp.position.y += dt * 0.9; fl.sp.material.opacity = 1 - fl.t / 0.95;
     if (fl.t > 0.95){ scene.remove(fl.sp); fl.sp.material.map.dispose(); fl.sp.material.dispose(); floaters.splice(f, 1); }
   }
+  /* Slice 3.12 — THE PER-VIEW LOOP LIVES. Since the v3 engine gave
+     units numeric ids, this loop looked them up by Object.keys STRING
+     and unitById's strict === never matched: every visit returned
+     early, and idle bob, wing flap, selection lift, orb pulse,
+     hit-flash and HP billboarding have been dead in the shipped game
+     all along (found by the v3.10 build; revived on Trenten's word —
+     "animations that make sense": each motion below has a job). The
+     fix is the numeric conversion at the lookup. Each effect no-ops
+     cleanly on parts a rig does not expose: GLB pieces carry no
+     procedural body / hover / wings / orb, so they get the lift, the
+     flash and the billboard, and the procedural fallbacks get the
+     full set; the same fix un-freezes the GLB mixers' Idle/FX
+     advance (clips already played at build — nothing new authored). */
   Object.keys(views).forEach(function(id){
     var v = views[id]; if (v.dead) return;
-    var u = unitById(S, id); if (!u) return;
+    var u = unitById(S, +id); if (!u) return;
     var moving = !!v._moving;
-    var bob = Math.sin(t * (moving ? 9 : 1.7) + v.phase) * (u.type === 'scout' ? 0.07 : 0.028);
+    var bob = Math.sin(t * (moving ? 9 : 1.7) + v.phase) * (u.type === 'scout' ? 0.07 : 0.04);
     if (u.type === 'scout' && v.parts.hover) v.parts.hover.position.y = 0.55 + bob;
-    else if (v.parts.body && !shots.length) v.group.position.y = SURF(v.q, v.r) + Math.abs(bob) * 0.6;
-    if (v.parts.wingL){ var flap = Math.sin(t * (moving ? 26 : 11) + v.phase) * 0.65; v.parts.wingL.rotation.z = flap * 0.5; v.parts.wingR.rotation.z = -flap * 0.5; }
+    else if (v.parts.body && !shots.length) v.group.position.y = SURF(v.q, v.r) + Math.abs(bob) * 0.75;
+    if (v.parts.wingL && v.parts.wingR){ var flap = Math.sin(t * (moving ? 26 : 11) + v.phase) * 0.65; v.parts.wingL.rotation.z = flap * 0.5; v.parts.wingR.rotation.z = -flap * 0.5; }
     if (v.parts.fig){
-      var liftT = (SEL && SEL.id == id) ? 0.17 : 0;
+      var liftT = (SEL && SEL.id === u.id) ? 0.17 : 0;
       v._lift = (v._lift || 0) + (liftT - (v._lift || 0)) * Math.min(1, dt * 9);
       v.parts.fig.position.y = v._lift;
     }
@@ -8023,7 +8037,15 @@ function animate(){
       v.mats.forEach(function(rec){ if (!rec.m.emissive) return; var base = new THREE.Color(rec.e); if (v._spentShown) base.multiplyScalar(SPENT_EMISSIVE); base.lerp(FLASH_RED, v.flash * 0.85); rec.m.emissive.copy(base); });
       v._flashed = v.flash > 0;
     }
-    v.parts.hpBar.quaternion.copy(camera.quaternion);
+    if (v.parts.hpBar){
+      /* billboard in WORLD terms: the plate's parent group is
+         Y-flipped for Ember (buildViews: rotation.y = PI) and the
+         plates are FrontSide planes, so the camera quaternion is
+         counter-rotated by the parent's — Ember plates face the
+         camera too, not their own backs. */
+      _bbQ.copy(v.group.quaternion).invert().multiply(camera.quaternion);
+      v.parts.hpBar.quaternion.copy(_bbQ);
+    }
   });
   /* Slice 3.10: the ready rings breathe — visible exactly when the
      piece can still act and is not itself selected (the selection
@@ -8031,10 +8053,11 @@ function animate(){
      reasserts the frame it is deselected). A spent piece keeps its
      dim under any selection — selection never makes a spent piece
      look ready, because the dim lives in _spentShown. This loop
-     iterates S.units (numeric ids) on purpose: the per-view loop
-     above looks pieces up by Object.keys string and has silently
-     never matched (pre-existing; left as found — see the v3.10
-     slice notes), so the rings drive themselves here. */
+     iterates S.units (numeric ids) on purpose and drives the rings
+     itself: a piece's status should never depend on another loop's
+     health. (The per-view loop above was silently dead until Slice
+     3.12 revived it; the rings never noticed, and still don't need
+     it.) */
   if (S) for (var rri = 0; rri < S.units.length; rri++){
     var ru = S.units[rri], rv = views[ru.id];
     if (!rv || rv.dead || !rv.parts.readyRing) continue;
