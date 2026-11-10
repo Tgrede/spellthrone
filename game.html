@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Spellthrone v3.13 · Slice 3.13 — Courts & Longevity — a duel of archmages</title>
+<title>Spellthrone v3.14 · Slice 3.14 — Courts & Longevity — a duel of archmages</title>
 <style>
   :root{ --gold:#f5c542; --ink:#0d0f14; --txt:#f3ead2; --ember:#ff9a3d; --frost:#57c8ff; --card:#1a1d26; }
   *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -142,7 +142,7 @@
     <button class="gbtn big" id="btnPvP">👥 Pass-and-play — two humans, one device</button>
     <button class="gbtn big" id="btnHow">📖 How to play (one minute)</button>
     <div id="glbStatus" style="text-align:center;opacity:.85;font-size:13px;margin-top:10px;min-height:16px"></div>
-    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.13 · Slice 3.13 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 5. A piece still to act wears a ring of light; once it has acted, the ring is gone and the piece rests dimmer. Orbit low and the island’s under-rock is lit from below now, mana seams glowing in the dark. The court breathes: pieces idle on their own time, rise when chosen, and flash when struck. And the Exclusives are serpents now — Ember's Cinderwyrm and Frost's Rimewyrm coil where the hounds once ran, forked tongues and all — while the archers stand in a true shooter's stance, arrows level. Learn it in a minute. Master it in a season.</p>
+    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.14 · Slice 3.14 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 5. A piece still to act wears a ring of light; once it has acted, the ring is gone and the piece rests dimmer. Orbit low and the island’s under-rock is lit from below now, mana seams glowing in the dark. The court breathes: pieces idle on their own time, rise when chosen, and flash when struck. And the Exclusives are serpents now — Ember's Cinderwyrm and Frost's Rimewyrm coil where the hounds once ran, forked tongues and all — while the archers stand in a true shooter's stance, arrows level. And the air itself has taken sides: embers rise over Ember's half of the isle while snow sifts down over Frost's, the braziers' firelight dances with their own flames, and gold, ice and plate catch real reflections of the dusk. Learn it in a minute. Master it in a season.</p>
   </div>
 </div>
 <div id="selectOverlay" class="overlay" style="display:none">
@@ -4871,6 +4871,49 @@ underFill.position.set(4.5, -18, -6.5); underFill.castShadow = false;
 scene.add(underFill);
 var throneLight = new THREE.PointLight(0xffc95e, 1.0, 20); throneLight.position.set(0, 4.2, 0); scene.add(throneLight);
 
+/* Slice 3.14 — THE ENVIRONMENT the pieces reflect. PMREM from a
+   tiny authored scene in this island's own colors — a vertex-
+   colored sphere (warm low toward the firelight side, cool
+   behind, dark plum below the horizon) with one warm and one
+   cool glow card — never a stock room, so nothing foreign leaks
+   into the reflections: gold reads gold, ice reads ice. The
+   studio rig above is untouched. scene.environment is NEVER
+   set; instead glbPrepare / propPrepare hand this texture to
+   their template materials at modest intensity (0.45), and
+   spawnGlacier takes it too — the board, the island and every
+   procedural material receive nothing, Dusk Slate stays exact.
+   PMREM unavailable (the headless harness) -> ENV_TEX stays
+   null and the game runs without reflections, as before. */
+var ENV_TEX = null;
+try {
+  if (THREE.PMREMGenerator && renderer && renderer.getContext && renderer.getContext()){
+    var pmrem = new THREE.PMREMGenerator(renderer);
+    var envScene = new THREE.Scene();
+    var envGeo = new THREE.SphereGeometry(10, 24, 16);
+    var epos = envGeo.attributes.position, ecol = [];
+    var warmDir = new THREE.Vector3(0.55, 0.05, 0.83).normalize();
+    var coolDir = warmDir.clone().negate();
+    for (var ei = 0; ei < epos.count; ei++){
+      var dv = new THREE.Vector3().fromBufferAttribute(epos, ei).normalize();
+      var w = Math.max(0, dv.dot(warmDir)), cq = Math.max(0, dv.dot(coolDir));
+      var up = dv.y;
+      var rr = 0.10 + w * w * 0.85 + cq * 0.10 + Math.max(0, up) * 0.08;
+      var gg = 0.07 + w * w * 0.48 + cq * 0.16 + Math.max(0, up) * 0.10;
+      var bb = 0.16 + w * w * 0.16 + cq * 0.38 + Math.max(0, up) * 0.16;
+      if (up < 0){ var dk = 1 + up * 0.8; rr *= dk; gg *= dk; bb *= dk; }
+      ecol.push(rr, gg, bb);
+    }
+    envGeo.setAttribute('color', new THREE.Float32BufferAttribute(ecol, 3));
+    envScene.add(new THREE.Mesh(envGeo, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide })));
+    var warmCard = new THREE.Mesh(new THREE.PlaneGeometry(7, 4.5), new THREE.MeshBasicMaterial({ color: new THREE.Color(2.6, 1.5, 0.62), side: THREE.DoubleSide }));
+    warmCard.position.copy(warmDir.clone().multiplyScalar(8)); warmCard.lookAt(0, 0, 0); envScene.add(warmCard);
+    var coolCard = new THREE.Mesh(new THREE.PlaneGeometry(6, 4), new THREE.MeshBasicMaterial({ color: new THREE.Color(0.5, 0.85, 1.5), side: THREE.DoubleSide }));
+    coolCard.position.copy(coolDir.clone().multiplyScalar(8)); coolCard.lookAt(0, 0, 0); envScene.add(coolCard);
+    ENV_TEX = pmrem.fromScene(envScene, 0.04).texture;
+    pmrem.dispose();
+  }
+} catch (e) { ENV_TEX = null; }
+
 /* ================= v2.2 PRESENTATION =================
    The Wizard Chess lesson: a board reads as real when it sits in a
    place, is built in layers, wears texture, and is lit dramatically.
@@ -4879,6 +4922,7 @@ var throneLight = new THREE.PointLight(0xffc95e, 1.0, 20); throneLight.position.
    GLTFLoader, and every shape here is one LatheGeometry/cone/canvas
    away at runtime, where per-instance variation stays free.) */
 var skyDome = null, starField = null, motes = null;
+var courtEmbers = null, courtSnow = null;   /* Slice 3.14: court-half air */
 var skyShards = [];
 /* (skyClouds is declared with the dressing slot registries below) */
 var islandSlab = null, islandUnder = null, runeBand = null;
@@ -5018,6 +5062,50 @@ motes = (function(){
   scene.add(pts);
   return pts;
 })();
+/* Slice 3.14 — THE AIR TAKES SIDES. Two cheap Points systems,
+   court-half themed: embers rise and spiral over the Ember half
+   (+Z, the home side camera 0 looks from), snow sifts down over
+   the Frost half (-Z). 140 particles each in wrap-around
+   volumes hugging the island; small, faint, and never weather
+   over the whole board — the legacy motes above keep their
+   whole-island ring, untouched. Positions integrate per-frame
+   from stored base + speed; the sway is a sine on top, so a
+   particle's lane never drifts. */
+function courtMotes(sign, rising){
+  var N = 140, pos = new Float32Array(N * 3), base = new Float32Array(N * 3),
+      spd = new Float32Array(N), pha = new Float32Array(N);
+  for (var i = 0; i < N; i++){
+    base[i * 3] = (hash2(i, 401 + sign) * 2 - 1) * 10.6 * BOARD_SCALE;
+    base[i * 3 + 1] = 0.2 + hash2(i, 403 + sign) * 4.3;
+    base[i * 3 + 2] = sign * (0.6 + hash2(i, 405 + sign) * 9.6) * BOARD_SCALE;
+    spd[i] = rising ? 0.25 + hash2(i, 407 + sign) * 0.25 : 0.30 + hash2(i, 409 + sign) * 0.25;
+    pha[i] = hash2(i, 411 + sign) * 6.28;
+    pos[i * 3] = base[i * 3]; pos[i * 3 + 1] = base[i * 3 + 1]; pos[i * 3 + 2] = base[i * 3 + 2];
+  }
+  var geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  var mat = rising
+    ? new THREE.PointsMaterial({ color: 0xffa845, size: 0.14, map: glowTex, transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending, depthWrite: false })
+    : new THREE.PointsMaterial({ color: 0xdff2ff, size: 0.12, map: glowTex, transparent: true, opacity: 0.5, depthWrite: false });
+  var pts = new THREE.Points(geo, mat);
+  pts.userData = { base: base, spd: spd, pha: pha, rising: rising, sign: sign };
+  scene.add(pts);
+  return pts;
+}
+courtEmbers = courtMotes(1, true);
+courtSnow = courtMotes(-1, false);
+function stepCourtMotes(pts, t, dt){
+  if (!pts) return;
+  var ud = pts.userData, arr = pts.geometry.attributes.position.array;
+  for (var i = 0; i < ud.spd.length; i++){
+    var y = arr[i * 3 + 1] + (ud.rising ? dt * ud.spd[i] : -dt * ud.spd[i]);
+    if (y > 4.6) y = 0.2; else if (y < 0.1) y = 4.5;
+    arr[i * 3] = ud.base[i * 3] + Math.sin(t * 0.35 + ud.pha[i]) * 0.35;
+    arr[i * 3 + 1] = y;
+    arr[i * 3 + 2] = ud.base[i * 3 + 2] + Math.cos(t * 0.28 + ud.pha[i] * 1.3) * 0.35;
+  }
+  pts.geometry.attributes.position.needsUpdate = true;
+}
 (function buildSkyShards(){
   /* per-shard material: hand-shaded by distance, fog-exempt */
   for (var i = 0; i < 9; i++){
@@ -5333,11 +5421,11 @@ function boardColor(hex){ var c = new THREE.Color(hex); c.convertSRGBToLinear();
     fi.position.y = 0.95; bslot.add(fi); flames.push(fi);
     var glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, color: 0xff9a40, transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending, depthWrite: false }));
     glow.scale.set(3.4, 3.4, 1); glow.position.y = 1.05; bg.add(glow);
-    var bl = new THREE.PointLight(0xff9040, 1.15, 18);
+    var bl = new THREE.PointLight(0xffa845, 1.15, 18);   /* Slice 3.14: the firelight spec color */
     bl.position.y = 1.45; bg.add(bl);
     bg.position.set(sgn * 10.9 * BOARD_SCALE, 0, 7.0 * BOARD_SCALE);
     scene.add(bg);
-    braziers.push({ group: bg, slot: bslot, light: bl, flames: flames, glow: glow, phase: sgn * 2.3 + 1.7, glbActive: false });
+    braziers.push({ group: bg, slot: bslot, light: bl, flames: flames, glow: glow, phase: sgn * 2.3 + 1.7, glbActive: false, flameMid: null, flameOuter: null });
   });
 })();
 var throneCrystal = new THREE.Mesh(new THREE.OctahedronGeometry(0.44, 0), new THREE.MeshStandardMaterial({ color: 0xffd968, emissive: 0xcc8f1a, emissiveIntensity: 0.85, roughness: 0.2, metalness: 0.3, flatShading: true }));
@@ -5402,6 +5490,13 @@ function glbPrepare(key, gltf){
   seenMats.forEach(function(m){
     if (m.color) m.color.convertSRGBToLinear();
     if (m.emissive) m.emissive.convertSRGBToLinear();
+  });
+  /* Slice 3.14: template materials opt into the authored
+     environment — per-instance clones inherit envMap + intensity
+     with their material clone. Board / procedural materials are
+     never in this list and stay unreflected, as authored. */
+  if (ENV_TEX) seenMats.forEach(function(m){
+    if ('envMapIntensity' in m){ m.envMap = ENV_TEX; m.envMapIntensity = 0.45; m.needsUpdate = true; }
   });
   scene.updateMatrixWorld(true);
   var box = new THREE.Box3().setFromObject(scene);
@@ -5550,6 +5645,12 @@ function propPrepare(name, gltf){
     if (m.color) m.color.convertSRGBToLinear();
     if (m.emissive) m.emissive.convertSRGBToLinear();
   });
+  /* Slice 3.14: prop materials take the same environment opt-in
+     as the court templates (0.45) — bronze bowls, gold fonts and
+     ice crystals gain the dusk's reflections. */
+  if (ENV_TEX) seenMats.forEach(function(m){
+    if ('envMapIntensity' in m){ m.envMap = ENV_TEX; m.envMapIntensity = 0.45; m.needsUpdate = true; }
+  });
   /* Slice 3.11: the underside clusters' hearts burned too dim to
      register against the black — their authored emissive lands at
      intensity 1.0 after conversion, the dimmest glow on the island.
@@ -5624,6 +5725,13 @@ function propsApply(){
        GLB torch anchors 2.20 below it (its islet hangs where the
        procedural one did) */
     c.root.position.set(0, propGroundY(c) - 2.20, 0);
+    /* Slice 3.14: keep handles on the authored flame layers —
+       animate() drives this brazier's light from their TorchFX
+       scale, so the firelight flickers WITH the flame. */
+    c.root.traverse(function(o){
+      if (o.name === 'flame_mid') b.flameMid = o;
+      if (o.name === 'flame_outer') b.flameOuter = o;
+    });
     b.slot.children.forEach(function(ch){ ch.visible = false; });
     b.slot.add(c.root); b.glbRoot = c.root; b.glbActive = true;
   });
@@ -6376,6 +6484,7 @@ function spawnGlacier(q, r, field){
   var w = hexToWorld(q, r);
   var m = new THREE.Mesh(new THREE.CylinderGeometry(0.94, 1.0, field ? 2.2 : 1.8, 6),
     new THREE.MeshStandardMaterial({ color: 0xbfdcff, emissive: 0x2a5a8a, emissiveIntensity: 0.35, roughness: 0.25, transparent: true, opacity: 0.82, flatShading: true }));
+  if (ENV_TEX){ m.material.envMap = ENV_TEX; m.material.envMapIntensity = 0.5; m.material.needsUpdate = true; }   /* Slice 3.14: raised ice reflects too */
   m.position.set(w.x, SURF(q, r) + (field ? 1.1 : 0.9), w.z);
   m.rotation.y = Math.PI / 6;
   m.castShadow = true;
@@ -8112,7 +8221,13 @@ function animate(){
       b.flames[1].scale.set(1, 1.12 - (fl - 0.9) * 1.5, 1);
       b.flames.forEach(function(fm){ fm.rotation.y += dt * 1.3; });
     }
-    b.light.intensity = 1.1 + Math.sin(t * 13 + b.phase) * 0.22 + Math.sin(t * 29 + b.phase * 2.1) * 0.1;
+    /* Slice 3.14: the light dances with its own flame — one
+       noise source per brazier. GLB torch in: the TorchFX flame
+       scale (its keys breathe 0.9–1.2 around 1.0; PROP_MIXERS
+       already advanced this frame, above). Procedural: the same
+       fl that scales the flame cones. */
+    if (b.glbActive && b.flameMid && b.flameOuter) b.light.intensity = 1.05 * (b.flameMid.scale.y + b.flameOuter.scale.y) / 2;
+    else b.light.intensity = 1.15 * (fl / 0.9);
     if (b.glow) b.glow.material.opacity = 0.45 + Math.sin(t * 9 + b.phase) * 0.1;
     b.group.position.y = Math.sin(t * 0.5 + b.phase) * 0.12;
   });
@@ -8125,6 +8240,8 @@ function animate(){
     }
     mp.needsUpdate = true;
   }
+  stepCourtMotes(courtEmbers, t, dt);
+  stepCourtMotes(courtSnow, t, dt);
   camTheta += (camThetaT - camTheta) * 0.06; camPhi += (camPhiT - camPhi) * 0.08; camRad += (camRadT - camRad) * 0.1;
   if (camFocus && camFocusT) camFocus.lerp(camFocusT, 0.12);
   var fx = camFocus ? camFocus.x : 0, fy = camFocus ? camFocus.y : 0.4, fz = camFocus ? camFocus.z : 0;
