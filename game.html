@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Spellthrone v3.38 · Slice 3.38 — One Row Up Top — a duel of archmages</title>
+<title>Spellthrone v3.39 · Slice 3.39 — Player, Not Student — a duel of archmages</title>
 <style>
   :root{ --gold:#f5c542; --ink:#0d0f14; --txt:#f3ead2; --ember:#ff9a3d; --frost:#57c8ff; --card:#1a1d26; }
   *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -20,6 +20,12 @@
   #banner{ top:56px; padding:6px 16px; font-size:14.5px; color:var(--txt); border-color:rgba(255,255,255,.16); }
   #banner b.emberT,#banner b.frostT{ letter-spacing:.4px; }
   #bottombar{ bottom:10px; width:min(680px,94vw); padding:10px 12px; display:none; }
+  /* Slice 3.39: the ARMED BAR — while a spell or strike waits for
+     its target, the whole card folds into this one slim row, so
+     the board the banner names is standing in the open */
+  #armedBar{ align-items:center; gap:10px; font-size:14px; }
+  #armedBar .abLabel{ flex:1; color:#ffe9a8; font-weight:bold; letter-spacing:.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  #armedBar .abNote{ color:#c79bff; font-weight:bold; font-size:12.5px; white-space:nowrap; }
   #unitCard{ font-size:14px; line-height:1.45; margin-bottom:8px; }
   #unitCard .uname{ font-size:16px; font-weight:bold; }
   /* Slice 3.2: compact card chrome — smaller buttons, tighter padding.
@@ -156,6 +162,7 @@
 <div id="bottombar" class="bar">
   <div id="unitCard"></div>
   <div id="spellInfo"></div>
+  <div id="armedBar" style="display:none"></div>
   <div class="rowbtns" id="actionRow"></div>
 </div>
 <div id="toast"></div>
@@ -167,20 +174,32 @@
     <button class="gbtn primary big" id="btnResume" style="display:none">▶ Resume game</button>
     <button class="gbtn primary big" id="btnVsAI">⚔️ Play vs the AI — pick your court</button>
     <button class="gbtn big" id="btnTutorial">🎓 Tutorial — learn by playing</button>
-    <button class="gbtn big" id="btnLessons">📚 Lessons — the five staged scenes ▸</button>
+    <button class="gbtn big" id="btnLessons">📚 Lessons — the twelve staged lessons ▸</button>
     <div id="lessonsBlock" style="display:none">
-    <button class="gbtn big" id="btnSceneFont">🌀 Scene 1 — The Font (first lesson)</button>
-    <button class="gbtn big" id="btnSceneQueen">👑 Scene 2 — The Queen (support)</button>
-    <button class="gbtn big" id="btnSceneTriangle">▲ Scene 3 — The Triangle</button>
-    <button class="gbtn big" id="btnSceneKindling">🔥 Scene 4 — Kindling</button>
-    <button class="gbtn big" id="btnSceneThrone">🏰 Scene 5 — The Long Way (the Throne)</button>
+    <div style="opacity:.6;font-size:11.5px;letter-spacing:1.2px;margin:9px 2px 1px">THE FONT</div>
+    <button class="gbtn big" id="btnLessonSpells">🔥 1 · Spells</button>
+    <button class="gbtn big" id="btnLessonFonts">🌀 2 · Mana Fonts</button>
+    <button class="gbtn big" id="btnLessonEscape">🔮 3 · Escape</button>
+    <button class="gbtn big" id="btnLessonIntercept">🛡️ 4 · Intercept</button>
+    <div style="opacity:.6;font-size:11.5px;letter-spacing:1.2px;margin:9px 2px 1px">THE QUEEN</div>
+    <button class="gbtn big" id="btnLessonMend">💚 5 · Mend</button>
+    <button class="gbtn big" id="btnLessonResonance">☄️ 6 · Resonance</button>
+    <div style="opacity:.6;font-size:11.5px;letter-spacing:1.2px;margin:9px 2px 1px">THE TRIANGLE</div>
+    <button class="gbtn big" id="btnLessonTriangle">▲ 7 · The Triangle</button>
+    <button class="gbtn big" id="btnLessonPinned">📌 8 · Pinned Down</button>
+    <div style="opacity:.6;font-size:11.5px;letter-spacing:1.2px;margin:9px 2px 1px">KINDLING</div>
+    <button class="gbtn big" id="btnLessonKindling">🔥 9 · Kindling</button>
+    <button class="gbtn big" id="btnLessonCinderburst">💥 10 · Cinderburst</button>
+    <div style="opacity:.6;font-size:11.5px;letter-spacing:1.2px;margin:9px 2px 1px">THE LONG WAY</div>
+    <button class="gbtn big" id="btnLessonThrone">👑 11 · The Throne</button>
+    <button class="gbtn big" id="btnLessonLongway">🐉 12 · The Long Way</button>
     </div>
     <button class="gbtn big" id="btnScenario" style="display:none">🎬 Dev stage — proof of life</button>
     <button class="gbtn big" id="btnExitScenario" style="display:none">⏏ Leave the stage</button>
     <button class="gbtn big" id="btnPvP">👥 Pass-and-play — two humans, one device</button>
     <button class="gbtn big" id="btnHow">📖 How to play (one minute)</button>
     <div id="glbStatus" style="text-align:center;opacity:.85;font-size:13px;margin-top:10px;min-height:16px"></div>
-    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.38 · Slice 3.38 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 7. A piece still to act wears a ring of light; once it has acted, the ring is gone and the piece rests dimmer. Orbit low and the island’s under-rock is lit from below now, mana seams glowing in the dark. The court breathes: pieces idle on their own time, rise when chosen, and flash when struck. And the Exclusives are serpents now — Ember's Cinderwyrm and Frost's Rimewyrm coil where the hounds once ran, forked tongues and all — while the archers stand in a true shooter's stance, arrows level. And the air itself has taken sides: embers rise over Ember's half of the isle while snow sifts down over Frost's, the braziers' firelight dances with their own flames, and gold, ice and plate catch real reflections of the dusk. The camera has learned manners too: four preset views fly you smoothly around the court, and left alone it breathes, very slowly, like something alive. On the board, pieces travel like they mean it now: moves glide hex to hex on an eased arc, strikes lunge and recoil, and the fallen shrink into their burst of court-colored sparks. And the wyrms themselves have been taken down a size — a small trim, so the serpents coil beside the band instead of towering over it. And the board itself has been polished to the pieces’ shine — the Dusk Slate now catches the same dusk as the gold and ice it carries. And the island no longer floats in front of a poster: a ruined colonnade rings the sky, mist pools below the rock, and the horizon glows warm toward Ember and cool toward Frost. And the Heart Crystals have woken: a Sprite that ends its activation kneeling on its own crystal and lives to stir again rises as a True Spirit — Inferno or Hearth for Ember, Blizzard or Glacier Wisp for Frost — and the kneeling wears a ring of light the whole board can read, so the race to stop it is fair. And the tutorial itself has been walked end to end, exactly as written, by a tireless first student: its gold ring now points at the Cinderbow who can actually loose the lesson's arrows, and the no-dice lesson waits for a strike of your own before it shows you the arithmetic. And the Waking itself can now be watched: when a Communion completes, the Sprite rises and turns in its court's light, the ring's sparks fall inward, and at the flash the piece on the board is the Spirit itself — Inferno and Hearth wear the Coal Imp's fire grown wild and warm, Blizzard and Glacier Wisp wear the Veil Wisp's mist grown storm and still: four new faces for the two forks of each court. And the spellbook itself has been slimmed: seventeen spells are twelve now, each a different verb — the High Mage has become the support mage, carrying Blink and Mend and the court's Resonance in her own hands (lose her, and you lose Resonance and her utility both), Ember has learned to set the very ground ablaze for a round, and Frost's Brittle has become Shatter, which only breaks what the cold already holds. And the tuning fork has come home: after a night of thousands of measured games on a fork of this very build, the Archmage stands at 17 HP, Fireball and Shatter cost ◆4 apiece, the Deepening holds its breath until Round 7, and the Throne starts paying a round later — the same duel, given room to breathe, with the balance confirmed rather than disturbed. And the hand itself has been trued: a tap now lands where the finger came DOWN, not where it lifted — the board holds still from the moment you touch it, so the hex at a border takes the order you aimed at it. And two seats have become one: the Court view and the Player view were near-twins, so a single seat remains — behind your own court against the machine, and in a pass-and-play duel it settles behind whoever is to move, a touch higher and closer, the way the Player view always sat. And the court has been grounded: every piece now stands in a soft pool of its own shade, so serpent and plate alike sit planted on the slate instead of hovering over it; the ruins have crept closer — broken drums and capital stones hang in a nearer ring beyond the rim, below the board’s edge where no sightline to a hex can cross them; and the hero lights burn hotter — brazier flame, heart crystal and wyrm-seam raised toward the studio band — while the slate beneath them keeps its dusk. And the turning hand keeps what it turns: the camera rides the steering finger exactly, so a fast swing stops dead the moment the hand lets go — no trailing settle behind it, and nothing left for the next touch to snap shut. And the camera has learned to land like a living thing: a hard swing now spends its last momentum in a short gliding settle — every frame of it continuous, never a jump — and a fresh touch simply stops the board where it lies, so the hex under your finger is always the hex you aimed at. And the view cluster has shed its two oldest buttons — Top view and Reset view are gone, because the preset row already says it all: Overhead is the top view, Court is the home seat — while the Terrain legend keeps its place. And the King has learned to step sideways: the Archmage now carries Blink ◆3 — vanish and reappear on an empty hex within 3, himself only, priced like the escape it is (◆2 from a Mana Font) — while the Queen keeps her cheaper ◆2 step, her Mend and her Resonance: lose her, and you lose the court's utility still. And beneath the duel a stage has been built — hand-set scenes, scripted volleys answered by real Guardians, a camera that flies to the lesson, and gates that hold every tap but the one being taught; the new way in will be staged on it, beat by beat. And the stage has its first lesson now — the Font: a hurt Archmage stands in the discount with two hill bows holding his life in their hands (3 + 3 against his 5), spends the Font's price break twice — a ◆3 Fireball, then a ◆2 Blink to the far hex his Guards flank — and the wyrm and the bow come for him anyway, 3 and 2, exactly his life again, and each of his Pyre Guards answers for him once. Scene 1 stands open in the menu: 'Scene 1 — The Font'. And four more lessons have taken the stage: the Queen — six hexes from her dying king, one Blink from Mend range, her mana counted to the last point (◆2, ◆2, ◆5) so the Resonance lands and the wyrm's killing 4 meets a mended 5; the Triangle — a needle that kills only because Scouts hunt bows (1 + 1 into 2), a pin that costs a Bulwark his one job, and a strike that lands on a queen because her Guardian cannot stand; Kindling — a blade of 3 made 4 against a life of exactly 4, and a Sprite whose death is itself a weapon; and the Long Way — a Guard on the Throne through three rounds of weather (10, 8, 6), the crown ticking 1, 2, 3, a duel won without a kill. The stage also keeps its own house now: the hint banner is recomputed at every beat, so it can never invite a move the moment refuses. Scenes 1–5 stand open in the menu. And the board now answers when you ask it: tap any enemy and its reach blooms over the slate — the deep red it can strike from where it stands, the pale red it could only reach by moving first — priced by the same movement and targeting the duel itself obeys, so the shading can no more lie than the AI can. Tap it again, tap the ground, or choose one of your own pieces to let it go; and no tap that means an attack or a spell is ever spent on looking. And the stage has learned to greet: a player who has never dueled is walked onto it as the island first rises — the Font, the Queen, the Triangle, the Kindling, the Long Way, one lesson handing them to the next — and at the end of the Long Way the stage does not close: the board beneath it becomes a real one, the camera pulls back to the Court seat in a single flight, and the first move of a real duel is already theirs. Leave at any point and the island remembers — it never drags anyone back; the lessons wait in the menu, where they have always waited. And the lessons have been walked blind: a stranger who knew nothing — reading only the coach's words, the gold ring, and the glow of what may be tapped — found every tap in every scene, from the menu and from the first-launch chain alike, and at the end of the Long Way took the first move of a real duel for his own. Every wrong thing he tried along the way was answered kindly — the enemy who blooms red when looked at and lets go when the ground is tapped, the End that refuses, the wrong march and the wrong Blink the stage rewinds and forgives — though the walking caught one real trap and mended it: a finished beat's buttons used to sit live into the next, a leftover Confirm waiting to be tapped into a plan with nowhere to go; now the card clears when its selection does, and the stage sweeps its own card clean at every beat. The menu has tidied itself too, at the word of the house: the five lessons fold under one 📚 Lessons door beneath the Tutorial, so the front page is short again — and every lesson still stands there for the replaying. The stage's door has moved, too: 'Leave the stage' no longer sits in the coach's row beside the way forward — it lives on a small ✕ Leave chip in the menu's corner, one tap to ask 'Sure?', a second to go, the house rule the old Skip taught; and the camera's three seats have quieted themselves — ghost-pale and small at rest, waking only when a hand comes near, their poses unchanged. And the top of the screen has been put in order: the Terrain key, the camera's three seats, and — while a lesson stands — the stage's ✕ door now share ONE slim row under the banner, where there used to be a stack of rows; the seats keep their ghost and their poses, the door keeps its two-tap 'Sure?', and nothing else up there moved. Learn it in a minute. Master it in a season.</p>
+    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.39 · Slice 3.39 — Courts & Longevity: Player, Not Student — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 7. A piece still to act wears a ring of light; once it has acted, the ring is gone and the piece rests dimmer. Orbit low and the island’s under-rock is lit from below now, mana seams glowing in the dark. The court breathes: pieces idle on their own time, rise when chosen, and flash when struck. And the Exclusives are serpents now — Ember's Cinderwyrm and Frost's Rimewyrm coil where the hounds once ran, forked tongues and all — while the archers stand in a true shooter's stance, arrows level. And the air itself has taken sides: embers rise over Ember's half of the isle while snow sifts down over Frost's, the braziers' firelight dances with their own flames, and gold, ice and plate catch real reflections of the dusk. The camera has learned manners too: four preset views fly you smoothly around the court, and left alone it breathes, very slowly, like something alive. On the board, pieces travel like they mean it now: moves glide hex to hex on an eased arc, strikes lunge and recoil, and the fallen shrink into their burst of court-colored sparks. And the wyrms themselves have been taken down a size — a small trim, so the serpents coil beside the band instead of towering over it. And the board itself has been polished to the pieces’ shine — the Dusk Slate now catches the same dusk as the gold and ice it carries. And the island no longer floats in front of a poster: a ruined colonnade rings the sky, mist pools below the rock, and the horizon glows warm toward Ember and cool toward Frost. And the Heart Crystals have woken: a Sprite that ends its activation kneeling on its own crystal and lives to stir again rises as a True Spirit — Inferno or Hearth for Ember, Blizzard or Glacier Wisp for Frost — and the kneeling wears a ring of light the whole board can read, so the race to stop it is fair. And the tutorial itself has been walked end to end, exactly as written, by a tireless first student: its gold ring now points at the Cinderbow who can actually loose the lesson's arrows, and the no-dice lesson waits for a strike of your own before it shows you the arithmetic. And the Waking itself can now be watched: when a Communion completes, the Sprite rises and turns in its court's light, the ring's sparks fall inward, and at the flash the piece on the board is the Spirit itself — Inferno and Hearth wear the Coal Imp's fire grown wild and warm, Blizzard and Glacier Wisp wear the Veil Wisp's mist grown storm and still: four new faces for the two forks of each court. And the spellbook itself has been slimmed: seventeen spells are twelve now, each a different verb — the High Mage has become the support mage, carrying Blink and Mend and the court's Resonance in her own hands (lose her, and you lose Resonance and her utility both), Ember has learned to set the very ground ablaze for a round, and Frost's Brittle has become Shatter, which only breaks what the cold already holds. And the tuning fork has come home: after a night of thousands of measured games on a fork of this very build, the Archmage stands at 17 HP, Fireball and Shatter cost ◆4 apiece, the Deepening holds its breath until Round 7, and the Throne starts paying a round later — the same duel, given room to breathe, with the balance confirmed rather than disturbed. And the hand itself has been trued: a tap now lands where the finger came DOWN, not where it lifted — the board holds still from the moment you touch it, so the hex at a border takes the order you aimed at it. And two seats have become one: the Court view and the Player view were near-twins, so a single seat remains — behind your own court against the machine, and in a pass-and-play duel it settles behind whoever is to move, a touch higher and closer, the way the Player view always sat. And the court has been grounded: every piece now stands in a soft pool of its own shade, so serpent and plate alike sit planted on the slate instead of hovering over it; the ruins have crept closer — broken drums and capital stones hang in a nearer ring beyond the rim, below the board’s edge where no sightline to a hex can cross them; and the hero lights burn hotter — brazier flame, heart crystal and wyrm-seam raised toward the studio band — while the slate beneath them keeps its dusk. And the turning hand keeps what it turns: the camera rides the steering finger exactly, so a fast swing stops dead the moment the hand lets go — no trailing settle behind it, and nothing left for the next touch to snap shut. And the camera has learned to land like a living thing: a hard swing now spends its last momentum in a short gliding settle — every frame of it continuous, never a jump — and a fresh touch simply stops the board where it lies, so the hex under your finger is always the hex you aimed at. And the view cluster has shed its two oldest buttons — Top view and Reset view are gone, because the preset row already says it all: Overhead is the top view, Court is the home seat — while the Terrain legend keeps its place. And the King has learned to step sideways: the Archmage now carries Blink ◆3 — vanish and reappear on an empty hex within 3, himself only, priced like the escape it is (◆2 from a Mana Font) — while the Queen keeps her cheaper ◆2 step, her Mend and her Resonance: lose her, and you lose the court's utility still. And beneath the duel a stage has been built — hand-set scenes, scripted volleys answered by real Guardians, a camera that flies to the lesson, and gates that hold every tap but the one being taught; the new way in will be staged on it, beat by beat. And the stage has its first lesson now — the Font: a hurt Archmage stands in the discount with two hill bows holding his life in their hands (3 + 3 against his 5), spends the Font's price break twice — a ◆3 Fireball, then a ◆2 Blink to the far hex his Guards flank — and the wyrm and the bow come for him anyway, 3 and 2, exactly his life again, and each of his Pyre Guards answers for him once. Scene 1 stands open in the menu: 'Scene 1 — The Font'. And four more lessons have taken the stage: the Queen — six hexes from her dying king, one Blink from Mend range, her mana counted to the last point (◆2, ◆2, ◆5) so the Resonance lands and the wyrm's killing 4 meets a mended 5; the Triangle — a needle that kills only because Scouts hunt bows (1 + 1 into 2), a pin that costs a Bulwark his one job, and a strike that lands on a queen because her Guardian cannot stand; Kindling — a blade of 3 made 4 against a life of exactly 4, and a Sprite whose death is itself a weapon; and the Long Way — a Guard on the Throne through three rounds of weather (10, 8, 6), the crown ticking 1, 2, 3, a duel won without a kill. The stage also keeps its own house now: the hint banner is recomputed at every beat, so it can never invite a move the moment refuses. Scenes 1–5 stand open in the menu. And the board now answers when you ask it: tap any enemy and its reach blooms over the slate — the deep red it can strike from where it stands, the pale red it could only reach by moving first — priced by the same movement and targeting the duel itself obeys, so the shading can no more lie than the AI can. Tap it again, tap the ground, or choose one of your own pieces to let it go; and no tap that means an attack or a spell is ever spent on looking. And the stage has learned to greet: a player who has never dueled is walked onto it as the island first rises — the Font, the Queen, the Triangle, the Kindling, the Long Way, one lesson handing them to the next — and at the end of the Long Way the stage does not close: the board beneath it becomes a real one, the camera pulls back to the Court seat in a single flight, and the first move of a real duel is already theirs. Leave at any point and the island remembers — it never drags anyone back; the lessons wait in the menu, where they have always waited. And the lessons have been walked blind: a stranger who knew nothing — reading only the coach's words, the gold ring, and the glow of what may be tapped — found every tap in every scene, from the menu and from the first-launch chain alike, and at the end of the Long Way took the first move of a real duel for his own. Every wrong thing he tried along the way was answered kindly — the enemy who blooms red when looked at and lets go when the ground is tapped, the End that refuses, the wrong march and the wrong Blink the stage rewinds and forgives — though the walking caught one real trap and mended it: a finished beat's buttons used to sit live into the next, a leftover Confirm waiting to be tapped into a plan with nowhere to go; now the card clears when its selection does, and the stage sweeps its own card clean at every beat. The menu has tidied itself too, at the word of the house: the five lessons fold under one 📚 Lessons door beneath the Tutorial, so the front page is short again — and every lesson still stands there for the replaying. The stage's door has moved, too: 'Leave the stage' no longer sits in the coach's row beside the way forward — it lives on a small ✕ Leave chip in the menu's corner, one tap to ask 'Sure?', a second to go, the house rule the old Skip taught; and the camera's three seats have quieted themselves — ghost-pale and small at rest, waking only when a hand comes near, their poses unchanged. And the top of the screen has been put in order: the Terrain key, the camera's three seats, and — while a lesson stands — the stage's ✕ door now share ONE slim row under the banner, where there used to be a stack of rows; the seats keep their ghost and their poses, the door keeps its two-tap 'Sure?', and nothing else up there moved. And the Font has learned to pay in time as well as price: Fontstep — a caster who STARTS an activation standing on a Mana Font may Blink at the beginning or the end of it without the Blink spending the activation, once per activation, Blink itself still once per round — the escape and the rescue are one breath now, and the duel's own brain knows the trick as well as any hand. And the five scenes have become twelve named lessons on five stages — Spells, Mana Fonts, Escape, Intercept on the Font stage alone — each one a single verb, each one an honest moment: no refreshed clocks, no compressed turns, a lesson boundary the only place time is allowed to pass, so a new player walks in feeling like a player, not a student. And the board has learned to duck: arm a spell or a strike and the great cards fold themselves away — the unit card to a slim armed bar, the coach to its one-line goal — so the target the banner names is standing in the open, in lessons and duels alike. Learn it in a minute. Master it in a season.</p>
   </div>
 </div>
 <div id="selectOverlay" class="overlay" style="display:none">
@@ -3991,7 +4010,7 @@ var SPELLS = {
   frostlance:   { name:'Frost Lance',   icon:'🧊', cost:2, range:4, kind:'unit', desc:'2 damage to an enemy within 4, and Chill it (−1 movement; two Chill roots).' },
   shatter:      { name:'Shatter',       icon:'🔨', cost:4, range:4, kind:'unit', desc:'Strike a Chilled or Rooted enemy within 4 for 4 damage, and its Chill is spent. It can only break what the cold already holds.' },
   glacier:      { name:'Glacier',      icon:'🏔️', cost:4, range:4, kind:'hex',  desc:'Raise an ice wall (4 HP) on an empty hex within 4. Nothing moves through it; it melts after 2 rounds.' },
-  blink:        { name:'Blink',         icon:'🔮', cost:2, mageCost:3, range:3, kind:'hex',  desc:'Vanish and reappear on an empty hex within 3. Walls, pieces and distance are no obstacle — only the landing must be clear.' },
+  blink:        { name:'Blink',         icon:'🔮', cost:2, mageCost:3, range:3, kind:'hex',  desc:'Vanish and reappear on an empty hex within 3. Walls, pieces and distance are no obstacle — only the landing must be clear. Fontstep: cast from a Mana Font (a caster who STARTS the activation standing on one), Blink does not spend the activation — step before or after the main action, once per activation; Blink itself is still once per round.' },
   conflagration:{ name:'Conflagration', icon:'☄️', cost:5, range:4, kind:'hex',  resonance:true, desc:'A greater Fireball: 3 damage at the center of a hex within 4, 2 to every adjacent hex, and survivors catch Burning.' },
   deepfreeze:   { name:'Deep Freeze',   icon:'🥶', cost:5, range:0, kind:'self', resonance:true, desc:'Every enemy is Chilled; those already Chilled crack for 3 damage and gain another Chill — a foe at one Chill comes out Rooted.' },
   meteor:       { name:'Meteor',        icon:'🌠', cost:5, range:5, kind:'hex',  signature:true, desc:'A falling star on a hex within 5: 4 damage at the center, 2 to every adjacent hex, and survivors catch Burning.' },
@@ -4186,7 +4205,7 @@ function newMatch(courtA, courtB){
       var u = { id: id++, side: side, court: courts[side], kit: kitOf(courts[side]), type: sp[0], q: q, r: r,
                 hp: 0, acted: false, alive: true,
                 burning: false, chill: 0, ward: false, buffKind: false, buffOver: false,
-                pinned: false, interceptUsed: false, sigUsed: false, channeling: false, form: null };
+                pinned: false, interceptUsed: false, sigUsed: false, channeling: false, form: null, blinkedRound: false, fsStage: 0 };
       u.hp = maxHp(u);
       s.units.push(u);
     });
@@ -4571,6 +4590,27 @@ function resolveWeaponAttack(s, atk, def, fromQ, fromR, evs, plan, stationary){
 function applyActivation(s, plan){
   var evs = [], u = unitById(s, plan.unit);
   if (!u || !u.alive || u.acted || s.winner !== null) return evs;
+  /* Slice 3.39 — FONTSTEP, the stateful window (human and scene
+     commits only; the AI rides the composite plans below, and
+     scorePlan's rebuild never carries fsWindow, so a simulation
+     can never open one). fsStage: 0 = no window, 2 = the Fontstep
+     Blink is cast and the main action is still owed, 3 = the main
+     action is spent and the Fontstep Blink is still open. A plan
+     marked fsClose simply ends the open activation. While a
+     window is open on the side to move, no OTHER unit of that
+     side may activate; at stage 3 only the closing Blink (or
+     fsClose) is legal. Continuation legs skip the start-of-
+     activation effects — the activation began with the first
+     leg, and its Burning tick and phantom chill were paid there. */
+  if (!u.fsStage) u.fsStage = 0;
+  if (u.blinkedRound === undefined) u.blinkedRound = false;
+  var fsCont = u.fsStage > 0;
+  if (u.fsStage === 3 && !plan.fsClose && plan.fsWindow !== 'blink-last') return evs;
+  if (u.side === s.turn && s.units.some(function(x){ return x.alive && x.id !== u.id && x.side === s.turn && x.fsStage; })) return evs;
+  if (plan.fsClose){
+    if (!u.fsStage) return evs;
+    plan = { unit: plan.unit, dest: { q: u.q, r: u.r }, action: null };
+  }
   /* v3.20 — THE PILGRIMAGE (addendum §10): the Communion completes
      HERE, at the start of the Sprite's next activation, if it
      ended its last activation on its own crystal and still stands
@@ -4597,12 +4637,12 @@ function applyActivation(s, plan){
      ever entering u.chill, so cold that lands DURING the
      activation (a Bulwark's answer, Rime's arrival) still stays,
      exactly as the Chill economy has always ruled. */
-  if (blizzardPending(s, u)) evs.push({ t: 'status', unit: u.id, what: 'chill', n: Math.min(2, u.chill + 1) });
-  var chillAtStart = u.chill;
+  if (!fsCont && blizzardPending(s, u)) evs.push({ t: 'status', unit: u.id, what: 'chill', n: Math.min(2, u.chill + 1) });
+  var chillAtStart = fsCont ? 0 : u.chill;
   /* Kindling's tax: a Burning piece takes 1 at the start of its own
      activation — before it stirs. Fire is not a hit: no ward saves
      you, no aura softens it. If it kills, the activation is spent. */
-  if (u.burning){
+  if (u.burning && !fsCont){
     /* the Hearth Spirit's aura (§10): a Burning foe beginning its
        activation beside an enemy Hearth Spirit feeds on the fire —
        its tick is 2, not 1 */
@@ -4613,6 +4653,22 @@ function applyActivation(s, plan){
       evs.push({ t: 'acted', unit: u.id, from: { q: u.q, r: u.r } });
       if (!settleWinner(s, evs)) advanceTurn(s, evs);
       return evs;
+    }
+  }
+  /* Slice 3.39 — FONTSTEP composite leg, BLINK-FIRST (the duel
+     AI's shape, ported from probe-fontstep: one plan, one call —
+     the Blink resolves from the font BEFORE the walk, the main
+     action then resolves from the landing). Human commits never
+     carry action.fontstep; they use the fsWindow legs below. */
+  var fsLeg = (plan.action && plan.action.fontstep) || null;
+  if (fsLeg && fsLeg.order === 'blink-first' && u.alive){
+    var fsSp = SPELLS.blink;
+    var fsCost = spellCost('blink', u.q, u.r, u.type);
+    if (fsSp && canCastSpell(s, u, 'blink') && !u.blinkedRound && s.mana[u.side] >= fsCost &&
+        resolveSpell(s, u, fsLeg.blinkAction, evs)){
+      s.mana[u.side] -= fsCost;
+      u.blinkedRound = true;
+      evs.push({ t: 'cast', unit: u.id, spell: 'blink', fontstep: true });
     }
   }
   var from = { q: u.q, r: u.r };
@@ -4665,16 +4721,41 @@ function applyActivation(s, plan){
   } else if (act && act.kind === 'spell' && (u.type === 'mage' || u.type === 'queen')){
     var sp = SPELLS[act.spell];
     var cost = sp ? spellCost(act.spell, u.q, u.r, u.type) : 0;
-    if (sp && canCastSpell(s, u, act.spell) && s.mana[u.side] >= cost){
+    if (sp && canCastSpell(s, u, act.spell) && s.mana[u.side] >= cost && !(act.spell === 'blink' && u.blinkedRound)){
       var castOk = resolveSpell(s, u, act, evs);
       if (castOk){
         s.mana[u.side] -= cost;
         if (sp.signature) u.sigUsed = true;
+        if (act.spell === 'blink') u.blinkedRound = true;
         evs.push({ t: 'cast', unit: u.id, spell: act.spell });
       }
     }
   }
-  u.acted = true;
+  /* Slice 3.39 — FONTSTEP composite leg, CAST-FIRST (probe port):
+     the main action has resolved; the Fontstep Blink rides after
+     it, priced from the hex the caster now stands on. */
+  if (fsLeg && fsLeg.order === 'cast-first' && u.alive && s.winner === null){
+    var fsCost2 = spellCost('blink', u.q, u.r, u.type);
+    if (canCastSpell(s, u, 'blink') && !u.blinkedRound && s.mana[u.side] >= fsCost2 &&
+        resolveSpell(s, u, fsLeg.blinkAction, evs)){
+      s.mana[u.side] -= fsCost2;
+      u.blinkedRound = true;
+      evs.push({ t: 'cast', unit: u.id, spell: 'blink', fontstep: true });
+    }
+  }
+  /* Slice 3.39 — the stateful window's verdict for THIS call:
+     open at stage 2 (a Fontstep Blink was just cast and the
+     activation is still owed) or stage 3 (a caster who started
+     on a Font spent the main action and the Blink is still
+     open), or close — the activation ends exactly as it always
+     has. A winner settled this call, or a dead caster, closes. */
+  var fsWillOpen = 0;
+  if (u.alive && s.winner === null){
+    if (plan.fsWindow === 'blink-first' && act && act.kind === 'spell' && act.spell === 'blink' && u.blinkedRound) fsWillOpen = 2;
+    else if (plan.fsWindow === 'cast-first' && !u.blinkedRound) fsWillOpen = 3;
+  }
+  if (fsWillOpen){ u.fsStage = fsWillOpen; evs.push({ t: 'fontstep', unit: u.id, stage: fsWillOpen }); }
+  else { u.fsStage = 0; u.acted = true; }
   /* Chill is spent by the activation it haunted: what was laid on
      this piece BEFORE it stirred is gone; what landed DURING its
      activation (a Bulwark's answer, Rime's arrival) stays. */
@@ -4686,7 +4767,7 @@ function applyActivation(s, plan){
      only until round's end (endRound), Burning's own heartbeat,
      so a mark laid here can still be cashed by an Ignite later
      in the round — and by nothing after it. */
-  if (u.alive && s.fires && s.fires.length){
+  if (!fsWillOpen && u.alive && s.fires && s.fires.length){
     for (var fi = 0; fi < s.fires.length; fi++){
       if (hexDist(u.q, u.r, s.fires[fi].q, s.fires[fi].r) <= 1){ applyBurn(s, u, evs); break; }
     }
@@ -4699,8 +4780,8 @@ function applyActivation(s, plan){
     u.channeling = true;
     evs.push({ t: 'channel', unit: u.id });
   }
-  evs.push({ t: 'acted', unit: u.id, from: from });
-  if (!settleWinner(s, evs)) advanceTurn(s, evs);
+  if (!fsWillOpen) evs.push({ t: 'acted', unit: u.id, from: from });
+  if (!settleWinner(s, evs) && !fsWillOpen) advanceTurn(s, evs);
   return evs;
 }
 /* spell resolution, by name — returns true if the cast truly fired
@@ -4891,7 +4972,7 @@ function endRound(s, evs){
      fades on the same heartbeat (the reset just below) */
   if (s.fires) s.fires.forEach(function(f){ evs.push({ t: 'firefade', q: f.q, r: f.r }); });
   s.fires = [];
-  s.units.forEach(function(u){ u.acted = false; u.burning = false; u.pinned = false; u.interceptUsed = false; });
+  s.units.forEach(function(u){ u.acted = false; u.burning = false; u.pinned = false; u.interceptUsed = false; u.blinkedRound = false; u.fsStage = 0; });
   s.round++;
   s.turn = (s.round - 1) % 2;
   evs.push({ t: 'round', round: s.round });
@@ -5082,8 +5163,75 @@ function scorePlan(s, side, plan){
   sc += evs.filter(function(e){ return e.t === 'crown' && e.side === side; }).length * 60;
   return sc;
 }
+/* Slice 3.39 — FONTSTEP plan enumeration (ported from
+   probe-fontstep, where the selftest proved the mana math and
+   800/800 unique-trace games priced the rule): for a great mage
+   standing on a Font at activation start, every stock plan gains
+   composite twins — cast-first (main spell, then the Fontstep
+   Blink away) and blink-first (the Blink, then the book cast
+   from the landing). scorePlan prices a composite exactly,
+   because applyActivation resolves both legs inside one call. */
+function qualifiesFS(s, u, side){
+  return !!(u && u.alive && !u.acted && u.side === side && s.turn === side &&
+    (u.type === 'mage' || u.type === 'queen') && !u.blinkedRound &&
+    terrainAt(u.q, u.r) === 'ley' && bookOf(u).indexOf('blink') >= 0 && canCastSpell(s, u, 'blink'));
+}
+function fontstepPlansFor(s, side){
+  var out = [];
+  s.units.forEach(function(u){
+    if (!qualifiesFS(s, u, side)) return;
+    var start = { q: u.q, r: u.r };
+    var blinkCostStart = spellCost('blink', start.q, start.r, u.type);
+    var reach = reachable(s, u);
+    var base = enumeratePlans(s, side).filter(function(p){ return p.unit === u.id; });
+    /* (a) cast-first: dest == start, a priced non-Blink spell,
+       and the Fontstep Blink after it */
+    base.forEach(function(p){
+      if (!p.action || p.action.kind !== 'spell' || p.action.spell === 'blink') return;
+      if (p.dest.q !== start.q || p.dest.r !== start.r) return;
+      var mainCost = spellCost(p.action.spell, start.q, start.r, u.type);
+      spellHexesFrom(s, u, 'blink', start.q, start.r).forEach(function(h){
+        if (reach[hexKey(h.q, h.r)]) return;   /* walking there is strictly better and already enumerated */
+        if (s.mana[side] < mainCost + blinkCostStart) return;
+        out.push({ unit: u.id, dest: { q: start.q, r: start.r },
+          action: Object.assign({}, p.action, { fontstep: { order: 'cast-first', blinkAction: { kind: 'spell', spell: 'blink', q: h.q, r: h.r } } }),
+          evolve: p.evolve });
+      });
+    });
+    /* (b) blink-first: the Blink from the Font, then each book
+       spell cast from the landing (the follow-up prices from
+       the hex it is cast from) */
+    spellHexesFrom(s, u, 'blink', start.q, start.r).forEach(function(L){
+      if (reach[hexKey(L.q, L.r)]) return;
+      var blinkAction = { kind: 'spell', spell: 'blink', q: L.q, r: L.r };
+      bookOf(u).forEach(function(spName){
+        if (spName === 'blink') return;
+        var sp = SPELLS[spName];
+        if (!canCastSpell(s, u, spName)) return;
+        var c2 = spellCost(spName, L.q, L.r, u.type);
+        if (s.mana[side] < blinkCostStart + c2) return;
+        function mk(action){ return { unit: u.id, dest: { q: L.q, r: L.r }, action: Object.assign({}, action, { fontstep: { order: 'blink-first', blinkAction: blinkAction } }) }; }
+        if (sp.kind === 'unit') spellTargetsFrom(s, u, spName, L.q, L.r).forEach(function(t){ out.push(mk({ kind: 'spell', spell: spName, target: t.id })); });
+        else if (sp.kind === 'ally'){ (spName === 'mend' ? mendTargetsFrom(s, u, L.q, L.r) : spellTargetsFrom(s, u, spName, L.q, L.r)).forEach(function(t){ out.push(mk({ kind: 'spell', spell: spName, target: t.id })); }); }
+        else if (sp.kind === 'self') out.push(mk({ kind: 'spell', spell: spName, q: L.q, r: L.r }));
+        else if (spName === 'glacier'){
+          spellHexesFrom(s, u, spName, L.q, L.r).forEach(function(h){
+            var nearAction = s.units.some(function(x){ return x.alive && hexDist(h.q, h.r, x.q, x.r) <= 1; }) ||
+              s.units.some(function(x){ return x.alive && x.side !== side && hexDist(h.q, h.r, x.q, x.r) <= 2; });
+            if (nearAction) out.push(mk({ kind: 'spell', spell: spName, q: h.q, r: h.r }));
+          });
+        }
+        else {
+          var seen = {};
+          s.units.forEach(function(e){ if (!e.alive) return; for (var dd = 0; dd < 6; dd++){ var hq = e.q + DIRS[dd][0], hr = e.r + DIRS[dd][1]; [hexKey(e.q, e.r), hexKey(hq, hr)].forEach(function(k){ if (!seen[k] && inBoard(+k.split(',')[0], +k.split(',')[1]) && hexDist(L.q, L.r, +k.split(',')[0], +k.split(',')[1]) <= sp.range){ seen[k] = 1; out.push(mk({ kind: 'spell', spell: spName, q: +k.split(',')[0], r: +k.split(',')[1] })); } }); } });
+        }
+      });
+    });
+  });
+  return out;
+}
 function planAI(s, side, rng){
-  var plans = enumeratePlans(s, side), best = null, bestScore = -1e18;
+  var plans = enumeratePlans(s, side).concat(fontstepPlansFor(s, side)), best = null, bestScore = -1e18;
   for (var i = 0; i < plans.length; i++){
     var sc = scorePlan(s, side, plans[i]) + (rng ? rng() * 1.6 : 0);
     if (sc > bestScore){ bestScore = sc; best = plans[i]; }
@@ -6817,6 +6965,16 @@ function inspectUnit(u){
   if (INSPECT === u.id){ clearInspect(); return; }
   INSPECT = u.id; drawInspect();
   toast('👁 ' + unitName(u) + ' threatens the red ground — deep: from where it stands · pale: after a move', 2400);
+  if (SCEN) scenInspectNotify(u);
+}
+/* Slice 3.39: a lesson beat may be completed by LOOKING — the
+   Mana Fonts lesson's second beat ends when the player inspects
+   the ringed bow. Inspection is not a commit, so it knocks here. */
+function scenInspectNotify(u){
+  if (!SCEN || SCEN.done) return;
+  var b = SCEN.def.beats[SCEN.beat];
+  if (!b || !b.done || !b.done.inspect) return;
+  if (b.done.inspect === true || u.type === b.done.inspect){ clearInspect(); scenBeatComplete('inspect'); }
 }
 
 /* ---- game state / views ---- */
@@ -7199,6 +7357,10 @@ function syncDock(){
 var FRAME_MARGIN = 8;
 var CARD_BTNS = []; /* the labels on the current unit card, recorded as drawSelection builds them (see estCardH) */
 function estCardH(){
+  /* Slice 3.39: while the armed bar stands, the card's reserved
+     height is the bar's — framing plans against the ENLARGED
+     band the collapse opens up */
+  if (ARMED_UI) return 64;
   /* the unit card's RESERVED height, modelled from its live contents:
      the stub DOM has no layout to measure, and in the browser the real
      card is never taller than this model — so framing (and the
@@ -7911,6 +8073,8 @@ function performEvents(evs, cb){
     } else if (ev.t === 'round'){
       shot(60, function(){}, function(){ refreshActedVisuals(); });
       notes.push('— Round ' + ev.round + ' —' + (ev.round === 3 ? ' · 👑 the Throne counts crowns from this round' : ''));
+    } else if (ev.t === 'fontstep'){
+      notes.push('✨ Fontstep — the Font paid for the step; the activation goes on');
     } else if (ev.t === 'acted'){
       (function(ev){ shot(30, function(){}, function(){ refreshActedVisuals(); }); })(ev);
     }
@@ -8393,27 +8557,38 @@ scenRegister('proof', {
   ]
 });
 
-/* ---- Scene 1 — THE FONT (Slice 3.33; PLAYER-FACING) ----
-   Trenten's opening lesson, staged exactly as designed: a hurt
-   Archmage on the Font, the discount spent twice, the volley
-   math read aloud, the escape, and the two Guards. Every number
-   in the coach lines is the engine's own (see patch-v333.js for
-   the searched staging and the full audit). The Blink beat's
-   check rewinds a stray landing — the stage forgives a mistap:
-   he returns to the Font unspent, the ◆2 refunded, and the beat
-   waits for the taught hex. */
+/* ---- THE FONT DIORAMA (Slice 3.39; PLAYER-FACING) ----
+   Four micro-lessons on the old Scene 1 staging, every pinned
+   number carried verbatim: the hurt Archmage on the Font at
+   (2,-2), HP 5; the ◆3 Fireball (mana 6→3) splashing the second
+   bow; the two hill bows holding 3 + 3 = 6 against his 5; the
+   ◆2 Blink to (-1,-2) between his Guards (mana 3→1); the volley
+   — Rimewyrm 3, hill bow 2 — answered by Guard A (10→7, his
+   retaliation singeing the wyrm 6→5) and Guard B (10→8), the
+   king untouched at 5. What changed is the CLOCK, and it changed
+   honestly: Fontstep (the rule this very build ships) makes the
+   Fireball and the Blink one legal activation, so no beat
+   refreshes the mage any more — the lesson boundary is the only
+   place time passes. L1's coach frames the position as what the
+   deep-Archmage probe measured it to be: a late-duel moment, a
+   king who camped the enemy font one turn too long (the staged
+   round stays 2 — at a staged Round 9 the signature would read
+   sealed past its Deepening, a HUD lie; the framing is
+   unnumbered instead). The diorama's action cams fly FLIPPED
+   (theta = home + PI): the king's face and both bows in one
+   glance, where the home seat showed his back. */
 function fontLandingCheck(plan, evs){
   var m = mageOf(S, 0); if (!m) return false;
   if (m.q === -1 && m.r === -2) return true;
-  m.q = 2; m.r = -2; m.acted = false;
+  m.q = 2; m.r = -2; m.acted = false; m.blinkedRound = false; m.fsStage = 0;
   S.mana[0] += spellCost('blink', 2, -2, 'mage');
   var v = views[m.id];
   if (v){ var w = hexToWorld(2, -2); v.group.position.set(w.x, SURF(2, -2), w.z); v.q = 2; v.r = -2; faceHome(m.id); }
   toast('🎬 Not there — the glowing hex, the one his Pyre Guards flank. The stage rewinds his step; Blink again.', 2600);
   return false;
 }
-scenRegister('font', {
-  title: 'Scene 1 — The Font',
+scenRegister('spells', {
+  title: 'Spells', dio: 'The Font', dioIdx: 1, dioCount: 4,
   courts: ['ember', 'frost'], mana: [6, 3], round: 2, turn: 0,
   pieces: [
     { side: 0, type: 'mage',       q: 2,  r: -2, hp: 5 },
@@ -8423,33 +8598,80 @@ scenRegister('font', {
     { side: 1, type: 'skirmisher', q: -1, r: 0 },
     { side: 1, type: 'exclusive',  q: -2, r: -1 }
   ],
-  outro: 'You can save yourself. Your court keeps you alive.',
+  outro: 'One cast, honestly bought — and the Font is not done with him yet. It never only pays in price.',
   beats: [
-    { title: 'The Font', goal: 'why he stands here',
-      coach: 'This is a <b>Mana Font</b> — and your Archmage is standing on it, hurt: <b>5 HP</b>. A spell cast while standing on a Font costs <b>◆1 less</b> — the only discount in the game. Hold that thought. It is about to matter twice.',
-      gate: { units: [], actions: [], moves: false },
-      ring: { q: 2, r: -2 },
-      cam: { focus: { q: 2, r: -2 }, rad: 13, phi: 0.95, dur: 1.4 },
-      done: { manual: 'Got it ▸' } },
     { title: 'Cast from the Font', goal: 'Fireball — ◆3 here, not ◆4',
-      coach: '<b>Fireball</b> costs ◆4. From this Font, he pays <b>◆3</b> — watch his mana when it lands. Select him, arm 🔥 <b>Fireball</b>, and blast the ringed Shardbow. Fire splashes, too: its neighbour will catch a spark.',
+      coach: 'Late in a duel — the moment every Archmage dreads. Yours camped the enemy\'s <b>Mana Font</b> one turn too long: hurt (<b>5 HP</b>), deep in Frost ground, two hill bows holding his life in their hands. But a Font pays the caster who stands on it — spells cast from one cost <b>◆1 less</b>. <b>Fireball</b> is ◆4; from here he pays <b>◆3</b>. Watch his mana when it lands. Select him, arm 🔥 <b>Fireball</b>, and blast the ringed Shardbow. Fire splashes, too: its neighbour will catch a spark.',
       gate: { units: ['mage'], actions: ['fireball'], moves: false },
       ring: { q: -1, r: 0 },
-      cam: { focus: { q: 2, r: -2 }, rad: 12, phi: 0.95, dur: 1.2 },
-      done: { spell: 'fireball', side: 0 } },
-    { title: 'The danger', goal: 'count the arrows',
-      coach: 'Now count what is aimed at him. Two Shardbows hold the hills, and high ground adds 1: each one hits him for <b>3</b>. 3 + 3 = <b>6</b> — and he has <b>5</b>. Where he stands, the next volley kills him. He cannot stay.',
+      cam: { focus: { q: 1, r: -2 }, rad: 15, phi: 0.95, dur: 1.4, flip: true },
+      done: { spell: 'fireball', side: 0 } }
+  ]
+});
+document.getElementById('btnLessonSpells').onclick = function(){ scenStart('spells'); };
+scenRegister('fonts', {
+  title: 'Mana Fonts', dio: 'The Font', dioIdx: 2, dioCount: 4,
+  courts: ['ember', 'frost'], mana: [3, 3], round: 2, turn: 0,
+  pieces: [
+    { side: 0, type: 'mage',       q: 2,  r: -2, hp: 5 },
+    { side: 0, type: 'guardian',   q: 0,  r: -2 },
+    { side: 0, type: 'guardian',   q: 0,  r: -3 },
+    { side: 1, type: 'skirmisher', q: 0,  r: -1, hp: 4, burning: true },
+    { side: 1, type: 'skirmisher', q: -1, r: 0, hp: 2, burning: true },
+    { side: 1, type: 'exclusive',  q: -2, r: -1 }
+  ],
+  outro: 'A Font is ground worth bleeding for — cheap spells for whoever stands on it, and a target painted on their back.',
+  beats: [
+    { title: 'What a Font is', goal: 'the discount, and the danger',
+      coach: 'The Fireball is away and both bows are burning — now look at what he is standing on. A <b>Mana Font</b>: one of six on the isle. Any spell cast while standing on one costs <b>◆1 less</b> — the only discount in the game, and it just paid for that Fireball (◆4 became ◆3; his mana went 6 to 3). But count what is aimed at him. Two Shardbows hold the hills, and high ground adds 1: each one hits him for <b>3</b>. 3 + 3 = <b>6</b> — and he has <b>5</b>. Where he stands, the next volley kills him. He cannot stay. The Font\'s gift and its price are the same ground.',
       gate: { units: [], actions: [], moves: false },
       ring: { q: 2, r: -2 },
       cam: { focus: { q: 1, r: -1 }, rad: 16, phi: 1.05, dur: 1.2 },
-      done: { manual: 'I see it ▸' } },
-    { title: 'Blink out', goal: 'Blink — ◆2 from the Font',
-      coach: '<b>Blink</b> costs ◆3 — but from this Font, <b>◆2</b>: the discount pays for the escape. Select him, arm 🔮 <b>Blink</b>, and tap the glowing hex at the far edge of his reach — the one his Pyre Guards flank.',
+      done: { manual: 'Got it ▸' } },
+    { title: 'Read the threat', goal: 'tap the ringed Shardbow',
+      coach: 'Don\'t take the coach\'s word for it — read the board yourself. <b>Tap the ringed Shardbow</b>: its reach blooms over the slate — deep red for where it can strike from where it stands, pale for where it could reach by moving first. That reading is free for any enemy, in any duel, forever. It is how a player checks the coach\'s arithmetic.',
+      gate: { units: [], actions: [], moves: false },
+      ring: { q: -1, r: 0 },
+      cam: { focus: { q: 0, r: -1 }, rad: 14, phi: 1.0, dur: 1.2 },
+      done: { inspect: 'skirmisher' } }
+  ]
+});
+document.getElementById('btnLessonFonts').onclick = function(){ scenStart('fonts'); };
+scenRegister('escape', {
+  title: 'Escape', dio: 'The Font', dioIdx: 3, dioCount: 4,
+  courts: ['ember', 'frost'], mana: [3, 3], round: 2, turn: 0,
+  pieces: [
+    { side: 0, type: 'mage',       q: 2,  r: -2, hp: 5 },
+    { side: 0, type: 'guardian',   q: 0,  r: -2 },
+    { side: 0, type: 'guardian',   q: 0,  r: -3 },
+    { side: 1, type: 'skirmisher', q: 0,  r: -1, hp: 4, burning: true },
+    { side: 1, type: 'skirmisher', q: -1, r: 0, hp: 2, burning: true },
+    { side: 1, type: 'exclusive',  q: -2, r: -1 }
+  ],
+  outro: 'Still his turn. That is the whole trick — and Frost is about to test whether it was enough.',
+  beats: [
+    { title: 'Blink out', goal: 'Fontstep Blink — ◆2 from the Font',
+      coach: 'He cannot stay — and he does not have to choose between the cast he made and the escape he needs. He cast that Fireball <b>from the Font</b>, so his activation is not spent: <b>Fontstep</b> — a caster who STARTS an activation standing on a Font may Blink at its beginning or its end, and the Blink does not end it. <b>Blink</b> costs ◆3 — but from this Font, <b>◆2</b>: the discount pays for the escape too. Select him, arm 🔮 <b>Blink</b>, and tap the glowing hex at the far edge of his reach — the one his Pyre Guards flank.',
       gate: { units: ['mage'], actions: ['blink'], moves: false },
-      fresh: { side: 0, types: ['mage'] },
       ring: { q: -1, r: -2 },
-      cam: { focus: { q: -1, r: -2 }, rad: 13, phi: 0.95, dur: 1.3 },
-      done: { spell: 'blink', side: 0, check: fontLandingCheck } },
+      cam: { focus: { q: 0, r: -2 }, rad: 22, phi: 0.95, dur: 1.3, flip: true },
+      done: { spell: 'blink', side: 0, check: fontLandingCheck } }
+  ]
+});
+document.getElementById('btnLessonEscape').onclick = function(){ scenStart('escape'); };
+scenRegister('intercept', {
+  title: 'Intercept', dio: 'The Font', dioIdx: 4, dioCount: 4,
+  courts: ['ember', 'frost'], mana: [1, 3], round: 2, turn: 0,
+  pieces: [
+    { side: 0, type: 'mage',       q: -1, r: -2, hp: 5 },
+    { side: 0, type: 'guardian',   q: 0,  r: -2 },
+    { side: 0, type: 'guardian',   q: 0,  r: -3 },
+    { side: 1, type: 'skirmisher', q: 0,  r: -1, hp: 4, burning: true },
+    { side: 1, type: 'skirmisher', q: -1, r: 0, hp: 2, burning: true },
+    { side: 1, type: 'exclusive',  q: -2, r: -1 }
+  ],
+  outro: 'You can save yourself. Your court keeps you alive.',
+  beats: [
     { title: 'The volley', goal: 'answer both Intercept prompts',
       coach: 'The volley lands on his new ground anyway: the Rimewyrm strikes for <b>3</b>, the hill bow for <b>2</b> — together, death again. But his Guards stand beside him now, and each may step in <b>once</b>. Answer both prompts — a different Guard for each blow. (The bow he burned is still shaking off the fire.)',
       gate: { units: [], actions: [], moves: false },
@@ -8461,85 +8683,106 @@ scenRegister('font', {
       done: { event: 'interceptPrompt' } }
   ]
 });
-document.getElementById('btnSceneFont').onclick = function(){ scenStart('font'); };
+document.getElementById('btnLessonIntercept').onclick = function(){ scenStart('intercept'); };
 
-/* ---- Scene 2 — THE QUEEN (Slice 3.34; PLAYER-FACING) ----
-   Ember's Queen, because Conflagration stages in the open:
-   a Frost cluster takes 3 and 2 and burns where she can see it.
-   (Frost's Deep Freeze is a board-wide status whose payoff
-   needs a Shatter the scene doesn't teach — her Queen scene
-   is flagged for a later slice, not faked here.) The staging
-   was probed, not hoped (verify/probe-v334-staging.js): she
-   stands 6 from him, her move is 2, Mend reaches 3 — Blink is
-   the only way in. The Blink beat's check rewinds a stray
-   landing, refunding the ◆2, like Scene 1's. */
-function queenLandingCheck(plan, evs){
+/* ---- THE QUEEN DIORAMA (Slice 3.39; PLAYER-FACING) ----
+   Two micro-lessons on the STAGING HUNT's layout (2,932 layouts
+   searched; findings in staging-hunt-queen-font/): the Queen
+   starts on her home Font at (-2,2); her king at (4,-2) has
+   2 HP; the Rimewyrm on the hill at (3,-2) strikes him for
+   exactly 4; her Fontstep Blink (◆1 from the Font) lands at
+   (1,-1), exactly Mend range (3) from the king; the Resonance
+   target is the Bulwark at (-3,-1) with its Shardbows at
+   (-2,-2) and (-3,-2) — Conflagration◆5: Bulwark 11→8 Burning,
+   bows 5→3 Burning. Ember mana ◆8: 1 + 2 + 5 spends it exactly,
+   and she enters Resonance with ◆5. The rescue is ONE
+   activation — Fontstep carries Blink into Mend with no
+   refreshed clock anywhere. L6 stages L5's end state EXACTLY
+   (the continuity suite diffs them): Queen (1,-1) 8/8, King
+   (4,-2) at 1 HP with Chill 1 riding, wyrm 6/6, Bulwark 11,
+   bows 5/5, mana ◆5/◆3, one round on. */
+function queenFontLandingCheck(plan, evs){
   if (!plan.action || plan.action.kind !== 'spell' || plan.action.spell !== 'blink') return false;
   var q = null; S.units.forEach(function(u){ if (u.alive && u.side === 0 && u.type === 'queen') q = u; });
   if (!q) return false;
-  if (q.q === -1 && q.r === 0) return true;
-  q.q = -4; q.r = 1; q.acted = false;
-  S.mana[0] += spellCost('blink', -4, 1, 'queen');
+  if (q.q === 1 && q.r === -1) return true;
+  q.q = -2; q.r = 2; q.acted = false; q.blinkedRound = false; q.fsStage = 0;
+  S.mana[0] += spellCost('blink', -2, 2, 'queen');
   var v = views[q.id];
-  if (v){ var w = hexToWorld(-4, 1); v.group.position.set(w.x, SURF(-4, 1), w.z); v.q = -4; v.r = 1; faceHome(q.id); }
-  toast('🎬 Not there — the ringed hill, the one within Mend of him. The stage rewinds her step; Blink again.', 2600);
+  if (v){ var w = hexToWorld(-2, 2); v.group.position.set(w.x, SURF(-2, 2), w.z); v.q = -2; v.r = 2; faceHome(q.id); }
+  toast('🎬 Not there — the ringed forest hex, the one within Mend of him. The stage rewinds her step; Blink again.', 2600);
   return false;
 }
-scenRegister('queen', {
-  title: 'Scene 2 — The Queen',
-  courts: ['ember', 'frost'], mana: [9, 3], round: 3, turn: 0,
+scenRegister('mend', {
+  title: 'Mend', dio: 'The Queen', dioIdx: 1, dioCount: 2,
+  courts: ['ember', 'frost'], mana: [8, 3], round: 3, turn: 0,
   pieces: [
-    { side: 0, type: 'queen',      q: -4, r: 1 },
-    { side: 0, type: 'mage',       q: 2,  r: 0, hp: 2 },
+    { side: 0, type: 'queen',      q: -2, r: 2 },
+    { side: 0, type: 'mage',       q: 4,  r: -2, hp: 2 },
+    { side: 1, type: 'exclusive',  q: 3,  r: -2 },
     { side: 1, type: 'guardian',   q: -3, r: -1 },
-    { side: 1, type: 'skirmisher', q: -2, r: -1 },
-    { side: 1, type: 'skirmisher', q: -3, r: 0 },
-    { side: 1, type: 'exclusive',  q: 1,  r: 0 }
+    { side: 1, type: 'skirmisher', q: -2, r: -2 },
+    { side: 1, type: 'skirmisher', q: -3, r: -2 }
   ],
-  outro: "Her step, her Mend, her Resonance — all of it is hers. Lose the Queen and the court loses every one of those. The duel doesn't end. It just gets lonelier.",
+  outro: 'One activation: a step the Font paid for, and a Mend that landed in the same breath. That is the Queen at work — the court\'s utility mage.',
   beats: [
-    { title: 'Too far to help', goal: 'Blink — she steps herself into range',
-      coach: 'Your <b>Archmage</b> is dying by inches: <b>2 HP</b>, and the Rimewyrm coiled beside him strikes for <b>4</b>. Your <b>High Mage</b> can Mend him — but she stands <b>6 hexes</b> away, and even running her full move leaves her 4 away. <b>Mend</b> reaches 3. Only one thing puts her in range this turn: her own 🔮 <b>Blink</b>, ◆2. Select her, arm Blink, and tap the ringed hill.',
+    { title: 'Too far to help', goal: 'Fontstep Blink — she steps herself into range',
+      coach: 'Your <b>Archmage</b> is dying by inches: <b>2 HP</b>, and the Rimewyrm coiled beside him strikes for <b>4</b>. Your <b>High Mage</b> — the Queen — can Mend him, but she stands <b>6 hexes</b> away; even running her full move leaves her short, and <b>Mend</b> reaches 3. She starts on her home <b>Font</b>, though — remember what that buys (Mana Fonts, two lessons back): <b>Fontstep</b>. Her Blink from the Font costs <b>◆1</b> and does not spend her activation. Select her, arm 🔮 <b>Blink</b>, and tap the ringed forest hex.',
       gate: { units: ['queen'], actions: ['blink'], moves: false },
-      ring: { q: -1, r: 0 },
-      cam: { focus: { q: -4, r: 1 }, rad: 13, phi: 0.95, dur: 1.3 },
-      done: { spell: 'blink', side: 0, check: queenLandingCheck } },
-    { title: 'Mend', goal: 'Mend — ◆2, heals 3',
-      coach: 'In range. 💚 <b>Mend</b> ◆2 heals <b>3</b> — he goes from <b>2 to 5</b>. Remember that number: the wyrm\'s <b>4</b> is still coming. Select her, arm Mend, and tap him.',
+      ring: { q: 1, r: -1 },
+      cam: { focus: { q: 0, r: 0 }, rad: 16, phi: 1.0, dur: 1.3 },
+      done: { spell: 'blink', side: 0, check: queenFontLandingCheck } },
+    { title: 'Mend', goal: 'Mend — ◆2, heals 3', window: true,
+      coach: 'In range — and it is <b>still her turn</b>: the Fontstep saw to that. No new activation, no refreshed clock; the same breath, continued. 💚 <b>Mend</b> ◆2 heals <b>3</b> — he goes from <b>2 to 5</b>. Remember that number: the wyrm\'s <b>4</b> is still coming. Select her, arm Mend, and tap him.',
       gate: { units: ['queen'], actions: ['mend'], moves: false },
-      fresh: { side: 0, types: ['queen'] },
-      ring: { q: 2, r: 0 },
-      cam: { focus: { q: 2, r: 0 }, rad: 15, phi: 1.0, dur: 1.2 },
+      ring: { q: 4, r: -2 },
+      cam: { focus: { q: 2, r: -1 }, rad: 17, phi: 1.0, dur: 1.2 },
       done: { spell: 'mend', side: 0 } },
-    { title: 'Resonance', goal: 'Conflagration — ◆5, hers alone',
-      coach: 'Now the big one. While <b>both</b> great mages stand, the Queen alone may loose the court\'s <b>Resonance</b> — Ember\'s is ☄️ <b>Conflagration</b>, ◆5: <b>3</b> at the center, <b>2</b> all around it, and every survivor catches <b>Burning</b>. She has exactly ◆5 left — this scene\'s mana was counted for it. Select her, arm Conflagration, and tap the ringed Bulwark.',
-      gate: { units: ['queen'], actions: ['conflagration'], moves: false },
-      fresh: { side: 0, types: ['queen'] },
-      ring: { q: -3, r: -1 },
-      cam: { focus: { q: -3, r: -1 }, rad: 14, phi: 1.0, dur: 1.2 },
-      done: { spell: 'conflagration', side: 0 } },
     { title: 'The bill comes due', goal: 'watch the Mend hold',
-      coach: 'The Rimewyrm strikes: <b>4</b>. At 2 HP, that was death. At <b>5</b>, he stands at <b>1</b>. That is what her Mend bought — not hit points. Time.',
+      coach: 'The Rimewyrm strikes: <b>4</b>. At 2 HP, that was death. At <b>5</b>, he stands at <b>1</b> — and the wyrm\'s cold rides with the bite: <b>Chill 1</b>, spent when he next stirs. That is what her Mend bought — not hit points. Time.',
       gate: { units: [], actions: [], moves: false },
       fresh: { side: 1, types: ['exclusive'] },
-      ring: { q: 2, r: 0 },
-      cam: { focus: { q: 2, r: 0 }, rad: 14, phi: 1.0, dur: 1.2 },
-      volley: [ { unit: { side: 1, type: 'exclusive', q: 1, r: 0 }, attack: { side: 0, type: 'mage' } } ],
+      ring: { q: 4, r: -2 },
+      cam: { focus: { q: 2, r: -1 }, rad: 17, phi: 1.0, dur: 1.2 },
+      volley: [ { unit: { side: 1, type: 'exclusive', q: 3, r: -2 }, attack: { side: 0, type: 'mage' } } ],
       done: { event: 'volley' } }
   ]
 });
-document.getElementById('btnSceneQueen').onclick = function(){ scenStart('queen'); };
+document.getElementById('btnLessonMend').onclick = function(){ scenStart('mend'); };
+scenRegister('resonance', {
+  title: 'Resonance', dio: 'The Queen', dioIdx: 2, dioCount: 2,
+  courts: ['ember', 'frost'], mana: [5, 3], round: 4, turn: 0,
+  pieces: [
+    { side: 0, type: 'queen',      q: 1,  r: -1 },
+    { side: 0, type: 'mage',       q: 4,  r: -2, hp: 1, chill: 1 },
+    { side: 1, type: 'exclusive',  q: 3,  r: -2 },
+    { side: 1, type: 'guardian',   q: -3, r: -1 },
+    { side: 1, type: 'skirmisher', q: -2, r: -2 },
+    { side: 1, type: 'skirmisher', q: -3, r: -2 }
+  ],
+  outro: "Her step, her Mend, her Resonance — all of it is hers. Lose the Queen and the court loses every one of those. The duel doesn't end. It just gets lonelier.",
+  beats: [
+    { title: 'Resonance', goal: 'Conflagration — ◆5, hers alone',
+      coach: 'One round on: the king still stands — barely — and the Queen turns to her other gift. While <b>both</b> great mages stand, she <b>alone</b> may loose the court\'s <b>Resonance</b> — Ember\'s is ☄️ <b>Conflagration</b>, ◆5: <b>3</b> at the center, <b>2</b> all around it, and every survivor catches <b>Burning</b>. The Archmage cannot cast it. Nobody else can. Lose her, and it dies with her. She has exactly ◆5. Select her, arm Conflagration, and tap the ringed Bulwark.',
+      gate: { units: ['queen'], actions: ['conflagration'], moves: false },
+      ring: { q: -3, r: -1 },
+      cam: { focus: { q: -3, r: -1 }, rad: 14, phi: 1.0, dur: 1.2 },
+      done: { spell: 'conflagration', side: 0 } }
+  ]
+});
+document.getElementById('btnLessonResonance').onclick = function(){ scenStart('resonance'); };
 
-/* ---- Scene 3 — THE TRIANGLE (Slice 3.34; PLAYER-FACING) ----
-   Three edges in three beats, all probed: the Scout's needle
-   is 1 + 1 triangle into a bow staged at exactly 2; the
+/* ---- THE TRIANGLE DIORAMA (Slices 3.34/3.39; PLAYER-FACING) ----
+   Two micro-lessons, the old Scene 3 beats verbatim: the Scout's
+   needle is 1 + 1 triangle into a bow staged at exactly 2; the
    Cinderbow's 2 into the Bulwark is nothing — the PIN is the
    payload; and the counterfactual is real (interceptOption
    answers the Bulwark while he stands unpinned: he would take
    3 to spare her 2). Pinned, the strike lands on her: 3 − 1
-   for his aura, which never sleeps. */
+   for his aura, which never sleeps. No fresh flags anywhere:
+   each Ember piece acts exactly once across the two lessons. */
 scenRegister('triangle', {
-  title: 'Scene 3 — The Triangle',
+  title: 'The Triangle', dio: 'The Triangle', dioIdx: 1, dioCount: 2,
   courts: ['ember', 'frost'], mana: [3, 3], round: 2, turn: 0,
   pieces: [
     { side: 0, type: 'scout',      q: -3, r: 0 },
@@ -8549,14 +8792,29 @@ scenRegister('triangle', {
     { side: 1, type: 'guardian',   q: 0,  r: 2, hp: 10 },
     { side: 1, type: 'queen',      q: 1,  r: 2 }
   ],
-  outro: 'Scouts hunt bows. Bows pin Guardians. Guardians hunt Scouts. Every piece has a hunter — and the pin is how you cut a Guardian out of a fight without killing him.',
+  outro: 'First edge: Scouts hunt bows. Two more edges wait on the same stage — the pin, and the price of it.',
   beats: [
     { title: 'The needle finds the bow', goal: 'Scout strikes the Shardbow',
       coach: 'The <b>triangle</b>, first edge. A Scout\'s needle does <b>1</b> — but Scouts hunt Skirmishers: <b>+1</b>. That Frost bow has exactly <b>2 HP</b>. Without the triangle she walks away at 1; with it, she falls. Select your Spark Sprite and tap the ringed bow.',
       gate: { units: ['scout'], actions: [], moves: false, attacks: true },
       ring: { q: -3, r: -2 },
       cam: { focus: { q: -3, r: -1 }, rad: 13, phi: 0.95, dur: 1.3 },
-      done: { attack: true } },
+      done: { attack: true } }
+  ]
+});
+document.getElementById('btnLessonTriangle').onclick = function(){ scenStart('triangle'); };
+scenRegister('pinned', {
+  title: 'Pinned Down', dio: 'The Triangle', dioIdx: 2, dioCount: 2,
+  courts: ['ember', 'frost'], mana: [3, 3], round: 2, turn: 0,
+  pieces: [
+    { side: 0, type: 'scout',      q: -3, r: 0, spent: true },
+    { side: 0, type: 'skirmisher', q: 1,  r: 3 },
+    { side: 0, type: 'guardian',   q: 2,  r: 2 },
+    { side: 1, type: 'guardian',   q: 0,  r: 2, hp: 10 },
+    { side: 1, type: 'queen',      q: 1,  r: 2 }
+  ],
+  outro: 'Scouts hunt bows. Bows pin Guardians. Guardians hunt Scouts. Every piece has a hunter — and the pin is how you cut a Guardian out of a fight without killing him.',
+  beats: [
     { title: 'The pin', goal: 'Skirmisher shoots the Bulwark',
       coach: 'Second edge. Your Cinderbow can\'t out-shoot a Bulwark — <b>2</b> into his <b>10</b>. But a Skirmisher\'s hit <b>pins</b> a Guardian: no Intercept this round. The damage isn\'t the point. The pin is. Select the Cinderbow and loose on the ringed Bulwark.',
       gate: { units: ['skirmisher'], actions: [], moves: false, attacks: true },
@@ -8571,21 +8829,23 @@ scenRegister('triangle', {
       done: { attack: true } }
   ]
 });
-document.getElementById('btnSceneTriangle').onclick = function(){ scenStart('triangle'); };
+document.getElementById('btnLessonPinned').onclick = function(){ scenStart('pinned'); };
 
-/* ---- Scene 4 — KINDLING (Slice 3.34; PLAYER-FACING) ----
-   The Enabler and the Sprite. Probed numbers: the Pyre Guard's
-   blade is 3 into a Bulwark staged at 4 — one short; kindled,
-   4 — exactly his life. The second Bulwark's blade into the
-   Sprite is 3 + 1 triangle (Guardians hunt Scouts) = 4 into
-   her staged 4; her Cinderburst answers 1 into the killer
-   staged at 1, standing adjacent. */
+/* ---- THE KINDLING DIORAMA (Slices 3.34/3.39; PLAYER-FACING) ----
+   Two micro-lessons, the old Scene 4 beats verbatim. Probed
+   numbers: the Pyre Guard's blade is 3 into a Bulwark staged at
+   4 — one short; kindled, 4 — exactly his life. The second
+   Bulwark's blade into the Sprite is 3 + 1 triangle (Guardians
+   hunt Scouts) = 4 into her staged 4; her Cinderburst answers
+   1 into the killer staged at 1, standing adjacent. The only
+   fresh flag is the scripted Frost volley — an enemy's line,
+   not a player's hidden second action. */
 function kindleCheck(plan, evs){
   var g = null; S.units.forEach(function(u){ if (u.alive && u.side === 0 && u.type === 'guardian') g = u; });
   return !!(g && g.buffKind);
 }
 scenRegister('kindling', {
-  title: 'Scene 4 — Kindling',
+  title: 'Kindling', dio: 'Kindling', dioIdx: 1, dioCount: 2,
   courts: ['ember', 'frost'], mana: [3, 3], round: 2, turn: 0,
   pieces: [
     { side: 0, type: 'enabler',  q: -1, r: 3 },
@@ -8594,7 +8854,7 @@ scenRegister('kindling', {
     { side: 1, type: 'guardian', q: 1,  r: 3, hp: 4 },
     { side: 1, type: 'guardian', q: 3,  r: 2, hp: 1 }
   ],
-  outro: "Small pieces make sharp trades: a kindled blade kills what a plain one can't, and even a Sprite's death is a weapon if you spend it standing in the right place.",
+  outro: "A kindled blade kills what a plain one can't. One more small trade waits on this stage: a Sprite whose death is itself a weapon.",
   beats: [
     { title: 'Kindlebrand', goal: 'kindle the Pyre Guard',
       coach: '🕯️ <b>Kindlebrand</b> doesn\'t fight — he <b>prepares</b>. His gift: an adjacent ally\'s next strike hits <b>+1</b> harder and primes <b>Burning</b>. Your Pyre Guard\'s blade does <b>3</b>. That Bulwark has <b>4</b>. One short. Select Kindlebrand, arm 🔥 <b>Kindle an ally</b>, and tap your Guard.',
@@ -8607,7 +8867,21 @@ scenRegister('kindling', {
       gate: { units: ['guardian'], actions: [], moves: false, attacks: true },
       ring: { q: 1, r: 3 },
       cam: { focus: { q: 1, r: 3 }, rad: 13, phi: 0.95, dur: 1.2 },
-      done: { attack: true } },
+      done: { attack: true } }
+  ]
+});
+document.getElementById('btnLessonKindling').onclick = function(){ scenStart('kindling'); };
+scenRegister('cinderburst', {
+  title: 'Cinderburst', dio: 'Kindling', dioIdx: 2, dioCount: 2,
+  courts: ['ember', 'frost'], mana: [3, 3], round: 2, turn: 0,
+  pieces: [
+    { side: 0, type: 'enabler',  q: -1, r: 3, spent: true },
+    { side: 0, type: 'guardian', q: 0,  r: 3, spent: true },
+    { side: 0, type: 'scout',    q: 2,  r: 2, hp: 4 },
+    { side: 1, type: 'guardian', q: 3,  r: 2, hp: 1 }
+  ],
+  outro: "Small pieces make sharp trades: a kindled blade kills what a plain one can't, and even a Sprite's death is a weapon if you spend it standing in the right place.",
+  beats: [
     { title: "The Sprite's last gift", goal: 'watch her fall — and take him with her',
       coach: 'Last lesson. Your Spark Sprite stands beside a Bulwark hanging at <b>1 HP</b>. His blade does <b>4</b> to a Scout — Guardians hunt Scouts — and she has <b>4</b>. She is about to die. But a Spark Sprite\'s death <b>bursts</b>: <b>1</b> to every adjacent enemy, and they catch fire. He is adjacent. He has 1. Watch the trade.',
       gate: { units: [], actions: [], moves: false },
@@ -8618,17 +8892,19 @@ scenRegister('kindling', {
       done: { event: 'volley' } }
   ]
 });
-document.getElementById('btnSceneKindling').onclick = function(){ scenStart('kindling'); };
+document.getElementById('btnLessonCinderburst').onclick = function(){ scenStart('cinderburst'); };
 
-/* ---- Scene 5 — THE LONG WAY (Slice 3.34; PLAYER-FACING) ----
-   The Throne and the wyrms, on the first wide camera of the
-   tutorial. The ticks are SCENIC — declared in the beats
-   (crownTick / setRound) and counted by the stage — because
-   real win settlement stays off under SCEN. They are honest
-   about the rule all the same: staged at Round 4 because
-   crowns only count from Round 4, three sole-holder round
-   ends, three ticks. The move beat's check rewinds a wrong
-   march, like Scene 1's Blink: the stage forgives a mistap. */
+/* ---- THE LONG WAY DIORAMA (Slices 3.34/3.39; PLAYER-FACING) ----
+   Two micro-lessons, the old Scene 5 beats verbatim. The ticks
+   are SCENIC — declared in the beats (crownTick / setRound) and
+   counted by the stage — because real win settlement stays off
+   under SCEN. They are honest about the rule all the same:
+   staged at Round 4 because crowns only count from Round 4,
+   three sole-holder round ends, three ticks. The second lesson
+   opens with the crown already at 1 (def.crownStart) — the tick
+   the first lesson earned. The move beat's check rewinds a
+   wrong march, like the Font's Blink: the stage forgives a
+   mistap. The fresh flags are the scripted bow volleys only. */
 function throneMoveCheck(plan, evs){
   var g = unitById(S, plan.unit); if (!g || g.side !== 0 || g.type !== 'guardian') return false;
   if (plan.dest.q === 0 && plan.dest.r === 0) return true;
@@ -8639,7 +8915,7 @@ function throneMoveCheck(plan, evs){
   return false;
 }
 scenRegister('throne', {
-  title: 'Scene 5 — The Long Way',
+  title: 'The Throne', dio: 'The Long Way', dioIdx: 1, dioCount: 2,
   courts: ['ember', 'frost'], mana: [4, 4], round: 4, turn: 0,
   pieces: [
     { side: 0, type: 'guardian',   q: 2,  r: -1 },
@@ -8648,7 +8924,7 @@ scenRegister('throne', {
     { side: 1, type: 'exclusive',  q: -5, r: 0 },
     { side: 1, type: 'skirmisher', q: 0,  r: -3 }
   ],
-  outro: 'Three ticks. In a real duel the Throne has spoken and he has won without killing anyone — while his wyrm held the west and a bow broke itself on his plate. The long way is still a way.',
+  outro: 'He holds, and the crown has ticked once. Two more ticks — and the long way still has weather to survive.',
   beats: [
     { title: 'Take the Throne', goal: 'move the Pyre Guard onto the Throne',
       coach: 'The wide view, at last. The gold hex at the center is the <b>Throne</b>. End a round as its <b>only</b> holder and the crown <b>ticks</b>; <b>three ticks win the duel</b> — no kill needed. Crowns only count from <b>Round 4</b>, and it is Round 4. Select your Pyre Guard, tap the ringed Throne, and confirm the march.',
@@ -8659,12 +8935,28 @@ scenRegister('throne', {
     { title: 'First pressure', goal: 'the crown ticks — 1 of 3',
       coach: 'Frost answers at once: the Shardbow puts <b>2</b> into his plate. He holds. The round ends, and the crown <b>ticks: 1 of 3</b>.',
       gate: { units: [], actions: [], moves: false },
+      setRound: 5,
       fresh: { side: 1, types: ['skirmisher'] },
       ring: { q: 0, r: 0 },
       cam: { focus: { q: 0, r: 0 }, rad: 16, phi: 1.05, dur: 1.2 },
       volley: [ { unit: { side: 1, type: 'skirmisher', q: 0, r: -3 }, attack: { side: 0, type: 'guardian' } } ],
       crownTick: true,
-      done: { event: 'volley' } },
+      done: { event: 'volley' } }
+  ]
+});
+document.getElementById('btnLessonThrone').onclick = function(){ scenStart('throne'); };
+scenRegister('longway', {
+  title: 'The Long Way', dio: 'The Long Way', dioIdx: 2, dioCount: 2,
+  courts: ['ember', 'frost'], mana: [4, 4], round: 4, turn: 0, crownStart: 1,
+  pieces: [
+    { side: 0, type: 'guardian',   q: 0,  r: 0, hp: 8 },
+    { side: 0, type: 'exclusive',  q: -3, r: -1 },
+    { side: 1, type: 'guardian',   q: -2, r: -1, hp: 10 },
+    { side: 1, type: 'exclusive',  q: -5, r: 0 },
+    { side: 1, type: 'skirmisher', q: 0,  r: -3 }
+  ],
+  outro: 'Three ticks. In a real duel the Throne has spoken and he has won without killing anyone — while his wyrm held the west and a bow broke itself on his plate. The long way is still a way.',
+  beats: [
     { title: 'The wyrm strikes', goal: 'Cinderwyrm bites the Bulwark',
       coach: 'Holding isn\'t hiding — the court fights around him. Your <b>Cinderwyrm</b> bites the Frost Bulwark for <b>3</b>. And when Round 5 closes, the crown ticks again: <b>2 of 3</b>. Select the Cinderwyrm and tap the ringed Bulwark.',
       gate: { units: ['exclusive'], actions: [], moves: false, attacks: true },
@@ -8685,7 +8977,7 @@ scenRegister('throne', {
       done: { event: 'volley' } }
   ]
 });
-document.getElementById('btnSceneThrone').onclick = function(){ scenStart('throne'); };
+document.getElementById('btnLessonLongway').onclick = function(){ scenStart('longway'); };
 
 
 
@@ -8710,6 +9002,12 @@ function scenClearWin(){
 }
 function scenStart(name, chainIdx){
   var def = SCENARIOS[name]; if (!def) return false;
+  /* Slice 3.39: a fresh stage never inherits an armed Leave
+     chip — the two-tap exit must be armed on THIS lesson, or a
+     stray tap carried over from the last one leaves early
+     (the blind walk caught it: armed in Spells, fired in
+     Mana Fonts). */
+  leaveChipDisarm();
   if (TUT) tutHide();
   MODE = 'scenario';
   MATCH = { courts: (def.courts || ['ember', 'frost']).slice(), presets: ['ember-classic', 'frost-classic'], humanSide: 0 };
@@ -8735,8 +9033,8 @@ function scenStart(name, chainIdx){
   if (def.round) S.round = def.round;
   S.turn = def.turn || 0; S.winner = null; S.winHow = '';
   GAME_STARTED = true;
-  SEL = null; PHASE = 'pick'; DEST = null; ARMED = null; STAGED = null; VOLLEY_ARM = false; BUSY = false; shots.length = 0;
-  SCEN = { id: name, def: def, beat: -1, done: false, btns: [], volleyFired: false, promptSeen: false, crown: 0, chain: (typeof chainIdx === 'number') ? chainIdx : null };
+  SEL = null; PHASE = 'pick'; DEST = null; ARMED = null; STAGED = null; VOLLEY_ARM = false; BUSY = false; shots.length = 0; clearInspect();
+  SCEN = { id: name, def: def, beat: -1, done: false, btns: [], volleyFired: false, promptSeen: false, crown: (def.crownStart || 0), chain: (typeof chainIdx === 'number') ? chainIdx : null };
   buildViews(); refreshTop(); clearHL();
   document.getElementById('sideName0').textContent = courtName(0).toUpperCase();
   document.getElementById('sideName1').textContent = courtName(1).toUpperCase();
@@ -8745,7 +9043,7 @@ function scenStart(name, chainIdx){
   document.getElementById('winOverlay').style.display = 'none';
   document.getElementById('selectOverlay').style.display = 'none';
   camThetaT = camHomeTheta();
-  banner('🎬 On stage: ' + def.title);
+  banner('🎬 On stage: ' + (def.dio ? def.dio + ' — ' : '') + def.title);
   scenAdvance();
   return true;
 }
@@ -8758,6 +9056,11 @@ function scenTeardown(openMenuAfter){
      and write nothing. */
   if (SCEN && SCEN.chain !== null && SCEN.chain !== undefined) lessonsMarkPlayed();
   SCEN = null;
+  /* Slice 3.39: a prompt the stage raised dies with the stage —
+     an Intercept question left standing would hold the NEXT
+     board modal-locked forever (the framing walk caught it:
+     bail mid-prompt, start a duel, and no tap ever lands). */
+  INTERCEPT_WAIT = false;
   leaveChipSync();
   var c = document.getElementById('coachCard'); if (c) c.style.display = 'none';
   coachRing.visible = false;
@@ -8789,6 +9092,11 @@ function scenAdvance(){
   SCEN.beat++; SCEN.volleyFired = false; SCEN.promptSeen = false;
   var b = SCEN.def.beats[SCEN.beat];
   if (!b){
+    /* Slice 3.39: the last beat turning is a time boundary too —
+       an open Fontstep window closes here, spent honestly (the
+       Escape lesson's Blink ends its activation as the lesson
+       ends; the window must not leak past the stage). */
+    if (S) S.units.forEach(function(u){ if (u.fsStage){ u.acted = true; u.fsStage = 0; } });
     SCEN.done = true;
     /* Slice 3.36: the chain is complete the moment its last
        scene's last beat lands — the played-flag is written
@@ -8796,6 +9104,12 @@ function scenAdvance(){
     if (SCEN.chain === LESSON_CHAIN.length - 1) lessonsMarkPlayed();
     scenRender(); scenSyncBanner(); return;
   }
+  /* Slice 3.39: a beat boundary is an honest time boundary, so
+     an open Fontstep window closes as the beat turns — UNLESS
+     the beat declares window:true, meaning it is the SAME
+     activation continuing (the Mend lesson: her Blink and her
+     Mend are one breath across two beats). */
+  if (S && !(b && b.window)) S.units.forEach(function(u){ if (u.fsStage){ u.acted = true; u.fsStage = 0; } });
   /* Slice 3.33: a beat may open on a fresh breath — beats are
      successive moments, so a beat can hand its pieces back their
      activation (fresh:{side, types}) without touching the round */
@@ -8822,14 +9136,14 @@ function scenBeatComplete(how){
    finished beat's buttons (and the selection state behind them)
    never sit live into the next moment. See patch-v337c. */
 function scenClearCard(){
-  SEL = null; STAGED = null; DEST = null; ARMED = null; VOLLEY_ARM = false; PHASE = 'pick';
+  SEL = null; STAGED = null; DEST = null; ARMED = null; VOLLEY_ARM = false; PHASE = 'pick'; applyArmedUI();
   var row = document.getElementById('actionRow'); if (row) row.innerHTML = '';
   CARD_BTNS = [];
 }
 function scenApplyCam(b){
   var c = b.cam; if (!c) return;
   if (c.release) return;   /* the director simply stops directing */
-  if (c.focus) scenFlyTo(c.focus, c.rad || 16, (c.phi !== undefined ? c.phi : 1.0), c.theta, c.dur || 1.2);
+  if (c.focus) scenFlyTo(c.focus, c.rad || 16, (c.phi !== undefined ? c.phi : 1.0), c.flip ? camHomeTheta() + Math.PI : c.theta, c.dur || 1.2);
   else if (c.preset) camPreset(c.preset);
 }
 function scenRender(){
@@ -8856,8 +9170,12 @@ function scenRender(){
     else if (SCEN.chain !== null && SCEN.chain !== undefined)
       scenBtn(row, 'Begin the duel ▸', 'primary', function(){ scenChainHandoff(); });
   } else {
-    document.getElementById('coachTitle').textContent = '🎬 ' + (b.title || SCEN.def.title) + '  ·  ' + (SCEN.beat + 1) + ' of ' + SCEN.def.beats.length;
-    if (gl) gl.textContent = '🎬 Beat ' + (SCEN.beat + 1) + ' of ' + SCEN.def.beats.length + (b.goal ? ' · ' + b.goal : '');
+    document.getElementById('coachTitle').textContent = SCEN.def.dio
+      ? '🎬 ' + SCEN.def.dio + ' · ' + SCEN.def.dioIdx + ' of ' + SCEN.def.dioCount + ' — ' + SCEN.def.title
+      : '🎬 ' + (b.title || SCEN.def.title) + '  ·  ' + (SCEN.beat + 1) + ' of ' + SCEN.def.beats.length;
+    if (gl) gl.textContent = SCEN.def.dio
+      ? '🎬 ' + (b.title || SCEN.def.title) + (b.goal ? ' · ' + b.goal : '')
+      : '🎬 Beat ' + (SCEN.beat + 1) + ' of ' + SCEN.def.beats.length + (b.goal ? ' · ' + b.goal : '');
     document.getElementById('coachText').innerHTML = (typeof b.coach === 'function') ? b.coach() : (b.coach || '');
     row.innerHTML = '';
     if (b.done && b.done.manual) scenBtn(row, b.done.manual, 'primary', function(){ scenBeatComplete('manual'); });
@@ -9030,7 +9348,7 @@ document.getElementById('btnLeaveScene').onclick = function(){
    the same guard as st_ai_rotation: a store that is missing or
    throws reads as PLAYED, so the fallback is always the menu —
    never a crash, never a player trapped in a greeting loop. */
-var LESSON_CHAIN = ['font', 'queen', 'triangle', 'kindling', 'throne'];
+var LESSON_CHAIN = ['spells', 'fonts', 'escape', 'intercept', 'mend', 'resonance', 'triangle', 'pinned', 'kindling', 'cinderburst', 'throne', 'longway'];
 var LESSON_FLAG = 'st_lessons_played';
 function lessonsPlayed(){
   try {
@@ -9099,6 +9417,7 @@ function drawSelection(){
        plan and throws, freezing the lesson. The Intercept
        prompt owns the row while it is up and is exempt. */
     if (!INTERCEPT_WAIT){ var _nr = document.getElementById('actionRow'); if (_nr) _nr.innerHTML = ''; CARD_BTNS = []; }
+    applyArmedUI();
     refreshHpPreviews(); return; }
   var T = TYPES[u.type];
   addHL(u.q, u.r, 0xffd968, true);
@@ -9112,6 +9431,9 @@ function drawSelection(){
   if (u.buffOver) statusBits.push('♨️ Overheated +2');
   if (u.pinned) statusBits.push('📌 Pinned — no Intercept this round');
   if (u.type === 'guardian' && u.interceptUsed) statusBits.push('🛡️ Intercept spent');
+  /* Slice 3.39: an open Fontstep window reads on the card */
+  if (u.fsStage === 2) statusBits.push('✨ Fontstep — Blink spent from the Font; this activation is still yours');
+  if (u.fsStage === 3) statusBits.push('✨ Fontstep — a Blink from the Font is still open, or end the activation');
   /* v3.20: the Pilgrimage reads on the card as plainly as on the board */
   if (u.type === 'scout' && !u.channeling && onPilgrimCrystal(S, u)) statusBits.push('✨ On its Heart Crystal — end this activation here to begin the Communion');
   if (u.channeling) statusBits.push('🌀 Communing — a True Spirit wakes at its next activation');
@@ -9155,7 +9477,16 @@ function drawSelection(){
     });
     card.innerHTML += '<br><span style="font-size:12.5px;opacity:.85">' + SPIRIT_FORMS[EVOLVE_PICK[u.id]].desc + '</span>';
   }
-  if (PHASE === 'move'){
+  if (PHASE === 'move' && u.fsStage === 3){
+    /* Slice 3.39: the main action is spent and only the Fontstep
+       Blink remains — the card offers exactly that, and the end
+       of the activation, and nothing the engine would refuse */
+    if (ARMED) spellTargetHL(u, { q: u.q, r: u.r });
+    banner(sideTag(S.turn) + ' — ✨ Fontstep: ' + T.name + ' may still Blink (priced from where it stands), or end the activation');
+    addSpellButtons(u, { q: u.q, r: u.r });
+    btn('✋ End activation', 'primary', function(){ commit({ unit: u.id, dest: { q: u.q, r: u.r }, action: null, fsClose: true }); });
+    btn('Deselect', '', function(){ SEL = null; PHASE = 'pick'; STAGED = null; clearHL(); clearInspect(); document.getElementById('bottombar').style.display = 'none'; banner('✨ Fontstep — the window stays open on ' + unitName(u) + ': tap it to finish the activation.'); });
+  } else if (PHASE === 'move'){
     var reach = reachable(S, u);
     /* a spell armed before the move dims the destinations instead of
        erasing them (v2.2.3) — the board never goes blank mid-decision */
@@ -9262,6 +9593,7 @@ function drawSelection(){
         (priceI < baseCost(ARMED, u.type) ? ' <span style="opacity:.75">(font price — normally ◆' + baseCost(ARMED, u.type) + ')</span>' : '') +
         (spI.resonance ? ' · <b>Resonance</b> — the High Mage may cast it, only while both great mages stand' : '') +
         (spI.signature ? ' · <b>Signature</b> — once per game, and only after the Deepening' : '') +
+        (ARMED === 'blink' && !u.blinkedRound && (u.fsStage === 3 || terrainAt(u.q, u.r) === 'ley') ? ' · <b>✨ Fontstep</b> — from a Font, this step will not end the activation' : '') +
         '<br>' + spI.desc;
       si.style.display = 'block';
     } else { si.innerHTML = ''; si.style.display = 'none'; }
@@ -9282,6 +9614,78 @@ function drawSelection(){
      to is on screen too — pan the focus until the piece and its
      reachable/targetable hexes clear every panel (frameSelection) */
   frameSelection();
+  /* Slice 3.39: if a spell or strike is armed, the card folds to
+     the slim armed bar and the coach to its one-line goal — the
+     targeting band is the board's again (applyArmedUI) */
+  applyArmedUI();
+}
+/* ================= Slice 3.39 — THE ARMED-STATE UI =================
+   Trenten's screenshot (Nov 11): Fireball armed in the Font
+   lesson, and "specifically the menus block everything" — the
+   selection card and the coach sheet together left a thin band
+   of board, with the ringed target under the cards. The fix is
+   panel behavior, not just camera math: while a spell (or a
+   staged strike) waits for its target tap, the unit card and
+   spell info fold away and a SLIM ARMED BAR stands in their
+   place — icon, name, price, and the way back out — and the
+   coach drops to its one-line goal (its own collapse affordance,
+   setCoachMin). Both restore when the action resolves, is
+   cancelled, or the beat changes (scenClearCard/commit call
+   applyArmedUI too). estCardH models the bar while it stands,
+   so frameSelection's framing targets the enlarged band. */
+var ARMED_UI = false, ARMED_COACH_WAS = null;
+function armedActive(){
+  if (!SEL) return false;
+  if (ARMED && (SPELLS[ARMED] || ARMED === 'enable')) return true;
+  if (PHASE === 'act' && STAGED !== null && STAGED !== undefined) return true;
+  return false;
+}
+function renderArmedBar(){
+  var bar = document.getElementById('armedBar'); if (!bar || !SEL) return;
+  var u = SEL;
+  bar.innerHTML = '';
+  function mkBtn(label, cls, fn){
+    var b = document.createElement('button'); b.className = 'gbtn ' + (cls || ''); b.innerHTML = label;
+    b.onclick = function(ev2){ ev2.stopPropagation(); fn(); }; bar.appendChild(b); return b;
+  }
+  function mkSpan(cls, html){ var s = document.createElement('span'); s.className = cls; s.innerHTML = html; bar.appendChild(s); return s; }
+  if (ARMED && SPELLS[ARMED]){
+    var sp = SPELLS[ARMED], base = (PHASE === 'act' && DEST) ? DEST : { q: u.q, r: u.r };
+    mkSpan('abLabel', sp.icon + ' ' + sp.name + ' ◆' + spellCost(ARMED, base.q, base.r, u.type));
+    if (ARMED === 'blink' && !u.blinkedRound && (u.fsStage === 3 || terrainAt(u.q, u.r) === 'ley')) mkSpan('abNote', '✨ Fontstep');
+    mkBtn('✕ Cancel', '', function(){ ARMED = null; drawSelection(); });
+  } else if (ARMED === 'enable'){
+    mkSpan('abLabel', u.kit === 'ember' ? '🔥 Kindle an ally' : '🛡️ Ward an ally');
+    mkBtn('✕ Cancel', '', function(){ ARMED = null; drawSelection(); });
+  } else if (PHASE === 'act' && STAGED !== null && STAGED !== undefined){
+    var foe = unitById(S, STAGED);
+    var dmg = foe ? attackDamage(S, u, foe, DEST.q, DEST.r) : 0;
+    mkSpan('abLabel', '⚔️ ' + unitName(u) + ' strikes ' + (foe ? unitName(foe) : '') + ' · ' + dmg + ' dmg');
+    mkBtn(VOLLEY_ARM ? '✓ Confirm attack only (no volley)' : '✓ Confirm attack', 'primary', function(){ var stId = STAGED; commit({ unit: u.id, dest: DEST, action: { kind: 'attack', target: stId } }); });
+    mkBtn('✕ Cancel', '', function(){ STAGED = null; DEST = null; PHASE = 'move'; VOLLEY_ARM = false; drawSelection(); });
+  }
+}
+function applyArmedUI(){
+  var bar = document.getElementById('armedBar'); if (!bar) return;
+  var on = armedActive();
+  if (on){
+    renderArmedBar();
+    bar.style.display = 'flex';
+    var card = document.getElementById('unitCard'); if (card) card.style.display = 'none';
+    var si = document.getElementById('spellInfo'); if (si) si.style.display = 'none';
+    var row = document.getElementById('actionRow'); if (row) row.style.display = 'none';
+    if (!ARMED_UI){ ARMED_COACH_WAS = COACH_MIN; if (!COACH_MIN) setCoachMin(true); }
+    ARMED_UI = true;
+    frameSelection();
+  } else if (ARMED_UI){
+    bar.style.display = 'none';
+    var card2 = document.getElementById('unitCard'); if (card2) card2.style.display = '';
+    var row2 = document.getElementById('actionRow'); if (row2) row2.style.display = '';
+    if (ARMED_COACH_WAS === false) setCoachMin(false);
+    ARMED_COACH_WAS = null;
+    ARMED_UI = false;
+    frameSelection();
+  }
 }
 function addSpellButtons(u, base){
   var row = document.getElementById('actionRow');
@@ -9296,14 +9700,21 @@ function addSpellButtons(u, base){
      until the Deepening, spent once cast). */
   var onFont = terrainAt(base.q, base.r) === 'ley';
   bookOf(u).forEach(function(name){
+    if (u.fsStage === 3 && name !== 'blink') return;   /* Slice 3.39: at Fontstep stage 3 only the Blink remains */
     var sp = SPELLS[name];
     var price = spellCost(name, base.q, base.r, u.type);
     var legal = canCastSpell(S, u, name);
     var b = document.createElement('button');
     b.className = 'gbtn spell' + (ARMED === name ? ' armed' : '') + (onFont && price < baseCost(name, u.type) ? ' fontdeal' : '');
     var suffix = sp.resonance ? ' ✦Res' : sp.signature ? (S.deepened ? ' ✦Sig' : ' 🔒') : '';
-    b.innerHTML = sp.icon + ' ' + sp.name + ' ◆' + price + (onFont && price < baseCost(name, u.type) ? ' ✦font' : '') + suffix;
-    b.disabled = !legal || S.mana[u.side] < price;
+    var fsNoteB = '';
+    if (name === 'blink'){
+      if (u.blinkedRound) fsNoteB = ' · spent this round';
+      else if (u.fsStage === 3) fsNoteB = ' ✨Fontstep';
+      else if (!u.fsStage && terrainAt(u.q, u.r) === 'ley' && (PHASE === 'move' || (DEST && DEST.q === u.q && DEST.r === u.r))) fsNoteB = ' ✨Fontstep';
+    }
+    b.innerHTML = sp.icon + ' ' + sp.name + ' ◆' + price + (onFont && price < baseCost(name, u.type) ? ' ✦font' : '') + suffix + fsNoteB;
+    b.disabled = !legal || S.mana[u.side] < price || (name === 'blink' && !!u.blinkedRound);
     /* the description rides the button too (hover), with the lock
        reason appended when the spell cannot be cast */
     b.title = sp.desc + (sp.resonance && !legal ? ' (Resonance needs BOTH great mages standing.)' : sp.signature && !legal ? (S.deepened ? ' (The signature is spent.)' : ' (Sealed until the Deepening, Round 7.)') : '');
@@ -9353,7 +9764,7 @@ function commit(plan){
      'move'/'act' with SEL null strands every future tap — handleTap
      only selects in 'pick', and the other phases demand a SEL that
      no longer exists, so the board goes permanently deaf */
-  SEL = null; PHASE = 'pick'; DEST = null; ARMED = null; STAGED = null; VOLLEY_ARM = false; clearHL(); clearInspect(); document.getElementById('bottombar').style.display = 'none';
+  SEL = null; PHASE = 'pick'; DEST = null; ARMED = null; STAGED = null; VOLLEY_ARM = false; clearHL(); clearInspect(); document.getElementById('bottombar').style.display = 'none'; applyArmedUI();
   refreshHpPreviews(); /* the armed outcome comes off the target's number the moment the blow is committed */
   /* v3.20: a waking Sprite's fork rides the plan — the chooser's
      pick, or the engine's heuristic when the card was never opened */
@@ -9361,6 +9772,20 @@ function commit(plan){
     var _eu = unitById(S, plan.unit);
     if (plan.evolve === undefined && _eu && _eu.type === 'scout' && _eu.channeling) plan.evolve = EVOLVE_PICK[plan.unit] || defaultFormFor(S, _eu);
     delete EVOLVE_PICK[plan.unit];
+  }
+  /* Slice 3.39 — FONTSTEP: a human caster who STARTS this
+     activation standing on a Mana Font gets the window marked
+     on the plan; the engine opens it at the tail. AI plans never
+     pass through commit (they carry composites instead), and
+     the old tutorial predates Fontstep and never sees it. */
+  if (plan && plan.action && plan.action.kind === 'spell' && !(TUT && !TUT.done)){
+    var fu = unitById(S, plan.unit);
+    if (fu && HUMANS[fu.side] && (fu.type === 'mage' || fu.type === 'queen') && !fu.blinkedRound){
+      if (!fu.fsStage && terrainAt(fu.q, fu.r) === 'ley' && bookOf(fu).indexOf('blink') >= 0 && canCastSpell(S, fu, 'blink'))
+        plan.fsWindow = plan.action.spell === 'blink' ? 'blink-first' : 'cast-first';
+      else if (fu.fsStage === 3 && plan.action.spell === 'blink')
+        plan.fsWindow = 'blink-last';
+    }
   }
   tutBeforeCommit(plan);
   maybeIntercept(plan, function(){ doCommit(plan); });
@@ -9406,7 +9831,12 @@ function doCommit(plan){
   var res = tutIntercept(applyActivation(S, plan));
   performEvents(res.evs, function(){
     if (SCEN){ scenPlayerCommit(plan, res.evs); }
-    else { tutNotify(plan, res.evs); afterAction(); }
+    else { tutNotify(plan, res.evs);
+      /* Slice 3.39: an open Fontstep window hands the piece
+         straight back to its player — the turn never passed */
+      var fw = (S && S.winner === null) ? S.units.find(function(x){ return x.alive && x.fsStage && HUMANS[x.side]; }) : null;
+      if (fw){ selectUnit(fw); banner('✨ Fontstep — ' + unitName(fw) + (fw.fsStage === 2 ? ' stepped from the Font: the activation is still yours.' : ' — the Fontstep Blink is still open: cast Blink, or end the activation.')); }
+      else afterAction(); }
     /* the clamp speaks LAST so its banner is the one left standing */
     if (res.emberClamped){
       banner('☠ In a real duel, your Archmage would have fallen there. In the tutorial he stands back up — that\'s the lesson.');
@@ -9664,6 +10094,16 @@ function handleTap(e){
   }
   var u = SEL; if (!u) return;
   if (PHASE === 'move'){
+    /* Slice 3.39: at Fontstep stage 3 the activation is spent but
+       for the Blink — armed taps route to it, a tap on the piece
+       itself re-reads its card, and everything else is answered
+       instead of silently arming a move the engine would refuse */
+    if (u.fsStage === 3){
+      if (ARMED){ resolveSpellTap(u, { q: u.q, r: u.r }, tappedHex, tappedUnit); return; }
+      if (tappedUnit && tappedUnit.id === u.id){ drawSelection(); return; }
+      banner('✨ Fontstep — ' + unitName(u) + ' has spent its action: cast the Fontstep Blink, or end the activation from its card.');
+      return;
+    }
     if (SCEN && !ARMED && !scenMoveAllowed() && !scenAttackTap(tappedUnit)){
       /* Slice 3.35: inspect answers before the deny — looking at a
          foe is not a move, and the gate has nothing to refuse */
@@ -10066,7 +10506,7 @@ document.getElementById('btnTutorial').onclick = function(){ startGame('tutorial
 var LESSONS_OPEN = false;
 function lessonsSync(){
   var lb = document.getElementById('lessonsBlock'); if (lb) lb.style.display = LESSONS_OPEN ? '' : 'none';
-  var lt = document.getElementById('btnLessons'); if (lt) lt.innerHTML = LESSONS_OPEN ? '📚 Lessons — the five staged scenes ▾' : '📚 Lessons — the five staged scenes ▸';
+  var lt = document.getElementById('btnLessons'); if (lt) lt.innerHTML = LESSONS_OPEN ? '📚 Lessons — the twelve staged lessons ▾' : '📚 Lessons — the twelve staged lessons ▸';
 }
 document.getElementById('btnLessons').onclick = function(){ LESSONS_OPEN = !LESSONS_OPEN; lessonsSync(); };
 lessonsSync();
