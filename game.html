@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Spellthrone v3.37 · Slice 3.37 — Walked Blind — a duel of archmages</title>
+<title>Spellthrone v3.38 · Slice 3.38 — One Row Up Top — a duel of archmages</title>
 <style>
   :root{ --gold:#f5c542; --ink:#0d0f14; --txt:#f3ead2; --ember:#ff9a3d; --frost:#57c8ff; --card:#1a1d26; }
   *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -50,24 +50,33 @@
   .gbtn.primary{ background:linear-gradient(180deg,#ffd968,#e9b32c); color:#191204; font-weight:bold; border-color:#ffe9a8; }
   .gbtn.armed{ background:#5b2ea6; border-color:#b78cff; color:#fff; }
   #menuBtn{ position:fixed; top:8px; right:8px; z-index:11; }
-  /* Slice 3.37 (Addendum 2): the stage's exit is a quiet corner
-     chip in the meta corner under ☰ Menu — never in the coach
-     row beside the way forward. Armed, it cannot be missed. */
-  #btnLeaveScene{ position:fixed; top:54px; right:8px; z-index:11; padding:6px 10px; font-size:12.5px; background:rgba(13,15,20,.55); border-color:rgba(255,255,255,.12); color:rgba(235,230,255,.85); }
-  #btnLeaveScene.armed{ background:#7a2430; border-color:#ff8f8f; color:#fff; font-weight:bold; }
-  #viewBtns{ position:fixed; top:8px; left:8px; z-index:11; display:flex; flex-direction:column; gap:6px; }
-  #viewBtns .gbtn{ padding:8px 11px; font-size:13px; text-align:left; }
-  /* Slice 3.37 (Addendum 3): the preset cluster, demoted in
-     place — ghost fill, hairline border, smaller type, half
-     opacity at rest, waking on hover/focus. The tap box keeps
-     its floor (min-height); only the visual weight shrank.
-     On phones fitPanels owns the geometry (38px inline) and
-     this treatment composes under it. */
-  #camBtns{ position:fixed; top:140px; left:8px; z-index:11; display:flex; flex-direction:column; gap:6px; opacity:.5; transition:opacity .25s ease; }
+  /* Slice 3.38 — ONE ROW UP TOP: the Terrain key, the camera's
+     three seats, and (during a scene) the stage's ✕ door share a
+     single slim utility row directly under the banner — status
+     bar → banner → utility row → board. The row itself is bare
+     (no card, no border): the chips carry their own chrome, so
+     the top of the screen reads as one quiet line of controls
+     instead of a stack of clusters. */
+  #utilRow{ position:fixed; top:96px; left:50%; transform:translateX(-50%); z-index:11; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  #utilRow #btnLegend{ padding:5px 9px; font-size:12px; min-height:34px; background:rgba(13,15,20,.45); border-color:rgba(255,255,255,.10); color:rgba(235,230,255,.88); }
+  /* Slice 3.37 (Addendum 2) behavior, Slice 3.38 home: the stage's
+     exit is the row's right-hand chip — never in the coach row
+     beside the way forward. Armed, it cannot be missed. */
+  #utilRow #btnLeaveScene{ padding:5px 9px; font-size:12px; min-height:34px; background:rgba(13,15,20,.55); border-color:rgba(255,255,255,.12); color:rgba(235,230,255,.85); }
+  #utilRow #btnLeaveScene.armed{ background:#7a2430; border-color:#ff8f8f; color:#fff; font-weight:bold; }
+  /* Slice 3.37 (Addendum 3), unchanged but for the home: the
+     preset cluster, demoted — ghost fill, hairline border,
+     smaller type, half opacity at rest, waking on hover/focus.
+     The tap box keeps its floor (min-height); only the visual
+     weight shrank. On phones fitPanels owns the geometry (38px
+     inline) and this treatment composes under it. #camBtns is
+     now the row's centre group: a horizontal trio, still
+     ghosted as one. */
+  #camBtns{ display:flex; flex-direction:row; gap:6px; opacity:.5; transition:opacity .25s ease; }
   #camBtns:hover, #camBtns:focus-within{ opacity:1; }
-  #camBtns .gbtn{ padding:5px 9px; font-size:12px; min-height:34px; text-align:left; background:rgba(13,15,20,.45); border-color:rgba(255,255,255,.10); color:rgba(235,230,255,.88); }
+  #camBtns .gbtn{ padding:5px 9px; font-size:12px; min-height:34px; text-align:center; background:rgba(13,15,20,.45); border-color:rgba(255,255,255,.10); color:rgba(235,230,255,.88); }
   #camBtns .gbtn:hover{ border-color:rgba(245,197,66,.55); }
-  #legendCard{ position:fixed; top:292px; left:8px; z-index:12; width:252px; background:rgba(13,15,20,.9); border:1px solid rgba(245,197,66,.4); border-radius:14px; padding:12px 14px; backdrop-filter:blur(6px); display:none; }
+  #legendCard{ position:fixed; top:140px; left:8px; z-index:12; width:252px; background:rgba(13,15,20,.9); border:1px solid rgba(245,197,66,.4); border-radius:14px; padding:12px 14px; backdrop-filter:blur(6px); display:none; }
   #legendCard h3{ color:var(--gold); font-size:14px; letter-spacing:1.5px; margin-bottom:8px; }
   .chip{ display:inline-block; width:13px; height:13px; border-radius:3px; margin-right:8px; vertical-align:-2px; border:1px solid rgba(255,255,255,.35); }
   .legRow{ font-size:13.5px; line-height:1.5; margin-bottom:7px; }
@@ -114,14 +123,14 @@
 </div>
 <div id="banner" class="bar">…</div>
 <button id="menuBtn" class="gbtn">☰ Menu</button>
-<button id="btnLeaveScene" class="gbtn" style="display:none">✕ Leave</button>
-<div id="viewBtns">
+<div id="utilRow">
   <button class="gbtn" id="btnLegend">🗺️ Terrain</button>
-</div>
-<div id="camBtns">
-  <button class="gbtn" id="btnCamCourt">♜ Court</button>
-  <button class="gbtn" id="btnCamOver">⬇ Overhead</button>
-  <button class="gbtn" id="btnCamSide">↔ Side</button>
+  <div id="camBtns">
+    <button class="gbtn" id="btnCamCourt">♜ Court</button>
+    <button class="gbtn" id="btnCamOver">⬇ Overhead</button>
+    <button class="gbtn" id="btnCamSide">↔ Side</button>
+  </div>
+  <button id="btnLeaveScene" class="gbtn" style="display:none">✕ Leave</button>
 </div>
 <div id="legendCard">
   <h3>THE GROUND</h3>
@@ -171,7 +180,7 @@
     <button class="gbtn big" id="btnPvP">👥 Pass-and-play — two humans, one device</button>
     <button class="gbtn big" id="btnHow">📖 How to play (one minute)</button>
     <div id="glbStatus" style="text-align:center;opacity:.85;font-size:13px;margin-top:10px;min-height:16px"></div>
-    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.37 · Slice 3.37 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 7. A piece still to act wears a ring of light; once it has acted, the ring is gone and the piece rests dimmer. Orbit low and the island’s under-rock is lit from below now, mana seams glowing in the dark. The court breathes: pieces idle on their own time, rise when chosen, and flash when struck. And the Exclusives are serpents now — Ember's Cinderwyrm and Frost's Rimewyrm coil where the hounds once ran, forked tongues and all — while the archers stand in a true shooter's stance, arrows level. And the air itself has taken sides: embers rise over Ember's half of the isle while snow sifts down over Frost's, the braziers' firelight dances with their own flames, and gold, ice and plate catch real reflections of the dusk. The camera has learned manners too: four preset views fly you smoothly around the court, and left alone it breathes, very slowly, like something alive. On the board, pieces travel like they mean it now: moves glide hex to hex on an eased arc, strikes lunge and recoil, and the fallen shrink into their burst of court-colored sparks. And the wyrms themselves have been taken down a size — a small trim, so the serpents coil beside the band instead of towering over it. And the board itself has been polished to the pieces’ shine — the Dusk Slate now catches the same dusk as the gold and ice it carries. And the island no longer floats in front of a poster: a ruined colonnade rings the sky, mist pools below the rock, and the horizon glows warm toward Ember and cool toward Frost. And the Heart Crystals have woken: a Sprite that ends its activation kneeling on its own crystal and lives to stir again rises as a True Spirit — Inferno or Hearth for Ember, Blizzard or Glacier Wisp for Frost — and the kneeling wears a ring of light the whole board can read, so the race to stop it is fair. And the tutorial itself has been walked end to end, exactly as written, by a tireless first student: its gold ring now points at the Cinderbow who can actually loose the lesson's arrows, and the no-dice lesson waits for a strike of your own before it shows you the arithmetic. And the Waking itself can now be watched: when a Communion completes, the Sprite rises and turns in its court's light, the ring's sparks fall inward, and at the flash the piece on the board is the Spirit itself — Inferno and Hearth wear the Coal Imp's fire grown wild and warm, Blizzard and Glacier Wisp wear the Veil Wisp's mist grown storm and still: four new faces for the two forks of each court. And the spellbook itself has been slimmed: seventeen spells are twelve now, each a different verb — the High Mage has become the support mage, carrying Blink and Mend and the court's Resonance in her own hands (lose her, and you lose Resonance and her utility both), Ember has learned to set the very ground ablaze for a round, and Frost's Brittle has become Shatter, which only breaks what the cold already holds. And the tuning fork has come home: after a night of thousands of measured games on a fork of this very build, the Archmage stands at 17 HP, Fireball and Shatter cost ◆4 apiece, the Deepening holds its breath until Round 7, and the Throne starts paying a round later — the same duel, given room to breathe, with the balance confirmed rather than disturbed. And the hand itself has been trued: a tap now lands where the finger came DOWN, not where it lifted — the board holds still from the moment you touch it, so the hex at a border takes the order you aimed at it. And two seats have become one: the Court view and the Player view were near-twins, so a single seat remains — behind your own court against the machine, and in a pass-and-play duel it settles behind whoever is to move, a touch higher and closer, the way the Player view always sat. And the court has been grounded: every piece now stands in a soft pool of its own shade, so serpent and plate alike sit planted on the slate instead of hovering over it; the ruins have crept closer — broken drums and capital stones hang in a nearer ring beyond the rim, below the board’s edge where no sightline to a hex can cross them; and the hero lights burn hotter — brazier flame, heart crystal and wyrm-seam raised toward the studio band — while the slate beneath them keeps its dusk. And the turning hand keeps what it turns: the camera rides the steering finger exactly, so a fast swing stops dead the moment the hand lets go — no trailing settle behind it, and nothing left for the next touch to snap shut. And the camera has learned to land like a living thing: a hard swing now spends its last momentum in a short gliding settle — every frame of it continuous, never a jump — and a fresh touch simply stops the board where it lies, so the hex under your finger is always the hex you aimed at. And the view cluster has shed its two oldest buttons — Top view and Reset view are gone, because the preset row already says it all: Overhead is the top view, Court is the home seat — while the Terrain legend keeps its place. And the King has learned to step sideways: the Archmage now carries Blink ◆3 — vanish and reappear on an empty hex within 3, himself only, priced like the escape it is (◆2 from a Mana Font) — while the Queen keeps her cheaper ◆2 step, her Mend and her Resonance: lose her, and you lose the court's utility still. And beneath the duel a stage has been built — hand-set scenes, scripted volleys answered by real Guardians, a camera that flies to the lesson, and gates that hold every tap but the one being taught; the new way in will be staged on it, beat by beat. And the stage has its first lesson now — the Font: a hurt Archmage stands in the discount with two hill bows holding his life in their hands (3 + 3 against his 5), spends the Font's price break twice — a ◆3 Fireball, then a ◆2 Blink to the far hex his Guards flank — and the wyrm and the bow come for him anyway, 3 and 2, exactly his life again, and each of his Pyre Guards answers for him once. Scene 1 stands open in the menu: 'Scene 1 — The Font'. And four more lessons have taken the stage: the Queen — six hexes from her dying king, one Blink from Mend range, her mana counted to the last point (◆2, ◆2, ◆5) so the Resonance lands and the wyrm's killing 4 meets a mended 5; the Triangle — a needle that kills only because Scouts hunt bows (1 + 1 into 2), a pin that costs a Bulwark his one job, and a strike that lands on a queen because her Guardian cannot stand; Kindling — a blade of 3 made 4 against a life of exactly 4, and a Sprite whose death is itself a weapon; and the Long Way — a Guard on the Throne through three rounds of weather (10, 8, 6), the crown ticking 1, 2, 3, a duel won without a kill. The stage also keeps its own house now: the hint banner is recomputed at every beat, so it can never invite a move the moment refuses. Scenes 1–5 stand open in the menu. And the board now answers when you ask it: tap any enemy and its reach blooms over the slate — the deep red it can strike from where it stands, the pale red it could only reach by moving first — priced by the same movement and targeting the duel itself obeys, so the shading can no more lie than the AI can. Tap it again, tap the ground, or choose one of your own pieces to let it go; and no tap that means an attack or a spell is ever spent on looking. And the stage has learned to greet: a player who has never dueled is walked onto it as the island first rises — the Font, the Queen, the Triangle, the Kindling, the Long Way, one lesson handing them to the next — and at the end of the Long Way the stage does not close: the board beneath it becomes a real one, the camera pulls back to the Court seat in a single flight, and the first move of a real duel is already theirs. Leave at any point and the island remembers — it never drags anyone back; the lessons wait in the menu, where they have always waited. And the lessons have been walked blind: a stranger who knew nothing — reading only the coach's words, the gold ring, and the glow of what may be tapped — found every tap in every scene, from the menu and from the first-launch chain alike, and at the end of the Long Way took the first move of a real duel for his own. Every wrong thing he tried along the way was answered kindly — the enemy who blooms red when looked at and lets go when the ground is tapped, the End that refuses, the wrong march and the wrong Blink the stage rewinds and forgives — though the walking caught one real trap and mended it: a finished beat's buttons used to sit live into the next, a leftover Confirm waiting to be tapped into a plan with nowhere to go; now the card clears when its selection does, and the stage sweeps its own card clean at every beat. The menu has tidied itself too, at the word of the house: the five lessons fold under one 📚 Lessons door beneath the Tutorial, so the front page is short again — and every lesson still stands there for the replaying. The stage's door has moved, too: 'Leave the stage' no longer sits in the coach's row beside the way forward — it lives on a small ✕ Leave chip in the menu's corner, one tap to ask 'Sure?', a second to go, the house rule the old Skip taught; and the camera's three seats have quieted themselves — ghost-pale and small at rest, waking only when a hand comes near, their poses unchanged. Learn it in a minute. Master it in a season.</p>
+    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.38 · Slice 3.38 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 7. A piece still to act wears a ring of light; once it has acted, the ring is gone and the piece rests dimmer. Orbit low and the island’s under-rock is lit from below now, mana seams glowing in the dark. The court breathes: pieces idle on their own time, rise when chosen, and flash when struck. And the Exclusives are serpents now — Ember's Cinderwyrm and Frost's Rimewyrm coil where the hounds once ran, forked tongues and all — while the archers stand in a true shooter's stance, arrows level. And the air itself has taken sides: embers rise over Ember's half of the isle while snow sifts down over Frost's, the braziers' firelight dances with their own flames, and gold, ice and plate catch real reflections of the dusk. The camera has learned manners too: four preset views fly you smoothly around the court, and left alone it breathes, very slowly, like something alive. On the board, pieces travel like they mean it now: moves glide hex to hex on an eased arc, strikes lunge and recoil, and the fallen shrink into their burst of court-colored sparks. And the wyrms themselves have been taken down a size — a small trim, so the serpents coil beside the band instead of towering over it. And the board itself has been polished to the pieces’ shine — the Dusk Slate now catches the same dusk as the gold and ice it carries. And the island no longer floats in front of a poster: a ruined colonnade rings the sky, mist pools below the rock, and the horizon glows warm toward Ember and cool toward Frost. And the Heart Crystals have woken: a Sprite that ends its activation kneeling on its own crystal and lives to stir again rises as a True Spirit — Inferno or Hearth for Ember, Blizzard or Glacier Wisp for Frost — and the kneeling wears a ring of light the whole board can read, so the race to stop it is fair. And the tutorial itself has been walked end to end, exactly as written, by a tireless first student: its gold ring now points at the Cinderbow who can actually loose the lesson's arrows, and the no-dice lesson waits for a strike of your own before it shows you the arithmetic. And the Waking itself can now be watched: when a Communion completes, the Sprite rises and turns in its court's light, the ring's sparks fall inward, and at the flash the piece on the board is the Spirit itself — Inferno and Hearth wear the Coal Imp's fire grown wild and warm, Blizzard and Glacier Wisp wear the Veil Wisp's mist grown storm and still: four new faces for the two forks of each court. And the spellbook itself has been slimmed: seventeen spells are twelve now, each a different verb — the High Mage has become the support mage, carrying Blink and Mend and the court's Resonance in her own hands (lose her, and you lose Resonance and her utility both), Ember has learned to set the very ground ablaze for a round, and Frost's Brittle has become Shatter, which only breaks what the cold already holds. And the tuning fork has come home: after a night of thousands of measured games on a fork of this very build, the Archmage stands at 17 HP, Fireball and Shatter cost ◆4 apiece, the Deepening holds its breath until Round 7, and the Throne starts paying a round later — the same duel, given room to breathe, with the balance confirmed rather than disturbed. And the hand itself has been trued: a tap now lands where the finger came DOWN, not where it lifted — the board holds still from the moment you touch it, so the hex at a border takes the order you aimed at it. And two seats have become one: the Court view and the Player view were near-twins, so a single seat remains — behind your own court against the machine, and in a pass-and-play duel it settles behind whoever is to move, a touch higher and closer, the way the Player view always sat. And the court has been grounded: every piece now stands in a soft pool of its own shade, so serpent and plate alike sit planted on the slate instead of hovering over it; the ruins have crept closer — broken drums and capital stones hang in a nearer ring beyond the rim, below the board’s edge where no sightline to a hex can cross them; and the hero lights burn hotter — brazier flame, heart crystal and wyrm-seam raised toward the studio band — while the slate beneath them keeps its dusk. And the turning hand keeps what it turns: the camera rides the steering finger exactly, so a fast swing stops dead the moment the hand lets go — no trailing settle behind it, and nothing left for the next touch to snap shut. And the camera has learned to land like a living thing: a hard swing now spends its last momentum in a short gliding settle — every frame of it continuous, never a jump — and a fresh touch simply stops the board where it lies, so the hex under your finger is always the hex you aimed at. And the view cluster has shed its two oldest buttons — Top view and Reset view are gone, because the preset row already says it all: Overhead is the top view, Court is the home seat — while the Terrain legend keeps its place. And the King has learned to step sideways: the Archmage now carries Blink ◆3 — vanish and reappear on an empty hex within 3, himself only, priced like the escape it is (◆2 from a Mana Font) — while the Queen keeps her cheaper ◆2 step, her Mend and her Resonance: lose her, and you lose the court's utility still. And beneath the duel a stage has been built — hand-set scenes, scripted volleys answered by real Guardians, a camera that flies to the lesson, and gates that hold every tap but the one being taught; the new way in will be staged on it, beat by beat. And the stage has its first lesson now — the Font: a hurt Archmage stands in the discount with two hill bows holding his life in their hands (3 + 3 against his 5), spends the Font's price break twice — a ◆3 Fireball, then a ◆2 Blink to the far hex his Guards flank — and the wyrm and the bow come for him anyway, 3 and 2, exactly his life again, and each of his Pyre Guards answers for him once. Scene 1 stands open in the menu: 'Scene 1 — The Font'. And four more lessons have taken the stage: the Queen — six hexes from her dying king, one Blink from Mend range, her mana counted to the last point (◆2, ◆2, ◆5) so the Resonance lands and the wyrm's killing 4 meets a mended 5; the Triangle — a needle that kills only because Scouts hunt bows (1 + 1 into 2), a pin that costs a Bulwark his one job, and a strike that lands on a queen because her Guardian cannot stand; Kindling — a blade of 3 made 4 against a life of exactly 4, and a Sprite whose death is itself a weapon; and the Long Way — a Guard on the Throne through three rounds of weather (10, 8, 6), the crown ticking 1, 2, 3, a duel won without a kill. The stage also keeps its own house now: the hint banner is recomputed at every beat, so it can never invite a move the moment refuses. Scenes 1–5 stand open in the menu. And the board now answers when you ask it: tap any enemy and its reach blooms over the slate — the deep red it can strike from where it stands, the pale red it could only reach by moving first — priced by the same movement and targeting the duel itself obeys, so the shading can no more lie than the AI can. Tap it again, tap the ground, or choose one of your own pieces to let it go; and no tap that means an attack or a spell is ever spent on looking. And the stage has learned to greet: a player who has never dueled is walked onto it as the island first rises — the Font, the Queen, the Triangle, the Kindling, the Long Way, one lesson handing them to the next — and at the end of the Long Way the stage does not close: the board beneath it becomes a real one, the camera pulls back to the Court seat in a single flight, and the first move of a real duel is already theirs. Leave at any point and the island remembers — it never drags anyone back; the lessons wait in the menu, where they have always waited. And the lessons have been walked blind: a stranger who knew nothing — reading only the coach's words, the gold ring, and the glow of what may be tapped — found every tap in every scene, from the menu and from the first-launch chain alike, and at the end of the Long Way took the first move of a real duel for his own. Every wrong thing he tried along the way was answered kindly — the enemy who blooms red when looked at and lets go when the ground is tapped, the End that refuses, the wrong march and the wrong Blink the stage rewinds and forgives — though the walking caught one real trap and mended it: a finished beat's buttons used to sit live into the next, a leftover Confirm waiting to be tapped into a plan with nowhere to go; now the card clears when its selection does, and the stage sweeps its own card clean at every beat. The menu has tidied itself too, at the word of the house: the five lessons fold under one 📚 Lessons door beneath the Tutorial, so the front page is short again — and every lesson still stands there for the replaying. The stage's door has moved, too: 'Leave the stage' no longer sits in the coach's row beside the way forward — it lives on a small ✕ Leave chip in the menu's corner, one tap to ask 'Sure?', a second to go, the house rule the old Skip taught; and the camera's three seats have quieted themselves — ghost-pale and small at rest, waking only when a hand comes near, their poses unchanged. And the top of the screen has been put in order: the Terrain key, the camera's three seats, and — while a lesson stands — the stage's ✕ door now share ONE slim row under the banner, where there used to be a stack of rows; the seats keep their ghost and their poses, the door keeps its two-tap 'Sure?', and nothing else up there moved. Learn it in a minute. Master it in a season.</p>
   </div>
 </div>
 <div id="selectOverlay" class="overlay" style="display:none">
@@ -6974,16 +6983,16 @@ function scenFlyTo(focusHex, rad, phi, theta, dur){
    here, so the webview has nothing left to miscompute. Row 1: the top bar
    (round + both courts) with the menu button beside it. Row 2: the status
    banner on its own full-width line — nothing ever stacks over it. Row 3:
-   the view cluster as a single icon-only button (the Terrain legend;
-   Slice 3.30 retired Top view + Reset view — the preset row below
-   covers their jobs), floating over the board's top-left corner. The
-   terrain legend drops in below the cluster. The coach is a bottom
+   ONE utility row (Slice 3.38) — the Terrain legend button at the
+   left, the three camera presets in the middle, and during a scene
+   the ✕ Leave chip at the right; one row on phones and desktop
+   alike. The terrain legend drops in below the row. The coach is a bottom
    sheet (applyCoachLayout) and the unit card + toast dock above it
    (syncDock) — at phone widths AND desktop widths alike (the sheet
    contract was extended to every viewport on 2026-11-08); the rest of
    the desktop HUD restores the shipped v2.2 presentation exactly. */
 var PHONE = false;
-var HUD = { topH: 42, topGap: 6, bannerH: 36, btn: 44 };
+var HUD = { topH: 42, topGap: 6, bannerH: 36, btn: 44, utilH: 38 };
 var CARD_W = 324; /* Slice 3.2: the desktop unit-card width — it side-docks at the right edge at this width instead of floating as a centered slab */
 function coachCapPx(){ return Math.round(window.innerHeight * 0.40); }
 function coachSheetPx(){
@@ -7004,9 +7013,8 @@ function fitPanels(){
   var coach = document.getElementById('coachCard');
   var leg = document.getElementById('legendCard');
   var tb = document.getElementById('topbar'), mb = document.getElementById('menuBtn');
-  var bn = document.getElementById('banner'), vb = document.getElementById('viewBtns'), cb = document.getElementById('camBtns'), lc = document.getElementById('btnLeaveScene');
+  var bn = document.getElementById('banner'), ur = document.getElementById('utilRow'), cb = document.getElementById('camBtns'), lc = document.getElementById('btnLeaveScene');
   var bb = document.getElementById('bottombar');
-  var vbIds = ['btnLegend']; /* Slice 3.30: Top + Reset retired — Terrain keeps the row */
   var camIds = ['btnCamCourt', 'btnCamOver', 'btnCamSide'];
   if (PHONE){
     var iw = window.innerWidth;
@@ -7024,33 +7032,34 @@ function fitPanels(){
     var bannerTop = HUD.topGap + HUD.topH + 6;
     bn.style.left = '6px'; bn.style.top = bannerTop + 'px'; bn.style.transform = 'none';
     bn.style.width = (iw - 12) + 'px'; bn.style.height = HUD.bannerH + 'px';
-    /* row 3: view cluster — the Terrain legend button, one 44px icon button */
-    var vbTop = bannerTop + HUD.bannerH + 6;
-    vb.style.left = '8px'; vb.style.top = vbTop + 'px'; vb.style.flexDirection = 'row';
-    var vbIcons = ['🗺️'];
-    vbIds.forEach(function(id, i){
+    /* row 3 (Slice 3.38): ONE utility row under the banner —
+       Terrain at the left, the three camera presets in the
+       middle, the ✕ Leave chip at the right (scenes only). The
+       row is full width so its ends land at the screen edges;
+       the camera trio flexes through the middle. Fit law at
+       narrow widths (~360px): the camera chips drop their icons
+       first (text stays), then padding shrinks — the row never
+       wraps and no chip's height goes below 38px. */
+    var urTop = bannerTop + HUD.bannerH + 6;
+    ur.style.left = '6px'; ur.style.top = urTop + 'px'; ur.style.transform = 'none';
+    ur.style.width = (iw - 12) + 'px'; ur.style.height = HUD.utilH + 'px';
+    var lg = document.getElementById('btnLegend');
+    lg.textContent = '🗺️';
+    lg.style.width = HUD.btn + 'px'; lg.style.height = HUD.utilH + 'px';
+    lg.style.padding = '0'; lg.style.fontSize = '17px'; lg.style.textAlign = 'center';
+    var camLabels = iw <= 400 ? ['Court', 'Overhead', 'Side'] : ['♜ Court', '⬇ Overhead', '↔ Side'];
+    camIds.forEach(function(id, i){
       var b = document.getElementById(id);
-      b.textContent = vbIcons[i];
-      b.style.width = HUD.btn + 'px'; b.style.height = HUD.btn + 'px';
-      b.style.padding = '0'; b.style.fontSize = '17px'; b.style.textAlign = 'center';
+      b.textContent = camLabels[i];
+      b.style.flex = '1'; b.style.height = HUD.utilH + 'px';
+      b.style.padding = iw <= 400 ? '0 2px' : '0'; b.style.fontSize = '12px'; b.style.textAlign = 'center';
     });
-    /* row 4: the camera presets — three labeled thumb buttons */
-    var cbTop = vbTop + HUD.btn + 6;
-    cb.style.left = '8px'; cb.style.top = cbTop + 'px'; cb.style.flexDirection = 'row';
-    cb.style.width = (iw - 16) + 'px';
-    camIds.forEach(function(id){
-      var b = document.getElementById(id);
-      b.style.flex = '1'; b.style.height = '38px'; b.style.padding = '0'; b.style.fontSize = '12px'; b.style.textAlign = 'center';
-    });
-    /* the Leave chip rides row 3's empty right end on a phone —
-       clear of the full-width banner above and the camera row
-       below, in the same meta corner as the menu icon */
-    if (lc){ lc.style.top = vbTop + 'px'; lc.style.right = '8px'; }
-    /* the legend drops in under both clusters, inside the viewport */
+    if (lc){ lc.style.height = HUD.utilH + 'px'; lc.style.padding = '0 10px'; }
+    /* the legend drops in under the one row, inside the viewport */
     if (leg){
-      leg.style.top = (vbTop + HUD.btn + 52) + 'px'; leg.style.left = '8px';
+      leg.style.top = (urTop + HUD.utilH + 8) + 'px'; leg.style.left = '8px';
       leg.style.width = Math.min(300, iw - 24) + 'px';
-      leg.style.maxHeight = Math.max(140, window.innerHeight - (vbTop + HUD.btn + 52) - 130) + 'px';
+      leg.style.maxHeight = Math.max(140, window.innerHeight - (urTop + HUD.utilH + 8) - 130) + 'px';
       leg.style.overflowY = 'auto';
     }
     /* the unit card spans the phone (JS px — no vw) and docks via syncDock;
@@ -7067,19 +7076,20 @@ function fitPanels(){
     var tt2 = tb.querySelector ? tb.querySelector('.title') : null;
     if (tt2) tt2.style.display = '';
     bn.style.left = ''; bn.style.top = ''; bn.style.transform = ''; bn.style.width = ''; bn.style.height = '';
-    vb.style.left = ''; vb.style.top = ''; vb.style.flexDirection = '';
-    var vbLabels = ['🗺️ Terrain'];
-    vbIds.forEach(function(id, i){
+    /* Slice 3.38: the one utility row restores to its CSS home —
+       centered under the banner — and every chip's label and
+       inline geometry clears back to the stylesheet's values */
+    ur.style.left = ''; ur.style.top = ''; ur.style.transform = ''; ur.style.width = ''; ur.style.height = '';
+    var lg2 = document.getElementById('btnLegend');
+    lg2.textContent = '🗺️ Terrain';
+    lg2.style.width = ''; lg2.style.height = ''; lg2.style.padding = ''; lg2.style.fontSize = ''; lg2.style.textAlign = '';
+    var camLabels2 = ['♜ Court', '⬇ Overhead', '↔ Side'];
+    camIds.forEach(function(id, i){
       var b = document.getElementById(id);
-      b.textContent = vbLabels[i];
-      b.style.width = ''; b.style.height = ''; b.style.padding = ''; b.style.fontSize = ''; b.style.textAlign = '';
-    });
-    cb.style.left = ''; cb.style.top = ''; cb.style.flexDirection = ''; cb.style.width = '';
-    if (lc){ lc.style.top = ''; lc.style.right = ''; }
-    camIds.forEach(function(id){
-      var b = document.getElementById(id);
+      b.textContent = camLabels2[i];
       b.style.flex = ''; b.style.height = ''; b.style.padding = ''; b.style.fontSize = ''; b.style.textAlign = '';
     });
+    if (lc){ lc.style.height = ''; lc.style.padding = ''; }
     if (leg){ leg.style.top = ''; leg.style.left = ''; leg.style.width = Math.min(252, Math.max(200, window.innerWidth - 24)) + 'px'; leg.style.maxHeight = Math.max(160, window.innerHeight - 150) + 'px'; leg.style.overflowY = 'auto'; }
     /* Slice 3.2: on desktop the unit card SIDE-DOCKS at the right edge
        at CARD_W instead of restoring the centered 680px slab — the slab
@@ -8993,7 +9003,10 @@ function leaveChipDisarm(){
 }
 function leaveChipSync(){
   var c = document.getElementById('btnLeaveScene'); if (!c) return;
-  c.style.display = SCEN ? 'block' : 'none';
+  /* Slice 3.38: the chip lives in the flex utility row now, so
+     shown is '' (its natural display), not 'block' — the row's
+     flex layout owns how it sits */
+  c.style.display = SCEN ? '' : 'none';
   if (!SCEN) leaveChipDisarm();
 }
 document.getElementById('btnLeaveScene').onclick = function(){
