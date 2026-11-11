@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Spellthrone v3.31 · Slice 3.31 — The King Steps Sideways — a duel of archmages</title>
+<title>Spellthrone v3.32 · Slice 3.32 — The Stage Is Set — a duel of archmages</title>
 <style>
   :root{ --gold:#f5c542; --ink:#0d0f14; --txt:#f3ead2; --ember:#ff9a3d; --frost:#57c8ff; --card:#1a1d26; }
   *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -144,10 +144,12 @@
     <button class="gbtn primary big" id="btnResume" style="display:none">▶ Resume game</button>
     <button class="gbtn primary big" id="btnVsAI">⚔️ Play vs the AI — pick your court</button>
     <button class="gbtn big" id="btnTutorial">🎓 Tutorial — learn by playing</button>
+    <button class="gbtn big" id="btnScenario" style="display:none">🎬 Dev stage — proof of life</button>
+    <button class="gbtn big" id="btnExitScenario" style="display:none">⏏ Leave the stage</button>
     <button class="gbtn big" id="btnPvP">👥 Pass-and-play — two humans, one device</button>
     <button class="gbtn big" id="btnHow">📖 How to play (one minute)</button>
     <div id="glbStatus" style="text-align:center;opacity:.85;font-size:13px;margin-top:10px;min-height:16px"></div>
-    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.31 · Slice 3.31 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 7. A piece still to act wears a ring of light; once it has acted, the ring is gone and the piece rests dimmer. Orbit low and the island’s under-rock is lit from below now, mana seams glowing in the dark. The court breathes: pieces idle on their own time, rise when chosen, and flash when struck. And the Exclusives are serpents now — Ember's Cinderwyrm and Frost's Rimewyrm coil where the hounds once ran, forked tongues and all — while the archers stand in a true shooter's stance, arrows level. And the air itself has taken sides: embers rise over Ember's half of the isle while snow sifts down over Frost's, the braziers' firelight dances with their own flames, and gold, ice and plate catch real reflections of the dusk. The camera has learned manners too: four preset views fly you smoothly around the court, and left alone it breathes, very slowly, like something alive. On the board, pieces travel like they mean it now: moves glide hex to hex on an eased arc, strikes lunge and recoil, and the fallen shrink into their burst of court-colored sparks. And the wyrms themselves have been taken down a size — a small trim, so the serpents coil beside the band instead of towering over it. And the board itself has been polished to the pieces’ shine — the Dusk Slate now catches the same dusk as the gold and ice it carries. And the island no longer floats in front of a poster: a ruined colonnade rings the sky, mist pools below the rock, and the horizon glows warm toward Ember and cool toward Frost. And the Heart Crystals have woken: a Sprite that ends its activation kneeling on its own crystal and lives to stir again rises as a True Spirit — Inferno or Hearth for Ember, Blizzard or Glacier Wisp for Frost — and the kneeling wears a ring of light the whole board can read, so the race to stop it is fair. And the tutorial itself has been walked end to end, exactly as written, by a tireless first student: its gold ring now points at the Cinderbow who can actually loose the lesson's arrows, and the no-dice lesson waits for a strike of your own before it shows you the arithmetic. And the Waking itself can now be watched: when a Communion completes, the Sprite rises and turns in its court's light, the ring's sparks fall inward, and at the flash the piece on the board is the Spirit itself — Inferno and Hearth wear the Coal Imp's fire grown wild and warm, Blizzard and Glacier Wisp wear the Veil Wisp's mist grown storm and still: four new faces for the two forks of each court. And the spellbook itself has been slimmed: seventeen spells are twelve now, each a different verb — the High Mage has become the support mage, carrying Blink and Mend and the court's Resonance in her own hands (lose her, and you lose Resonance and her utility both), Ember has learned to set the very ground ablaze for a round, and Frost's Brittle has become Shatter, which only breaks what the cold already holds. And the tuning fork has come home: after a night of thousands of measured games on a fork of this very build, the Archmage stands at 17 HP, Fireball and Shatter cost ◆4 apiece, the Deepening holds its breath until Round 7, and the Throne starts paying a round later — the same duel, given room to breathe, with the balance confirmed rather than disturbed. And the hand itself has been trued: a tap now lands where the finger came DOWN, not where it lifted — the board holds still from the moment you touch it, so the hex at a border takes the order you aimed at it. And two seats have become one: the Court view and the Player view were near-twins, so a single seat remains — behind your own court against the machine, and in a pass-and-play duel it settles behind whoever is to move, a touch higher and closer, the way the Player view always sat. And the court has been grounded: every piece now stands in a soft pool of its own shade, so serpent and plate alike sit planted on the slate instead of hovering over it; the ruins have crept closer — broken drums and capital stones hang in a nearer ring beyond the rim, below the board’s edge where no sightline to a hex can cross them; and the hero lights burn hotter — brazier flame, heart crystal and wyrm-seam raised toward the studio band — while the slate beneath them keeps its dusk. And the turning hand keeps what it turns: the camera rides the steering finger exactly, so a fast swing stops dead the moment the hand lets go — no trailing settle behind it, and nothing left for the next touch to snap shut. And the camera has learned to land like a living thing: a hard swing now spends its last momentum in a short gliding settle — every frame of it continuous, never a jump — and a fresh touch simply stops the board where it lies, so the hex under your finger is always the hex you aimed at. And the view cluster has shed its two oldest buttons — Top view and Reset view are gone, because the preset row already says it all: Overhead is the top view, Court is the home seat — while the Terrain legend keeps its place. And the King has learned to step sideways: the Archmage now carries Blink ◆3 — vanish and reappear on an empty hex within 3, himself only, priced like the escape it is (◆2 from a Mana Font) — while the Queen keeps her cheaper ◆2 step, her Mend and her Resonance: lose her, and you lose the court's utility still. Learn it in a minute. Master it in a season.</p>
+    <p style="text-align:center;opacity:.65;font-size:12.5px;margin-top:12px">Spellthrone v3.32 · Slice 3.32 — Courts & Longevity — nine pieces a side on a wider isle: two great mages, Guardians who step in, fires that spread and frosts that root, and a Deepening at Round 7. A piece still to act wears a ring of light; once it has acted, the ring is gone and the piece rests dimmer. Orbit low and the island’s under-rock is lit from below now, mana seams glowing in the dark. The court breathes: pieces idle on their own time, rise when chosen, and flash when struck. And the Exclusives are serpents now — Ember's Cinderwyrm and Frost's Rimewyrm coil where the hounds once ran, forked tongues and all — while the archers stand in a true shooter's stance, arrows level. And the air itself has taken sides: embers rise over Ember's half of the isle while snow sifts down over Frost's, the braziers' firelight dances with their own flames, and gold, ice and plate catch real reflections of the dusk. The camera has learned manners too: four preset views fly you smoothly around the court, and left alone it breathes, very slowly, like something alive. On the board, pieces travel like they mean it now: moves glide hex to hex on an eased arc, strikes lunge and recoil, and the fallen shrink into their burst of court-colored sparks. And the wyrms themselves have been taken down a size — a small trim, so the serpents coil beside the band instead of towering over it. And the board itself has been polished to the pieces’ shine — the Dusk Slate now catches the same dusk as the gold and ice it carries. And the island no longer floats in front of a poster: a ruined colonnade rings the sky, mist pools below the rock, and the horizon glows warm toward Ember and cool toward Frost. And the Heart Crystals have woken: a Sprite that ends its activation kneeling on its own crystal and lives to stir again rises as a True Spirit — Inferno or Hearth for Ember, Blizzard or Glacier Wisp for Frost — and the kneeling wears a ring of light the whole board can read, so the race to stop it is fair. And the tutorial itself has been walked end to end, exactly as written, by a tireless first student: its gold ring now points at the Cinderbow who can actually loose the lesson's arrows, and the no-dice lesson waits for a strike of your own before it shows you the arithmetic. And the Waking itself can now be watched: when a Communion completes, the Sprite rises and turns in its court's light, the ring's sparks fall inward, and at the flash the piece on the board is the Spirit itself — Inferno and Hearth wear the Coal Imp's fire grown wild and warm, Blizzard and Glacier Wisp wear the Veil Wisp's mist grown storm and still: four new faces for the two forks of each court. And the spellbook itself has been slimmed: seventeen spells are twelve now, each a different verb — the High Mage has become the support mage, carrying Blink and Mend and the court's Resonance in her own hands (lose her, and you lose Resonance and her utility both), Ember has learned to set the very ground ablaze for a round, and Frost's Brittle has become Shatter, which only breaks what the cold already holds. And the tuning fork has come home: after a night of thousands of measured games on a fork of this very build, the Archmage stands at 17 HP, Fireball and Shatter cost ◆4 apiece, the Deepening holds its breath until Round 7, and the Throne starts paying a round later — the same duel, given room to breathe, with the balance confirmed rather than disturbed. And the hand itself has been trued: a tap now lands where the finger came DOWN, not where it lifted — the board holds still from the moment you touch it, so the hex at a border takes the order you aimed at it. And two seats have become one: the Court view and the Player view were near-twins, so a single seat remains — behind your own court against the machine, and in a pass-and-play duel it settles behind whoever is to move, a touch higher and closer, the way the Player view always sat. And the court has been grounded: every piece now stands in a soft pool of its own shade, so serpent and plate alike sit planted on the slate instead of hovering over it; the ruins have crept closer — broken drums and capital stones hang in a nearer ring beyond the rim, below the board’s edge where no sightline to a hex can cross them; and the hero lights burn hotter — brazier flame, heart crystal and wyrm-seam raised toward the studio band — while the slate beneath them keeps its dusk. And the turning hand keeps what it turns: the camera rides the steering finger exactly, so a fast swing stops dead the moment the hand lets go — no trailing settle behind it, and nothing left for the next touch to snap shut. And the camera has learned to land like a living thing: a hard swing now spends its last momentum in a short gliding settle — every frame of it continuous, never a jump — and a fresh touch simply stops the board where it lies, so the hex under your finger is always the hex you aimed at. And the view cluster has shed its two oldest buttons — Top view and Reset view are gone, because the preset row already says it all: Overhead is the top view, Court is the home seat — while the Terrain legend keeps its place. And the King has learned to step sideways: the Archmage now carries Blink ◆3 — vanish and reappear on an empty hex within 3, himself only, priced like the escape it is (◆2 from a Mana Font) — while the Queen keeps her cheaper ◆2 step, her Mend and her Resonance: lose her, and you lose the court's utility still. And beneath the duel a stage has been built — hand-set scenes, scripted volleys answered by real Guardians, a camera that flies to the lesson, and gates that hold every tap but the one being taught; the new way in will be staged on it, beat by beat. Learn it in a minute. Master it in a season.</p>
   </div>
 </div>
 <div id="selectOverlay" class="overlay" style="display:none">
@@ -6850,6 +6852,19 @@ function camPreset(name){
   else if (name === 'overhead') flyTo({ theta: home, phi: CAM_LIMITS.phiMin, rad: rad, focus: focus });
   else if (name === 'side') flyTo({ theta: home + Math.PI / 2, phi: 1.30, rad: rad, focus: focus });
 }
+/* Slice 3.32 — the CAMERA DIRECTOR's flight: flyTo with the beat's
+   own duration (the flight object is flyTo's; the director only
+   retimes it — motion law, easing and the freeze rule untouched). */
+function flyToDur(to, dur){
+  flyTo(to);
+  if (camFly && dur) camFly.dur = dur;
+}
+function scenFlyTo(focusHex, rad, phi, theta, dur){
+  var w = hexToWorld(focusHex.q, focusHex.r);
+  flyToDur({ theta: (theta !== undefined && theta !== null) ? theta : camTheta,
+             phi: phi, rad: rad,
+             focus: new THREE.Vector3(w.x, SURF(focusHex.q, focusHex.r) + 0.6, w.z) }, dur || 1.2);
+}
 /* overlay panels are sized in raw px from the live viewport — never vh/%,
    which the phone webview miscomputes and collapses.
    v2.2.1 MOBILE LAYOUT: at phone widths (<= 520px) the whole HUD becomes
@@ -6873,7 +6888,7 @@ function coachSheetPx(){
   /* the sheet's current height, for docking: expanded it is the cap
      (its text scrolls inside), collapsed it is the one-line goal bar */
   var c = document.getElementById('coachCard');
-  if (!c || c.style.display === 'none' || !TUT || TUT.done) return 0;
+  if (!c || c.style.display === 'none' || !((TUT && !TUT.done) || (typeof SCEN !== 'undefined' && SCEN))) return 0;
   return COACH_MIN ? 104 : coachCapPx();
 }
 function fitPanels(){
@@ -8202,6 +8217,284 @@ function tutIntercept(evs){
   return out;
 }
 
+
+/* ================= Slice 3.32 — THE SCENARIO ENGINE =================
+   A stage under the duel. Scenarios are DATA: a named definition
+   stages an exact board (pieces at hexes with HP and spent state,
+   mana, round, side to move), then walks a list of BEATS. Each
+   beat may carry a coach line (rendered on the tutorial's own
+   coach card), a camera instruction, an input gate, a scripted
+   volley, and a completion condition. Nothing here is a match:
+   no AI is consulted, win settlement is annulled on sight, and
+   leaving the stage abandons the staged state entirely. Later
+   slices register real lessons with scenRegister(). */
+var SCEN = null;   /* { id, def, beat, done, btns, volleyFired, promptSeen } */
+var SCEN_DEV = (typeof location !== 'undefined' && location && /[?&]devstage=1/.test(location.search || ''));
+var SCENARIOS = {};
+function scenRegister(name, def){ SCENARIOS[name] = def; }
+
+/* ---- the proof-of-life scene (DEV — staging, not player copy) ----
+   Beat 0: the Ember Archmage (6 HP) stands ON the Mana Font at
+   (2,-2), gated to his Blink alone; two Pyre Guards beside him.
+   Beat 1: a scripted Frost Cinderbow volley from (2,-4) — bowshot
+   2 — strikes the Archmage where he lands; a Pyre Guard beside
+   the landing ground is a legal Intercept candidate, so the
+   REAL prompt asks the defender.
+   Beat 2: the gates open; a manual button closes the show. */
+scenRegister('proof', {
+  title: 'Proof of Life (dev stage)',
+  courts: ['ember', 'frost'], mana: [5, 3], round: 2, turn: 0,
+  pieces: [
+    { side: 0, type: 'mage',       q: 2,  r: -2, hp: 6 },
+    { side: 0, type: 'guardian',   q: 2,  r: -1 },
+    { side: 0, type: 'guardian',   q: 1,  r: -1 },
+    { side: 0, type: 'queen',      q: 0,  r: 3 },
+    { side: 1, type: 'skirmisher', q: 2,  r: -4 },
+    { side: 1, type: 'mage',       q: 0,  r: -5 },
+    { side: 1, type: 'guardian',   q: -1, r: -4 }
+  ],
+  outro: 'The stage goes dark. Load, gate, volley, prompt, camera, exit — the machinery held.',
+  beats: [
+    { title: 'The gated King', goal: 'Blink — and only Blink',
+      coach: '🎬 DEV STAGE. The Archmage stands on the Mana Font, hurt and gated: on this beat he may <b>Blink</b>, and nothing else on the board answers a tap. Try the Queen, try a Guard, try walking, try Fireball — the stage refuses them all, politely. Then select him, arm 🔮 <b>Blink</b>, and tap a clear hex.',
+      gate: { units: ['mage'], actions: ['blink'], moves: false },
+      ring: { q: 2, r: -2 },
+      cam: { focus: { q: 2, r: -2 }, rad: 13, phi: 0.95, dur: 1.4 },
+      done: { spell: 'blink', side: 0 } },
+    { title: 'The scripted volley', goal: 'answer the Intercept prompt',
+      coach: '🎬 The Frost Cinderbow looses — a scripted volley, resolved by the real rules. The arrow is aimed at your Archmage, and your Pyre Guard can step in. The choice the game puts in front of you now is the genuine Intercept prompt, with genuine numbers. Answer it.',
+      gate: { units: [], actions: [], moves: false },
+      ring: { q: 2, r: -1 },
+      cam: { focus: { q: 2, r: -2 }, rad: 15, phi: 1.05, dur: 1.2 },
+      volley: [ { unit: { side: 1, type: 'skirmisher' }, attack: { side: 0, type: 'mage' } } ],
+      done: { event: 'interceptPrompt' } },
+    { title: 'The free stage', goal: 'the gates are open',
+      coach: '🎬 Last beat: the gates are open and the camera is yours again. Move the Queen a hex, if you like — then take your bow.',
+      gate: { units: 'ALL', actions: null, moves: true },
+      cam: { release: true },
+      done: { manual: 'Take the stage ▸' } }
+  ]
+});
+
+function scenBtn(row, label, cls, fn){
+  var b = document.createElement('button'); b.className = 'gbtn ' + (cls || ''); b.textContent = label;
+  b.onclick = function(ev){ if (ev && ev.stopPropagation) ev.stopPropagation(); fn(); };
+  row.appendChild(b); if (SCEN) SCEN.btns.push({ label: label, el: b }); return b;
+}
+function scenFindUnit(spec){
+  if (!spec || !S) return null;
+  for (var i = 0; i < S.units.length; i++){ var u = S.units[i];
+    if (u.alive && u.side === spec.side && u.type === spec.type && (spec.q === undefined || (u.q === spec.q && u.r === spec.r))) return u; }
+  return null;
+}
+/* a scenario is not a match: if anything would settle a winner,
+   the settlement is annulled and the stage plays on */
+function scenClearWin(){
+  if (!S) return;
+  S.winner = null; S.winHow = '';
+  var w = document.getElementById('winOverlay'); if (w) w.style.display = 'none';
+  refreshTop();
+}
+function scenStart(name){
+  var def = SCENARIOS[name]; if (!def) return false;
+  if (TUT) tutHide();
+  MODE = 'scenario';
+  MATCH = { courts: (def.courts || ['ember', 'frost']).slice(), presets: ['ember-classic', 'frost-classic'], humanSide: 0 };
+  HUMANS = [true, false];
+  S = newMatch(MATCH.courts[0], MATCH.courts[1]);
+  /* keep ONLY the listed pieces, placed and priced as written */
+  var keep = [];
+  (def.pieces || []).forEach(function(p){
+    var u = null;
+    for (var i = 0; i < S.units.length; i++){ var x = S.units[i];
+      if (x.side === p.side && x.type === p.type && keep.indexOf(x) < 0){ u = x; break; } }
+    if (!u) return;
+    u.q = p.q; u.r = p.r; u.alive = true;
+    if (p.hp !== undefined) u.hp = Math.max(1, Math.min(maxHp(u), p.hp));
+    u.acted = !!p.spent;
+    if (p.chill) u.chill = p.chill;
+    if (p.burning) u.burning = true;
+    keep.push(u);
+  });
+  S.units = S.units.filter(function(x){ return keep.indexOf(x) >= 0; });
+  S.units.forEach(function(u, i){ u.id = i + 1; });
+  if (def.mana) S.mana = def.mana.slice();
+  if (def.round) S.round = def.round;
+  S.turn = def.turn || 0; S.winner = null; S.winHow = '';
+  GAME_STARTED = true;
+  SEL = null; PHASE = 'pick'; DEST = null; ARMED = null; STAGED = null; VOLLEY_ARM = false; BUSY = false; shots.length = 0;
+  SCEN = { id: name, def: def, beat: -1, done: false, btns: [], volleyFired: false, promptSeen: false };
+  buildViews(); refreshTop(); clearHL();
+  document.getElementById('sideName0').textContent = courtName(0).toUpperCase();
+  document.getElementById('sideName1').textContent = courtName(1).toUpperCase();
+  document.getElementById('bottombar').style.display = 'none';
+  document.getElementById('menuOverlay').style.display = 'none';
+  document.getElementById('winOverlay').style.display = 'none';
+  document.getElementById('selectOverlay').style.display = 'none';
+  camThetaT = camHomeTheta();
+  banner('🎬 On stage: ' + def.title);
+  scenAdvance();
+  return true;
+}
+function scenTeardown(openMenuAfter){
+  SCEN = null;
+  var c = document.getElementById('coachCard'); if (c) c.style.display = 'none';
+  coachRing.visible = false;
+  GAME_STARTED = false;   /* the staged board is abandoned, never resumable */
+  if (openMenuAfter) openMenu();
+}
+function scenExit(){
+  scenTeardown(true);
+  toast('🎬 Back to the menu — the stage leaves no trace.', 2200);
+}
+/* ---- beats ---- */
+function scenAdvance(){
+  if (!SCEN) return;
+  SCEN.beat++; SCEN.volleyFired = false; SCEN.promptSeen = false;
+  var b = SCEN.def.beats[SCEN.beat];
+  if (!b){ SCEN.done = true; scenRender(); return; }
+  if (b.cam) scenApplyCam(b);
+  scenRender();
+  if (b.volley) scenFireVolley();
+}
+function scenBeatComplete(how){
+  if (!SCEN || SCEN.done) return;
+  if (!SCEN.def.beats[SCEN.beat]) return;
+  scenAdvance();
+}
+function scenApplyCam(b){
+  var c = b.cam; if (!c) return;
+  if (c.release) return;   /* the director simply stops directing */
+  if (c.focus) scenFlyTo(c.focus, c.rad || 16, (c.phi !== undefined ? c.phi : 1.0), c.theta, c.dur || 1.2);
+  else if (c.preset) camPreset(c.preset);
+}
+function scenRender(){
+  if (!SCEN) return;
+  var card = document.getElementById('coachCard'); if (!card) return;
+  var row = document.getElementById('coachRow');
+  var gl = document.getElementById('coachGoal');
+  var b = SCEN.def.beats[SCEN.beat];
+  SCEN.btns = [];
+  if (!b || SCEN.done){
+    document.getElementById('coachTitle').textContent = '🎬 ' + SCEN.def.title + ' — complete';
+    if (gl) gl.textContent = '🎬 Stage complete';
+    document.getElementById('coachText').innerHTML = SCEN.def.outro || 'The stage goes dark.';
+    row.innerHTML = '';
+    scenBtn(row, 'Leave the stage ▸', 'primary', function(){ scenExit(); });
+  } else {
+    document.getElementById('coachTitle').textContent = '🎬 ' + (b.title || SCEN.def.title) + '  ·  ' + (SCEN.beat + 1) + ' of ' + SCEN.def.beats.length;
+    if (gl) gl.textContent = '🎬 Beat ' + (SCEN.beat + 1) + ' of ' + SCEN.def.beats.length + (b.goal ? ' · ' + b.goal : '');
+    document.getElementById('coachText').innerHTML = (typeof b.coach === 'function') ? b.coach() : (b.coach || '');
+    row.innerHTML = '';
+    if (b.done && b.done.manual) scenBtn(row, b.done.manual, 'primary', function(){ scenBeatComplete('manual'); });
+    scenBtn(row, 'Leave the stage', '', function(){ scenExit(); });
+  }
+  card.style.display = 'block';
+  applyCoachLayout();
+  var skp = document.getElementById('coachSkipBtn'); if (skp) skp.style.display = 'none';  /* the Skip belongs to the tutorial; the stage's exits live in the row */
+  syncDock();
+}
+/* ---- input gating: the beat decides what answers a tap ---- */
+function scenGate(){
+  if (!SCEN || SCEN.done) return null;
+  var b = SCEN.def.beats[SCEN.beat];
+  return b ? (b.gate || null) : null;
+}
+function scenUnitAllowed(u){
+  var g = scenGate(); if (!g || !g.units || g.units === 'ALL') return true;
+  return g.units.indexOf(u.type) >= 0;
+}
+function scenActionAllowed(name){
+  var g = scenGate(); if (!g || g.actions === undefined || g.actions === null) return true;
+  return g.actions.indexOf(name) >= 0;
+}
+function scenMoveAllowed(){
+  var g = scenGate(); if (!g) return true;
+  if (g.moves !== undefined) return !!g.moves;
+  return !(g.actions && g.actions.length);
+}
+var SCEN_DENY_AT = 0;
+function scenDeny(){
+  var now = Date.now(); if (now - SCEN_DENY_AT < 350) return; SCEN_DENY_AT = now;
+  toast('🎬 Not on this beat — the coach card names the one move this moment teaches.', 1600);
+  var card = document.getElementById('coachCard');
+  if (card && card.style.display !== 'none'){
+    card.style.transition = 'transform .07s';
+    card.style.transform = 'translateX(calc(-50% - 6px))';
+    setTimeout(function(){ card.style.transform = 'translateX(calc(-50% + 6px))'; }, 70);
+    setTimeout(function(){ card.style.transform = 'translateX(-50%)'; }, 140);
+    setTimeout(function(){ card.style.transform = ''; card.style.transition = ''; }, 230);
+  }
+}
+/* ---- completion: the player's commits are read against the beat ---- */
+function scenPlayerCommit(plan, evs){
+  if (!SCEN || SCEN.done || !plan) return;
+  var bi = SCEN.beat;
+  /* a scenario is a moment, not a match: applyActivation hands the
+     turn to the other side as if a match were running, and the stage
+     takes it straight back — otherwise the board strands on a turn
+     nobody plays (The Stage Holds caught it: the Queen walked on the
+     free beat and the turn sat on Frost forever) */
+  if (S && S.turn !== (SCEN.def.turn || 0)){ S.turn = SCEN.def.turn || 0; refreshTop(); }
+  var b = SCEN.def.beats[bi]; if (!b || !b.done) return;
+  var u = unitById(S, plan.unit); if (!u) return;
+  var d = b.done;
+  if (d.spell && plan.action && plan.action.kind === 'spell' && plan.action.spell === d.spell && (d.side === undefined || u.side === d.side)){ scenBeatComplete('spell'); return; }
+  if (d.attack && plan.action && plan.action.kind === 'attack'){ scenBeatComplete('attack'); return; }
+  if (d.move && (plan.dest.q !== u.q || plan.dest.r !== u.r)){ scenBeatComplete('move'); return; }
+  if (typeof d.check === 'function' && SCEN && SCEN.beat === bi && d.check(plan, evs)) scenBeatComplete('check');
+}
+/* ---- scripted volleys: the enemy's activation, fired by the script
+   through the same machinery a real turn uses — applyActivation for
+   the resolution, maybeIntercept for the defender's choice, so a
+   scripted hit on a defended piece asks the REAL question. ---- */
+function scenEnemyPlan(s){
+  for (var i = 0; i < s.units.length; i++){ var u = s.units[i];
+    if (u.side === s.turn && u.alive && !u.acted) return { unit: u.id, dest: { q: u.q, r: u.r }, action: null }; }
+  return null;
+}
+function scenFireVolley(){
+  if (!SCEN || SCEN.volleyFired) return;
+  SCEN.volleyFired = true;
+  banner('🎬 The stage stirs…');
+  setTimeout(function(){
+    if (!SCEN || SCEN.done) return;
+    S.turn = 1; refreshTop();
+    scenVolleyStep(0);
+  }, 450);
+}
+function scenVolleyStep(i){
+  if (!SCEN || SCEN.done) return;
+  var b = SCEN.def.beats[SCEN.beat];
+  if (!b || !b.volley || i >= b.volley.length){ scenVolleyDone(); return; }
+  var v = b.volley[i];
+  var atk = scenFindUnit(v.unit);
+  if (!atk){ scenVolleyStep(i + 1); return; }
+  var plan = { unit: atk.id, dest: { q: atk.q, r: atk.r }, action: null };
+  if (v.attack){ var def = scenFindUnit(v.attack); if (def) plan.action = { kind: 'attack', target: def.id }; }
+  else if (v.spell){ plan.action = { kind: 'spell', spell: v.spell, q: v.q, r: v.r };
+    if (v.target){ var tu = scenFindUnit(v.target); if (tu) plan.action.target = tu.id; } }
+  maybeIntercept(plan, function(){
+    var evs = applyActivation(S, plan);
+    if (SCEN && S.winner !== null) scenClearWin();
+    performEvents(evs, function(){ scenVolleyStep(i + 1); });
+  });
+  if (INTERCEPT_WAIT) SCEN.promptSeen = true;
+}
+function scenVolleyDone(){
+  if (!SCEN) return;
+  S.turn = SCEN.def.turn || 0; refreshTop();
+  scenBeatComplete('volley');
+}
+/* the menu keeps the stage's doors honest */
+function scenSyncMenuButtons(){
+  var bs = document.getElementById('btnScenario'), bx = document.getElementById('btnExitScenario');
+  if (bs) bs.style.display = SCEN_DEV ? 'block' : 'none';
+  if (bx) bx.style.display = SCEN ? 'block' : 'none';
+}
+document.getElementById('btnScenario').onclick = function(){ scenStart('proof'); };
+document.getElementById('btnExitScenario').onclick = function(){ scenExit(); };
+
 /* ---- human input flow ---- */
 function humanTurn(){ return S && S.winner === null && HUMANS[S.turn]; }
 function selectUnit(u){
@@ -8403,7 +8696,7 @@ function drawSelection(){
      by the game instead of by hand. tutAdvance unfolds it again when
      the next step begins. Desktop never needs this: the side dock +
      framing keep everything visible with the sheet up. */
-  if (PHONE && TUT && !TUT.done && !COACH_MIN) setCoachMin(true);
+  if (PHONE && ((TUT && !TUT.done) || SCEN) && !COACH_MIN) setCoachMin(true);
   /* Slice 3.2: with the card on screen, make sure the board it refers
      to is on screen too — pan the focus until the piece and its
      reachable/targetable hexes clear every panel (frameSelection) */
@@ -8435,6 +8728,7 @@ function addSpellButtons(u, base){
     b.title = sp.desc + (sp.resonance && !legal ? ' (Resonance needs BOTH great mages standing.)' : sp.signature && !legal ? (S.deepened ? ' (The signature is spent.)' : ' (Sealed until the Deepening, Round 7.)') : '');
     b.onclick = function(ev2){
       ev2.stopPropagation();
+      if (SCEN && !scenActionAllowed(name)){ scenDeny(); return; }
       ARMED = ARMED === name ? null : name;
       drawSelection();
       if (ARMED) banner(sp.icon + ' ' + sp.name + (sp.kind === 'self' ? ' — tap ✓ Cast to loose it' : ' — tap a glowing target'));
@@ -8465,6 +8759,7 @@ function addEnableButton(u){
   if (u.kit === 'frost') b.title = 'Ward — wrap an adjacent ally in ice: the next hit they take is negated. Great mages burn too bright to hold a ward — neither the Archmage nor the High Mage may be warded.';
   b.onclick = function(ev2){
     ev2.stopPropagation();
+    if (SCEN && !scenActionAllowed('enable')){ scenDeny(); return; }
     ARMED = ARMED === 'enable' ? null : 'enable';
     drawSelection();
     if (ARMED) banner(sideTag(S.turn) + ' — tap an adjacent ally to ' + (u.kit === 'ember' ? 'kindle their weapon' : 'wrap them in rime — great mages burn too bright to hold a ward'));
@@ -8529,7 +8824,8 @@ function maybeIntercept(plan, proceed){
 function doCommit(plan){
   var res = tutIntercept(applyActivation(S, plan));
   performEvents(res.evs, function(){
-    tutNotify(plan, res.evs); afterAction();
+    if (SCEN){ scenPlayerCommit(plan, res.evs); }
+    else { tutNotify(plan, res.evs); afterAction(); }
     /* the clamp speaks LAST so its banner is the one left standing */
     if (res.emberClamped){
       banner('☠ In a real duel, your Archmage would have fallen there. In the tutorial he stands back up — that\'s the lesson.');
@@ -8556,6 +8852,7 @@ function doCommit(plan){
 }
 function afterAction(){
   refreshTop();
+  if (SCEN && S.winner !== null) scenClearWin();
   if (S.winner !== null){ showWin(); return; }
   camThetaT = camHomeTheta();
   if (!humanTurn()){
@@ -8564,8 +8861,8 @@ function afterAction(){
       if (S.winner !== null) return;
       /* Slice 1.2: inside an unfinished tutorial, Frost spars —
          planAI is not consulted, and its events pass the same clamp */
-      var plan = (TUT && !TUT.done && !HUMANS[S.turn]) ? tutSparringPlan(S) : planAI(S, S.turn, Math.random);
-      if (!plan){ showWin(); return; }
+      var plan = SCEN ? scenEnemyPlan(S) : ((TUT && !TUT.done && !HUMANS[S.turn]) ? tutSparringPlan(S) : planAI(S, S.turn, Math.random));
+      if (!plan){ if (SCEN){ banner('🎬 The stage holds its breath…'); return; } showWin(); return; }
       /* Slice 3: the human defends even on the AI's turn — if their
          Guardian could step in, the blow waits for their answer */
       maybeIntercept(plan, function(){
@@ -8770,6 +9067,7 @@ function handleTap(e){
   if (PHASE === 'pick'){
     var pu = tappedUnit || nearUnit;
     if (pu && pu.side === S.turn){
+      if (SCEN && !scenUnitAllowed(pu)){ scenDeny(); return; }
       if (!pu.acted) selectUnit(pu);
       else actedFeedback(pu);
     }
@@ -8777,12 +9075,14 @@ function handleTap(e){
   }
   var u = SEL; if (!u) return;
   if (PHASE === 'move'){
+    if (SCEN && !ARMED && !scenMoveAllowed()){ scenDeny(); return; }
     if (ARMED){
       resolveSpellTap(u, { q: u.q, r: u.r }, tappedHex, tappedUnit);
       return;
     }
     if (tappedUnit && tappedUnit.id === u.id){ DEST = { q: u.q, r: u.r }; PHASE = 'act'; drawSelection(); return; }
     if (tappedUnit && tappedUnit.side === S.turn && tappedUnit.id !== u.id){
+      if (SCEN && !scenUnitAllowed(tappedUnit)){ scenDeny(); return; }
       if (!tappedUnit.acted) selectUnit(tappedUnit); else actedFeedback(tappedUnit);
       return;
     }
@@ -8971,6 +9271,7 @@ var GAME_STARTED = false;
 function openMenu(){
   var canResume = GAME_STARTED && !!S;
   document.getElementById('btnResume').style.display = canResume ? 'block' : 'none';
+  scenSyncMenuButtons();
   document.getElementById('btnMenuClose').style.display = canResume ? 'block' : 'none';
   document.getElementById('menuOverlay').style.display = 'flex';
 }
@@ -9096,6 +9397,7 @@ function startGame(mode, cfg){
   HUMANS = mode === 'pvp' ? [true, true] : (mode === 'ai' && MATCH.humanSide === 1 ? [false, true] : [true, false]);
   S = newMatch(MATCH.courts[0], MATCH.courts[1]); GAME_STARTED = true;
   SEL = null; PHASE = 'pick'; DEST = null; ARMED = null; STAGED = null; BUSY = false; shots.length = 0;
+  if (SCEN) scenTeardown(false);
   if (mode === 'tutorial') tutStart(); else tutHide();
   buildViews(); refreshTop(); clearHL();
   document.getElementById('sideName0').textContent = courtName(0).toUpperCase();
@@ -9269,6 +9571,14 @@ function animate(){
       coachRing.material.opacity = 0.72 + Math.sin(t * 4.5) * 0.25;
     } else coachRing.visible = false;
   } else if (coachRing.visible) coachRing.visible = false;
+  if (SCEN && !SCEN.done && SCEN.def.beats[SCEN.beat] && SCEN.def.beats[SCEN.beat].ring){
+    var srx = SCEN.def.beats[SCEN.beat].ring;
+    var sw2 = hexToWorld(srx.q, srx.r);
+    coachRing.visible = true;
+    coachRing.position.set(sw2.x, SURF(srx.q, srx.r) + 0.09, sw2.z);
+    var scs = 1 + Math.sin(t * 4.5) * 0.09; coachRing.scale.set(scs, scs, 1);
+    coachRing.material.opacity = 0.72 + Math.sin(t * 4.5) * 0.25;
+  }
   hlGroup.children.forEach(function(ring, i){ var s = 1 + Math.sin(t * 4 + i) * 0.05; ring.scale.set(s, s, 1); });
   if (MANA_CRACK_MAT) MANA_CRACK_MAT.emissiveIntensity = 1.78 + Math.sin(t * 0.7) * 0.34 + Math.sin(t * 1.7) * 0.12;
   /* v2.2 ambient life: far shards drift, braziers flicker, motes float */
