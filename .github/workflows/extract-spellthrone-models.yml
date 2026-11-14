@@ -1,9 +1,19 @@
 name: Extract Spellthrone GLB models
 
-# The roster and hounds pages already carry the fourteen final GLBs as
-# base64. This workflow decodes the byte-identical payloads into real
-# models/*.glb files so the Pages variant of the game can fetch them
-# as sibling files. Mapping is pinned by MD5: any drift fails the run.
+# The roster and hounds pages carry the roster GLBs as base64, and
+# spirit-payloads.html carries the four True Spirit GLBs the same
+# way (no viewer page embeds them). This workflow decodes the
+# byte-identical payloads into real models/*.glb files so the
+# Pages variant of the game can fetch them as sibling files.
+# Mapping is pinned by MD5: any drift fails the run.
+#
+# Slice 3.49 ("One Roster", the roster-parity fix): the pinned set
+# is now the full eighteen-form roster — the same map the two
+# assemblers (assemble-v3c.js / assemble-pages-v3c.js) share, kept
+# honest by the roster-parity battery suite. Before this slice the
+# pin held the v3.7-era fourteen: the retired hound Exclusives,
+# v3 Skirmishers, and no spirits at all, so the live game fielded
+# the hounds and answered 404 for every spirit model.
 
 on:
   push:
@@ -11,6 +21,7 @@ on:
     paths:
       - roster.html
       - hounds.html
+      - spirit-payloads.html
       - .github/workflows/extract-spellthrone-models.yml
   workflow_dispatch:
 
@@ -22,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Decode models from roster and hounds pages
+      - name: Decode models from roster, hounds and spirit payload pages
         run: |
           python3 - <<'PY'
           import base64, hashlib, os, re, sys
@@ -30,20 +41,24 @@ jobs:
             "849e26d6c9e3e3d4e5a653596e7b10db": "spellthrone-archmage-ember-v3.glb",
             "c7d22f5a4ab136065f2923e32bef1975": "spellthrone-highmage-ember-v1.glb",
             "161012e621fd517d6bd227c9d9fbe88e": "spellthrone-guardian-ember-v3.glb",
-            "90d0a25c318fbfd7f727a715f1b60d44": "spellthrone-skirmisher-ember-v3.glb",
+            "af4fa0428f895a1fa907f81b0364b267": "spellthrone-skirmisher-ember-v4.glb",
             "5ed058d13af2662edcefcd3a07a8eba0": "spellthrone-enabler-ember-v1.glb",
             "c53ece501eb4843140e34c3eb644b229": "spellthrone-scout-ember-v2.glb",
-            "10f4c2c6ebcbee1a719d3e5a3b705174": "spellthrone-exclusive-ember-v1.glb",
+            "68cb73b068e1bff1ed95d04d22387925": "spellthrone-exclusive-ember-wyrm-v2.glb",
             "a74c8d78cb73ec4037aa6f7c1f4dd3f5": "spellthrone-archmage-frost-v2.glb",
             "9e5616476f54b55648a6f727b3c09350": "spellthrone-highmage-frost-v1.glb",
             "de396490f39ca3e51977360d1d55febb": "spellthrone-guardian-frost-v3.glb",
-            "c653fbf8fa3454ff7de286d2680bf8ce": "spellthrone-skirmisher-frost-v3.glb",
+            "03cf419504c30cdc21fe705d1dfdabfc": "spellthrone-skirmisher-frost-v4.glb",
             "8a1a88eec1893c710db826a2739b82cf": "spellthrone-enabler-frost-v1.glb",
             "fb67c458de7bfa5dba2795e1a6be2d78": "spellthrone-scout-frost-v1.glb",
-            "eaca975193c2dd7a1bc743cd06c18aee": "spellthrone-exclusive-frost-v1.glb",
+            "8ce49e42cc3c269b6bc306911c0830ec": "spellthrone-exclusive-frost-wyrm-v1.glb",
+            "b2a705ac48f114e61f675ac1b95bfc31": "spellthrone-spirit-ember-inferno-v1.glb",
+            "8a3c44a8fcfe16e284c72146773a51d0": "spellthrone-spirit-ember-hearth-v1.glb",
+            "440980d85dac6113d2dfda3fa76f02a3": "spellthrone-spirit-frost-blizzard-v1.glb",
+            "f987c541652128febd206d653815b3f3": "spellthrone-spirit-frost-glacier-v1.glb",
           }
           found = {}
-          for page in ("roster.html", "hounds.html"):
+          for page in ("roster.html", "hounds.html", "spirit-payloads.html"):
               text = open(page, encoding="utf-8", errors="ignore").read()
               for run in re.findall(r"[A-Za-z0-9+/=]{1000,}", text):
                   try:
